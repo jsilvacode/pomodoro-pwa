@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flowmodoro — Tu flujo de trabajo perfecto</title>
+  <meta name="description" content="Flowmodoro es un temporizador Pomodoro premium con gestión de tareas, modo oscuro y soporte multiidioma. Enfocate mejor, descansa mejor." />
+  <meta name="theme-color" content="#f9a8d4" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Flowmodoro — Tu flujo de trabajo perfecto" />
+  <meta property="og:description" content="Temporizador Pomodoro premium con gestión de tareas y modo oscuro." />
+  <meta property="og:image" content="icons/icon-512.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════ NAVBAR ═══════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">
+        <span class="logo-icon">🍅</span>
+        <span class="logo-text">Flowmodoro</span>
+      </a>
+      <div class="nav-links">
+        <a href="#timer-section" class="nav-link" data-i18n="nav.timer">Timer</a>
+        <a href="#tasks-section" class="nav-link" data-i18n="nav.tasks">Tareas</a>
+        <a href="#guide-section" class="nav-link" data-i18n="nav.guide">Guía</a>
+      </div>
+      <div class="nav-actions">
+        <!-- Lang switcher -->
+        <button id="langToggle" class="icon-btn" aria-label="Switch language" title="Switch language">
+          <span id="langLabel">ES</span>
+        </button>
+        <!-- Theme toggle -->
+        <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">
+          <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <!-- Install PWA btn -->
+        <button id="installBtn" class="btn-primary btn-sm" style="display:none" data-i18n="nav.install">Instalar App</button>
+      </div>
+      <!-- Mobile hamburger -->
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#timer-section" class="nav-link" data-i18n="nav.timer">Timer</a>
+      <a href="#tasks-section" class="nav-link" data-i18n="nav.tasks">Tareas</a>
+      <a href="#guide-section" class="nav-link" data-i18n="nav.guide">Guía</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════ HERO ══════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg-blobs">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge" data-i18n="hero.badge">✨ Tu flujo de trabajo perfecto</div>
+      <h1 class="hero-title">
+        <span data-i18n="hero.title1">Trabaja mejor,</span><br />
+        <span class="gradient-text" data-i18n="hero.title2">descansa mejor.</span>
+      </h1>
+      <p class="hero-subtitle" data-i18n="hero.subtitle">
+        Usa la técnica Pomodoro para potenciar tu productividad con intervalos de trabajo y descanso que respetan tu cerebro.
+      </p>
+      <div class="hero-cta">
+        <a href="#timer-section" class="btn-primary btn-large" data-i18n="hero.cta">Empezar ahora</a>
+        <a href="#guide-section" class="btn-ghost btn-large" data-i18n="hero.learn">¿Qué es Pomodoro?</a>
+      </div>
+      <!-- Mini stats -->
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">25</span>
+          <span class="stat-label" data-i18n="hero.stat1">min de enfoque</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">5</span>
+          <span class="stat-label" data-i18n="hero.stat2">min de descanso</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">4×</span>
+          <span class="stat-label" data-i18n="hero.stat3">y descansás 15 min</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ TIMER ════════════════════════════════════ -->
+  <section class="section" id="timer-section">
+    <div class="container">
+      <div class="timer-card">
+        <!-- Mode tabs -->
+        <div class="mode-tabs">
+          <button class="mode-tab active" id="tab-work" data-mode="work" data-i18n="timer.work">Trabajo</button>
+          <button class="mode-tab" id="tab-short" data-mode="short" data-i18n="timer.short">Descanso corto</button>
+          <button class="mode-tab" id="tab-long" data-mode="long" data-i18n="timer.long">Descanso largo</button>
+        </div>
+
+        <!-- SVG Progress Ring -->
+        <div class="timer-ring-wrapper">
+          <svg class="timer-ring" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+            <circle class="ring-bg" cx="110" cy="110" r="100" />
+            <circle class="ring-progress" id="ringProgress" cx="110" cy="110" r="100"
+              stroke-dasharray="628.3"
+              stroke-dashoffset="0"
+              transform="rotate(-90 110 110)" />
+          </svg>
+          <div class="timer-inner">
+            <div class="timer-display" id="timerDisplay">25:00</div>
+            <div class="timer-session-label" id="sessionLabel" data-i18n="timer.focusTime">Tiempo de enfoque</div>
+          </div>
+        </div>
+
+        <!-- Pomodoro counters -->
+        <div class="pomo-counter">
+          <span class="pomo-dot active" id="pomo0">🍅</span>
+          <span class="pomo-dot" id="pomo1">🍅</span>
+          <span class="pomo-dot" id="pomo2">🍅</span>
+          <span class="pomo-dot" id="pomo3">🍅</span>
+        </div>
+
+        <!-- Controls -->
+        <div class="timer-controls">
+          <button class="ctrl-btn ctrl-btn-ghost" id="resetBtn" aria-label="Reset">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/>
+            </svg>
+          </button>
+          <button class="ctrl-btn ctrl-btn-primary" id="startBtn" data-i18n="timer.start">
+            Iniciar
+          </button>
+          <button class="ctrl-btn ctrl-btn-ghost" id="settingsBtn" aria-label="Settings">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Active task indicator -->
+        <div class="active-task-bar" id="activeTaskBar" style="display:none">
+          <span class="active-task-icon">📌</span>
+          <span class="active-task-name" id="activeTaskName"></span>
+        </div>
+      </div>
+
+      <!-- Settings panel (hidden by default) -->
+      <div class="settings-panel" id="settingsPanel" style="display:none">
+        <h3 class="settings-title" data-i18n="settings.title">Configuración</h3>
+        <div class="settings-grid">
+          <div class="setting-item">
+            <label data-i18n="settings.work">Trabajo (min)</label>
+            <input type="number" id="setWork" min="1" max="60" value="25" class="setting-input" />
+          </div>
+          <div class="setting-item">
+            <label data-i18n="settings.short">Descanso corto (min)</label>
+            <input type="number" id="setShort" min="1" max="30" value="5" class="setting-input" />
+          </div>
+          <div class="setting-item">
+            <label data-i18n="settings.long">Descanso largo (min)</label>
+            <input type="number" id="setLong" min="1" max="60" value="15" class="setting-input" />
+          </div>
+          <div class="setting-item">
+            <label data-i18n="settings.sound">Sonido</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="soundToggle" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+        <button class="btn-primary" id="saveSettings" data-i18n="settings.save">Guardar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ TASKS ════════════════════════════════════ -->
+  <section class="section section-alt" id="tasks-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge" data-i18n="tasks.badge">📋 Gestión de tareas</div>
+        <h2 class="section-title" data-i18n="tasks.title">¿En qué vas a trabajar hoy?</h2>
+        <p class="section-subtitle" data-i18n="tasks.subtitle">Agrega tus tareas y marca la activa para enfocar el timer en ella.</p>
+      </div>
+
+      <!-- Add task input -->
+      <div class="task-input-row">
+        <input
+          type="text"
+          id="taskInput"
+          class="task-input"
+          placeholder="Agregar nueva tarea..."
+          data-i18n-placeholder="tasks.placeholder"
+          maxlength="120"
+        />
+        <button class="btn-primary" id="addTaskBtn" data-i18n="tasks.add">+ Agregar</button>
+      </div>
+
+      <!-- Task list -->
+      <div class="task-list" id="taskList">
+        <!-- Tasks rendered by JS -->
+        <div class="task-empty" id="taskEmpty">
+          <div class="task-empty-icon">🎯</div>
+          <p data-i18n="tasks.empty">No hay tareas aún. ¡Agrega la primera!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ GUIDE ════════════════════════════════════ -->
+  <section class="section" id="guide-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge" data-i18n="guide.badge">📚 Técnica Pomodoro</div>
+        <h2 class="section-title" data-i18n="guide.title">¿Cómo funciona?</h2>
+        <p class="section-subtitle" data-i18n="guide.subtitle">Desarrollada por Francesco Cirillo a finales de los '80, la técnica Pomodoro es una de las metodologías de productividad más efectivas del mundo.</p>
+      </div>
+
+      <!-- Cycle visual -->
+      <div class="cycle-visual">
+        <div class="cycle-step">
+          <div class="cycle-icon">🍅</div>
+          <div class="cycle-time">25 min</div>
+          <div class="cycle-label" data-i18n="guide.cycle.work">Trabajo profundo</div>
+        </div>
+        <div class="cycle-arrow">→</div>
+        <div class="cycle-step">
+          <div class="cycle-icon">☕</div>
+          <div class="cycle-time">5 min</div>
+          <div class="cycle-label" data-i18n="guide.cycle.short">Descanso corto</div>
+        </div>
+        <div class="cycle-arrow">→</div>
+        <div class="cycle-step cycle-step-repeat">
+          <div class="cycle-icon">🔄</div>
+          <div class="cycle-time">×4</div>
+          <div class="cycle-label" data-i18n="guide.cycle.repeat">Repetir</div>
+        </div>
+        <div class="cycle-arrow">→</div>
+        <div class="cycle-step cycle-step-long">
+          <div class="cycle-icon">🛋️</div>
+          <div class="cycle-time">15-30 min</div>
+          <div class="cycle-label" data-i18n="guide.cycle.long">Descanso largo</div>
+        </div>
+      </div>
+
+      <!-- Info cards -->
+      <div class="cards-grid">
+        <div class="info-card">
+          <div class="card-icon">🧠</div>
+          <h3 class="card-title" data-i18n="guide.card1.title">¿Por qué funciona?</h3>
+          <p class="card-text" data-i18n="guide.card1.text">El cerebro humano no está diseñado para mantener foco profundo por horas. Los intervalos cortos e intensos aprovechan los picos naturales de atención y reducen la fatiga cognitiva.</p>
+        </div>
+        <div class="info-card">
+          <div class="card-icon">⏱️</div>
+          <h3 class="card-title" data-i18n="guide.card2.title">El origen del nombre</h3>
+          <p class="card-text" data-i18n="guide.card2.text">Francesco Cirillo usaba un timer de cocina con forma de tomate ("pomodoro" en italiano) cuando era universitario. De ahí el nombre y el ícono 🍅 que hoy conocemos.</p>
+        </div>
+        <div class="info-card">
+          <div class="card-icon">💡</div>
+          <h3 class="card-title" data-i18n="guide.card3.title">Tips para empezar</h3>
+          <p class="card-text" data-i18n="guide.card3.text">Antes de iniciar, define una sola tarea en la que vas a trabajar. Pon el teléfono en silencio. Si surge algo urgente, anótalo y vuelve tu foco. El pomodoro es sagrado.</p>
+        </div>
+        <div class="info-card">
+          <div class="card-icon">📈</div>
+          <h3 class="card-title" data-i18n="guide.card4.title">Adáptalo a ti</h3>
+          <p class="card-text" data-i18n="guide.card4.text">Aunque el estándar es 25/5, puedes ajustar los tiempos. Algunos prefieren 50/10 para trabajo creativo o 15/5 para tareas mecánicas. Experimenta hasta encontrar tu ritmo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ FOOTER ═══════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">🍅</span>
+        <span class="footer-name">Flowmodoro</span>
+      </div>
+      <p class="footer-tagline" data-i18n="footer.tagline">Tu flujo de trabajo perfecto.</p>
+      <p class="footer-credit">
+        <span data-i18n="footer.made">Hecho con</span> ❤️ · 2026
+      </p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('SW registered:', reg.scope))
+          .catch(err => console.warn('SW failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>
