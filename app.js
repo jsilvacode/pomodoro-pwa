@@ -134,7 +134,7 @@ const TRANSLATIONS = {
 // ─── State ────────────────────────────────────────────────────
 const state = {
   lang: localStorage.getItem('fm_lang') || 'es',
-  theme: localStorage.getItem('fm_theme') || 'light',
+  theme: localStorage.getItem('fm_theme') || 'dark',
   durations: JSON.parse(localStorage.getItem('fm_durations') || 'null') || { work: 25, short: 5, long: 15 },
   currentMode: 'work',    // 'work' | 'short' | 'long'
   timeLeft: 0,
