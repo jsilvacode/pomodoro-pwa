@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flowmodoro-v1';
+const CACHE_NAME = 'flowmodoro-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -7,15 +7,14 @@ const ASSETS = [
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap',
+  './favicon.ico',
+  // Note: Google Fonts are cached dynamically on first fetch (see fetch handler)
 ];
 
 // Install: pre-cache static assets
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(ASSETS.filter(url => !url.startsWith('https://fonts')));
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
   );
   self.skipWaiting();
 });

@@ -131,11 +131,22 @@ const TRANSLATIONS = {
   }
 };
 
+// ─── Safe localStorage helpers ──────────────────────────────
+function safeGetJSON(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch (e) {
+    console.warn(`[Flowmodoro] Could not parse localStorage key "${key}":`, e);
+    return fallback;
+  }
+}
+
 // ─── State ────────────────────────────────────────────────────
 const state = {
   lang: localStorage.getItem('fm_lang') || 'es',
   theme: localStorage.getItem('fm_theme') || 'dark',
-  durations: JSON.parse(localStorage.getItem('fm_durations') || 'null') || { work: 25, short: 5, long: 15 },
+  durations: safeGetJSON('fm_durations', null) || { work: 25, short: 5, long: 15 },
   currentMode: 'work',    // 'work' | 'short' | 'long'
   timeLeft: 0,
   totalTime: 0,
@@ -144,7 +155,7 @@ const state = {
   endTime: null,
   pomoCount: 0,           // 0-3 in current set
   soundEnabled: true,
-  tasks: JSON.parse(localStorage.getItem('fm_tasks') || '[]'),
+  tasks: safeGetJSON('fm_tasks', []),
   activeTaskId: localStorage.getItem('fm_activeTask') || null,
   expandedTasks: new Set(),
 };
@@ -233,7 +244,8 @@ dom.themeToggle.addEventListener('click', () => {
 
 // ─── Mobile menu ──────────────────────────────────────────────
 dom.hamburger.addEventListener('click', () => {
-  dom.mobileMenu.classList.toggle('open');
+  const isOpen = dom.mobileMenu.classList.toggle('open');
+  dom.hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 });
 
 dom.mobileMenu.querySelectorAll('a').forEach(a => {
@@ -242,11 +254,10 @@ dom.mobileMenu.querySelectorAll('a').forEach(a => {
 
 // Navbar shrink on scroll
 window.addEventListener('scroll', () => {
-  const navbar = document.getElementById('navbar');
   if (window.scrollY > 10) {
-    navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+    dom.navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
   } else {
-    navbar.style.boxShadow = '';
+    dom.navbar.style.boxShadow = '';
   }
 }, { passive: true });
 
@@ -343,6 +354,12 @@ function tick() {
   }
 }
 
+function updatePomoDotsUI() {
+  dom.pomoCount.forEach((dot, i) => {
+    dot.classList.toggle('active', i < state.pomoCount);
+  });
+}
+
 function handleSessionEnd() {
   playSound();
 
@@ -356,16 +373,20 @@ function handleSessionEnd() {
       }
     }
 
-    // Advance pomo counter
-    dom.pomoCount[state.pomoCount].classList.add('active');
-    state.pomoCount = (state.pomoCount + 1) % 4;
+    // Advance pomo counter (0-4)
+    state.pomoCount = Math.min(state.pomoCount + 1, 4);
+    updatePomoDotsUI();
 
     // Notify
     showNotification(t('timer.done.work'));
 
-    // After 4 pomodoros → long break, else short
-    const nextMode = state.pomoCount === 0 ? 'long' : 'short';
-    setTimeout(() => setMode(nextMode), 1000);
+    // After 4 pomodoros → long break (and reset counter), else short
+    if (state.pomoCount >= 4) {
+      state.pomoCount = 0;
+      setTimeout(() => { updatePomoDotsUI(); setMode('long'); }, 1000);
+    } else {
+      setTimeout(() => setMode('short'), 1000);
+    }
   } else {
     const msg = state.currentMode === 'short' ? t('timer.done.short') : t('timer.done.long');
     showNotification(msg);
@@ -444,7 +465,12 @@ dom.saveSettings.addEventListener('click', () => {
 // ─── Tasks ────────────────────────────────────────────────────
 function saveTasks() {
   localStorage.setItem('fm_tasks', JSON.stringify(state.tasks));
-  localStorage.setItem('fm_activeTask', state.activeTaskId || '');
+  // Store null explicitly so we don't read back an empty string as truthy
+  if (state.activeTaskId) {
+    localStorage.setItem('fm_activeTask', state.activeTaskId);
+  } else {
+    localStorage.removeItem('fm_activeTask');
+  }
 }
 
 function generateId() {
@@ -620,13 +646,24 @@ dom.taskList.addEventListener('click', e => {
   }
 });
 
+// Debounce helper
+function debounce(fn, delay) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+const saveNotesDebounced = debounce(saveTasks, 500);
+
 dom.taskList.addEventListener('input', e => {
   if (e.target.classList.contains('task-notes-input')) {
     const id = e.target.dataset.id;
     const task = state.tasks.find(t => t.id === id);
     if (task) {
       task.notes = e.target.value;
-      saveTasks(); // persist without interrupting typing
+      saveNotesDebounced(); // debounced: save after 500ms of inactivity
     }
   }
 });
@@ -690,25 +727,10 @@ function init() {
   setLang(state.lang);
   dom.body.setAttribute('data-mode', 'work');
   updateTimerUI();
+  updatePomoDotsUI();
   renderTasks();
-
-  // Request notification permission early
-  if ('Notification' in window && Notification.permission === 'default') {
-    // We'll request on first timer start to avoid being annoying
-  }
 }
 
 init();
 
-// ─── Atmospheric Parallax ─────────────────────────────────────
-document.addEventListener('mousemove', e => {
-  if (state.theme !== 'dark') return;
-  const bg = document.getElementById('parallaxBg');
-  if (!bg) return;
-  
-  // Max movement ~20px in any direction
-  const x = (e.clientX / window.innerWidth - 0.5) * 40; 
-  const y = (e.clientY / window.innerHeight - 0.5) * 40;
-  
-  bg.style.transform = `translate(${-x}px, ${-y}px)`;
-});
+

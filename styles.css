@@ -3,8 +3,7 @@
    Premium pastel palette · Light & Dark mode · Responsive
 ═══════════════════════════════════════════════════════════ */
 
-/* ─── Google Font ─── */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+/* ─── Google Font (loaded via HTML <link> for better perf) ─── */
 
 /* ─── Design tokens (Light) ─── */
 :root {
@@ -107,14 +106,40 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
   transition: background var(--transition), color var(--transition);
   overflow-x: hidden;
-  /* Minimum width: prevents deformation on narrow desktop PWA windows */
   min-width: 320px;
+}
+
+/* Dark mode animated mesh background */
+[data-theme="dark"] body,
+[data-theme="dark"] {
+  background: var(--bg-primary);
+}
+
+[data-theme="dark"] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(192, 132, 252, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(103, 232, 249, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(236, 72, 153, 0.06) 0%, transparent 60%),
+    var(--bg-primary);
+  animation: meshShift 20s ease-in-out infinite alternate;
+}
+
+@keyframes meshShift {
+  0%   { background-position: 0% 50%, 100% 50%, 50% 0%; }
+  50%  { background-position: 30% 80%, 70% 20%, 60% 40%; }
+  100% { background-position: 10% 20%, 90% 80%, 40% 60%; }
 }
 
 img, svg { display: block; max-width: 100%; }
@@ -486,12 +511,19 @@ input { font-family: inherit; }
   padding: 2.5rem 2rem;
   box-shadow: var(--shadow-xl);
   text-align: center;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   transition: background var(--transition);
   max-width: 480px;
   min-width: 280px;
   width: 100%;
   margin: 0 auto;
+}
+
+[data-theme="dark"] .timer-card {
+  background: rgba(34, 28, 54, 0.75);
+  border-color: rgba(255,255,255,0.1);
+  box-shadow: var(--shadow-xl), 0 0 60px rgba(192, 132, 252, 0.06);
 }
 
 /* Mode tabs */
@@ -523,6 +555,23 @@ input { font-family: inherit; }
   background: var(--bg-surface);
   color: var(--text-primary);
   box-shadow: var(--shadow-sm);
+}
+
+/* Colored active tabs per mode */
+body[data-mode="work"] #tab-work.active {
+  background: rgba(244, 114, 182, 0.15);
+  color: var(--mode-work);
+  box-shadow: 0 0 0 1px rgba(244, 114, 182, 0.3);
+}
+body[data-mode="short"] #tab-short.active {
+  background: rgba(125, 211, 252, 0.15);
+  color: var(--mode-short);
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.3);
+}
+body[data-mode="long"] #tab-long.active {
+  background: rgba(134, 239, 172, 0.15);
+  color: var(--mode-long);
+  box-shadow: 0 0 0 1px rgba(134, 239, 172, 0.3);
 }
 
 /* SVG Ring */
@@ -1111,51 +1160,10 @@ input { font-family: inherit; }
 }
 
 .footer-name { color: var(--text-primary); }
+.footer-tagline { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 0.25rem; }
+.footer-credit { color: var(--text-muted); font-size: 0.85rem; }
 
-body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-body[data-theme="dark"] {
-  background-color: transparent; /* Allow parallax background to show through */
-}
-
-/* ═══ ATMOSPHERIC PARALLAX BG ══════════════════════════════ */
-.parallax-bg {
-  position: fixed;
-  top: -5%; left: -5%;
-  width: 110vw; height: 110vh;
-  z-index: -2;
-  background-image: url('assets/bg-dark.jpg');
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  transition: opacity 1s ease;
-  pointer-events: none;
-}
-
-.parallax-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background: 
-    radial-gradient(circle at top right, rgba(236, 72, 153, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at bottom left, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
-    linear-gradient(to bottom, rgba(30, 30, 46, 0.65), rgba(30, 30, 46, 0.95));
-  backdrop-filter: blur(12px);
-  opacity: 0;
-  transition: opacity 1s ease;
-  pointer-events: none;
-}
-
-body[data-theme="dark"] .parallax-bg { opacity: 0.8; }
-body[data-theme="dark"] .parallax-overlay { opacity: 1; }
-
-/* ═══ BUTTONS ══════════════════════════════════════════════ */
+/* ═══ RESPONSIVE ════════════════════════════════════════════ */
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .hamburger { display: flex; }
@@ -1215,6 +1223,18 @@ body[data-mode="long"] .ctrl-btn-primary {
   box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
 }
 
-/* ═══ SMOOTH page transitions ════════════════════════════════ */
-* { transition: background-color var(--transition), border-color var(--transition), color 0.2s ease; }
-.timer-display, .timer-ring { transition: none; }
+/* ═══ SMOOTH transitions — only on elements that need it ════ */
+/* (Avoid global * transition which causes jank on mobile) */
+a, button, input, textarea,
+.nav-link, .icon-btn, .btn-primary, .btn-ghost,
+.task-item, .task-check, .task-action-btn,
+.info-card, .cycle-step, .mode-tab,
+.timer-ring, .ring-progress,
+.toggle-slider, .toggle-slider::before {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.2s;
+  transition-property: background-color, border-color, color, box-shadow, opacity, transform;
+}
+/* Timer display and ring: no transition so it ticks cleanly */
+.timer-display { transition: none; }
+.ring-progress { transition: stroke-dashoffset 1s linear, stroke var(--transition); }

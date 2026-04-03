@@ -4,8 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flowmodoro — Tu flujo de trabajo perfecto</title>
-  <meta name="description" content="Flowmodoro es un temporizador Pomodoro premium con gestión de tareas, modo oscuro y soporte multiidioma. Enfocate mejor, descansa mejor." />
-  <meta name="theme-color" content="#f9a8d4" />
+  <meta name="description" content="Flowmodoro es un temporizador Pomodoro premium con gestión de tareas, modo oscuro y soporte multiidioma. Enfócate mejor, descansa mejor." />
+  <meta name="theme-color" content="#f472b6" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#c084fc" media="(prefers-color-scheme: dark)" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-192.png" />
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
@@ -26,10 +31,6 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Atmospheric Parallax Background (Dark Mode) -->
-  <div class="parallax-bg" id="parallaxBg"></div>
-  <div class="parallax-overlay"></div>
-
   <!-- ═══════════════════════════════════ NAVBAR ═══════════════════════════════════ -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
@@ -63,7 +64,7 @@
         <button id="installBtn" class="btn-primary btn-sm" style="display:none" data-i18n="nav.install">Instalar App</button>
       </div>
       <!-- Mobile hamburger -->
-      <button class="hamburger" id="hamburger" aria-label="Menu">
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
