@@ -220,7 +220,7 @@ function applyTranslations() {
 function setLang(lang) {
   state.lang = lang;
   localStorage.setItem('fm_lang', lang);
-  dom.langLabel.textContent = lang.toUpperCase();
+  dom.langLabel.textContent = lang === 'es' ? 'EN' : 'ES';
   applyTranslations();
   updateTimerUI(); // re-apply session label
 }
@@ -234,8 +234,8 @@ function applyTheme(theme) {
   state.theme = theme;
   dom.html.setAttribute('data-theme', theme);
   localStorage.setItem('fm_theme', theme);
-  dom.sunIcon.style.display  = theme === 'light' ? 'block' : 'none';
-  dom.moonIcon.style.display = theme === 'dark'  ? 'block' : 'none';
+  dom.sunIcon.style.display  = theme === 'dark'  ? 'block' : 'none';
+  dom.moonIcon.style.display = theme === 'light' ? 'block' : 'none';
 }
 
 dom.themeToggle.addEventListener('click', () => {
