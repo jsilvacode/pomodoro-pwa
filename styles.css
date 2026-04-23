@@ -1490,13 +1490,93 @@ body[data-mode="long"] .ctrl-btn-primary {
   margin-bottom: 0.25rem;
 }
 
-.footer-credit {
+/* ─── Donation Section ─── */
+.donation-section {
+  padding: 5rem 1.5rem;
+  background: var(--bg-alt);
+  border-top: 1px solid var(--border);
+}
+
+[data-theme="dark"] .donation-section {
+  background: var(--bg-secondary);
+}
+
+.donation-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  padding: 3rem 2rem;
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto;
+  box-shadow: var(--shadow-lg);
+}
+
+.donation-text {
+  font-family: var(--font-ui);
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+}
+
+.donation-actions {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.donation-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2.5rem;
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  color: white;
+  transition: all var(--transition);
+  min-width: 200px;
+}
+
+.donation-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.donation-btn:active {
+  transform: translateY(-1px);
+}
+
+.mp-btn {
+  background-color: #009EE3; /* Mercado Pago Blue */
+}
+
+.pp-btn {
+  background-color: #003087; /* PayPal Dark Blue */
+}
+
+.footer-version {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  opacity: 0.5;
+  font-weight: 300;
+  margin-left: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.footer-email {
   font-family: var(--font-ui);
   font-size: 0.85rem;
   font-weight: 300;
   letter-spacing: 0.08em;
   color: var(--text-muted);
+  margin-top: 0.5rem;
 }
+
 
 /* ═══ RESPONSIVE ════════════════════════════════════════════ */
 @media (max-width: 768px) {

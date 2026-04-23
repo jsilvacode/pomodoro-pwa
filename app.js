@@ -68,7 +68,9 @@ const TRANSLATIONS = {
     'tasks.estimation': 'Pomodoros estimados',
     'tasks.delete':     'Eliminar tarea',
     'footer.tagline':   'Tu flujo de trabajo perfecto.',
-    'footer.made':      'Hecho con',
+    'footer.developed': 'Desarrollado con ❤️ por Julio Silva',
+    'donation.badge':   'Apoya el proyecto',
+    'donation.text':    'Este proyecto es gratuito y sin anuncios. Tu donación ayuda a mantener los servidores y el desarrollo.',
   },
   en: {
     'nav.timer':        'Timer',
@@ -131,7 +133,9 @@ const TRANSLATIONS = {
     'tasks.estimation': 'Estimated pomodoros',
     'tasks.delete':     'Delete task',
     'footer.tagline':   'Your perfect workflow.',
-    'footer.made':      'Made with',
+    'footer.developed': 'Developed with ❤️ by Julio Silva',
+    'donation.badge':   'Support the project',
+    'donation.text':    'This project is free and ad-free. Your donation helps maintain servers and development.',
   }
 };
 
