@@ -72,6 +72,13 @@
 
   --nav-height: 52px;
   --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ───────────── HERO & PARALLAX ───────────── */
+  --hero-orb-1: radial-gradient(ellipse at 20% 50%, rgba(210, 155, 100, 0.35) 0%, transparent 60%);
+  --hero-orb-2: radial-gradient(ellipse at 80% 20%, rgba(180, 120, 80, 0.25) 0%, transparent 55%);
+  --hero-orb-3: radial-gradient(ellipse at 60% 80%, rgba(230, 195, 150, 0.3) 0%, transparent 50%);
+  --hero-bg: var(--bg-primary);
+  --hero-noise-opacity: 0.04;
 }
 
 /* ─── Dark mode tokens ─── */
@@ -101,6 +108,13 @@
   --mode-work:  #C8A050;
   --mode-short: #7A9E8A;
   --mode-long:  #8A9E7A;
+
+  /* ───────────── HERO & PARALLAX ───────────── */
+  --hero-orb-1: radial-gradient(ellipse at 20% 50%, rgba(200, 160, 60, 0.3) 0%, transparent 60%);
+  --hero-orb-2: radial-gradient(ellipse at 80% 20%, rgba(160, 100, 30, 0.2) 0%, transparent 55%);
+  --hero-orb-3: radial-gradient(ellipse at 60% 80%, rgba(220, 180, 80, 0.25) 0%, transparent 50%);
+  --hero-bg: var(--bg-primary);
+  --hero-noise-opacity: 0.06;
 }
 
 /* ─── Reset ─── */
@@ -303,6 +317,7 @@ input { font-family: inherit; }
 .btn-sm { padding: 0.4rem 1rem; font-size: 0.78rem; }
 
 /* ═══ HERO ══════════════════════════════════════════════════ */
+/* ─── Hero container ─── */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -312,47 +327,145 @@ input { font-family: inherit; }
   padding: calc(var(--nav-height) + 3rem) 1.5rem 4rem;
   overflow: hidden;
   text-align: center;
+  background-color: var(--hero-bg);
 }
 
-.hero-bg-blobs {
+/* ─── Capa de orbs ─── */
+.hero__gradient {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  overflow: hidden;
+  z-index: 0;
 }
 
-.blob {
+.hero__orb {
   position: absolute;
+  width: 600px;
+  height: 600px;
   border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0;
+  filter: blur(80px);
+  will-change: transform;
 }
 
-[data-theme="dark"] .blob {
-  opacity: 0.06;
-  filter: blur(120px);
+.hero__orb--1 {
+  top: -100px;
+  left: -150px;
+  background: var(--hero-orb-1);
+  animation: orb-float-1 12s ease-in-out infinite;
 }
 
-.blob-1 {
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, var(--copper-300), var(--copper-500));
-  top: -150px; left: -100px;
-}
-.blob-2 {
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, var(--amber-300), var(--amber-500));
-  bottom: -100px; right: -100px;
-}
-.blob-3 {
-  width: 300px; height: 300px;
-  background: radial-gradient(circle, var(--copper-400), var(--amber-400));
-  top: 50%; left: 60%;
+.hero__orb--2 {
+  top: -50px;
+  right: -200px;
+  width: 500px;
+  height: 500px;
+  background: var(--hero-orb-2);
+  animation: orb-float-2 15s ease-in-out infinite;
 }
 
-.hero-content {
+.hero__orb--3 {
+  bottom: -200px;
+  left: 30%;
+  width: 700px;
+  height: 400px;
+  background: var(--hero-orb-3);
+  animation: orb-float-3 18s ease-in-out infinite;
+}
+
+/* ─── Textura grain (noise) ─── */
+.hero__noise {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--hero-noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* ─── El contenido queda sobre las capas ─── */
+.hero__content {
   position: relative;
-  max-width: 700px;
+  z-index: 2;
+  max-width: 800px;
 }
+
+/* ─── Parallax base styles ─── */
+.section-parallax {
+  position: relative;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.section-parallax__bg {
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  transition: none;
+}
+
+.section-parallax > *:not(.section-parallax__bg) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Decoradores de sección ─── */
+.deco-circle {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.12;
+  background: var(--accent);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.deco-blob {
+  position: absolute;
+  width: 500px;
+  height: 300px;
+  filter: blur(80px);
+  opacity: 0.1;
+  background: radial-gradient(ellipse, var(--accent), transparent);
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  top: 0;
+  right: -100px;
+}
+
+[data-theme="dark"] .deco-circle,
+[data-theme="dark"] .deco-blob {
+  opacity: 0.18;
+}
+
+/* ─── Animaciones de flotado suave ─── */
+@keyframes orb-float-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(40px, -30px) scale(1.05); }
+  66%       { transform: translate(-20px, 20px) scale(0.97); }
+}
+
+@keyframes orb-float-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40%       { transform: translate(-50px, 30px) scale(1.08); }
+  70%       { transform: translate(20px, -20px) scale(0.95); }
+}
+
+@keyframes orb-float-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%       { transform: translate(30px, -40px) scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__orb,
+  .hero::before {
+    animation: none !important;
+  }
+}
+
 
 .hero-badge {
   display: inline-block;
@@ -629,8 +742,9 @@ body[data-mode="long"] #tab-long.active {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
+
 
 @media (max-width: 768px) {
   .flip-clock { gap: 0.75rem; }

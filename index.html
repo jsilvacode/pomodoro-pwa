@@ -78,14 +78,18 @@
     </div>
   </nav>
 
-  <!-- ═══════════════════════════════════ HERO ══════════════════════════════════════ -->
   <section class="hero" id="hero">
-    <div class="hero-bg-blobs">
-      <div class="blob blob-1"></div>
-      <div class="blob blob-2"></div>
-      <div class="blob blob-3"></div>
+    <!-- Capa de gradiente (orbs) -->
+    <div class="hero__gradient" aria-hidden="true">
+      <div class="hero__orb hero__orb--1"></div>
+      <div class="hero__orb hero__orb--2"></div>
+      <div class="hero__orb hero__orb--3"></div>
     </div>
-    <div class="hero-content">
+
+    <!-- Textura grain -->
+    <div class="hero__noise" aria-hidden="true"></div>
+
+    <div class="hero__content">
       <div class="hero-badge" data-i18n="hero.badge">✨ Tu flujo de trabajo perfecto</div>
       <h1 class="hero-title">
         <span data-i18n="hero.title1">Trabaja mejor,</span><br />
@@ -119,7 +123,10 @@
   </section>
 
   <!-- ═══════════════════════════════════ TIMER ════════════════════════════════════ -->
-  <section class="section" id="timer-section">
+  <section class="section section-parallax" id="timer-section" data-parallax="0.1">
+    <div class="section-parallax__bg">
+      <div class="deco-circle"></div>
+    </div>
     <div class="container">
       <div class="timer-card">
         <!-- Mode tabs -->
@@ -230,7 +237,10 @@
   </section>
 
   <!-- ═══════════════════════════════════ TASKS ════════════════════════════════════ -->
-  <section class="section section-alt" id="tasks-section">
+  <section class="section section-alt section-parallax" id="tasks-section" data-parallax="0.15">
+    <div class="section-parallax__bg">
+      <div class="deco-blob"></div>
+    </div>
     <div class="container">
       <div class="section-header">
         <div class="section-badge" data-i18n="tasks.badge">📋 Gestión de tareas</div>
@@ -263,7 +273,10 @@
   </section>
 
   <!-- ═══════════════════════════════════ GUIDE ════════════════════════════════════ -->
-  <section class="section" id="guide-section">
+  <section class="section section-parallax" id="guide-section" data-parallax="0.08">
+    <div class="section-parallax__bg">
+      <div class="deco-circle" style="top: 20%; left: 80%;"></div>
+    </div>
     <div class="container">
       <div class="section-header">
         <div class="section-badge" data-i18n="guide.badge">📚 Técnica Pomodoro</div>
@@ -325,7 +338,10 @@
   </section>
 
   <!-- ═══════════════════════════════════ DONATION ══════════════════════════════════ -->
-  <section class="section donation-section" id="donation-section">
+  <section class="section donation-section section-parallax" id="donation-section" data-parallax="0.12">
+    <div class="section-parallax__bg">
+      <div class="deco-blob" style="bottom: 0; left: -100px; transform: rotate(45deg);"></div>
+    </div>
     <div class="container">
       <div class="section-header">
         <div class="section-badge" data-i18n="donation.badge">Apoya el proyecto</div>

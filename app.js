@@ -795,6 +795,58 @@ window.addEventListener('appinstalled', () => {
   dom.installBtn.style.display = 'none';
 });
 
+// ─── Parallax Controller ──────────────────────────────────────
+class ParallaxController {
+  constructor() {
+    this.sections = [];
+    this.ticking = false;
+    this.prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (this.prefersReduced) return;
+    this.init();
+  }
+
+  init() {
+    document.querySelectorAll('[data-parallax]').forEach(el => {
+      this.sections.push({
+        el,
+        speed: parseFloat(el.dataset.parallax) || 0.15,
+        bg: el.querySelector('.section-parallax__bg') || null,
+      });
+    });
+
+    window.addEventListener('scroll', () => this.onScroll(), { passive: true });
+    this.update(); 
+  }
+
+  onScroll() {
+    if (!this.ticking) {
+      requestAnimationFrame(() => {
+        this.update();
+        this.ticking = false;
+      });
+      this.ticking = true;
+    }
+  }
+
+  update() {
+    const scrollY = window.scrollY;
+
+    this.sections.forEach(({ el, speed, bg }) => {
+      const rect = el.getBoundingClientRect();
+      const centerY = rect.top + rect.height / 2;
+      const viewCenter = window.innerHeight / 2;
+      const distance = centerY - viewCenter;
+
+      const offset = distance * speed;
+
+      if (bg) {
+        bg.style.transform = `translateY(${offset}px)`;
+      }
+    });
+  }
+}
+
 // ─── Init ─────────────────────────────────────────────────────
 function init() {
   applyTheme(state.theme);
@@ -803,6 +855,7 @@ function init() {
   updateTimerUI(true); // Force initial render
   updatePomoDotsUI();
   renderTasks();
+  new ParallaxController();
 }
 
 init();
