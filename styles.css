@@ -621,7 +621,6 @@ body[data-mode="long"] #tab-long.active {
 .view-flip {
   width: 100%;
   max-width: 650px;
-  perspective: 2000px;
   margin: 0 auto;
 }
 
@@ -660,6 +659,7 @@ body[data-mode="long"] #tab-long.active {
   color: #FFF;
   box-shadow: 0 20px 50px rgba(0,0,0,0.5);
   transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 [data-theme="light"] .flip-card {
@@ -689,6 +689,7 @@ body[data-mode="long"] #tab-long.active {
   background-color: #151515;
   overflow: hidden;
   border-radius: var(--flip-radius);
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
@@ -752,12 +753,14 @@ body[data-mode="long"] #tab-long.active {
   transform-origin: bottom center;
   z-index: 10;
   background-color: #1A1A1A;
+  will-change: transform, filter;
 }
 
 .flap-bottom {
   transform-origin: top center;
   transform: rotateX(90deg);
   z-index: 5;
+  will-change: transform, filter;
 }
 
 /* Animaciones */
