@@ -696,6 +696,8 @@ body[data-mode="long"] #tab-long.active {
   backface-visibility: hidden;
   /* Fix Safari overflow/border-radius bug */
   -webkit-mask-image: -webkit-radial-gradient(white, black);
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 [data-theme="light"] .half {
@@ -704,8 +706,7 @@ body[data-mode="long"] #tab-long.active {
 
 .half span {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%) translateZ(0);
+  left: 0;
   width: 100%;
   height: var(--flip-h);
   text-align: center;
