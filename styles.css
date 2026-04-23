@@ -723,17 +723,29 @@ body[data-mode="long"] #tab-long.active {
 }
 
 /* Mitades superiores */
-.top, .flap-top {
+.top {
   top: 0;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   background: linear-gradient(to bottom, #1A1A1A, #111);
   z-index: 1;
+  transform: translateZ(0px);
+}
+
+.flap-top {
+  top: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background: linear-gradient(to bottom, #1A1A1A, #111);
+  z-index: 10;
+  transform-origin: bottom center;
+  transform: translateZ(1px);
+  will-change: transform, filter;
 }
 
 .top span, .flap-top span {
   top: 0;
-  align-items: center; /* Centrado base */
+  align-items: center;
 }
 
 [data-theme="light"] .top, [data-theme="light"] .flap-top {
@@ -741,37 +753,34 @@ body[data-mode="long"] #tab-long.active {
 }
 
 /* Mitades inferiores */
-.bottom, .flap-bottom {
+.bottom {
   bottom: 0;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   background: linear-gradient(to bottom, #111, #181818);
   z-index: 1;
+  transform: translateZ(0px);
+}
+
+.flap-bottom {
+  bottom: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  background: linear-gradient(to bottom, #111, #181818);
+  z-index: 5;
+  transform-origin: top center;
+  transform: translateZ(1px) rotateX(90deg);
+  will-change: transform, filter;
 }
 
 .bottom span, .flap-bottom span {
   bottom: auto;
-  top: calc(var(--flip-h) * -0.5); /* Desplazar hacia arriba para mostrar mitad inferior */
+  top: calc(var(--flip-h) * -0.5);
   align-items: center;
 }
 
 [data-theme="light"] .bottom, [data-theme="light"] .flap-bottom {
   background: linear-gradient(to bottom, #F2EDE4, #EBE4D8);
-}
-
-/* Configuración 3D */
-.flap-top {
-  transform-origin: bottom center;
-  z-index: 10;
-  background-color: #1A1A1A;
-  will-change: transform, filter;
-}
-
-.flap-bottom {
-  transform-origin: top center;
-  transform: rotateX(90deg);
-  z-index: 5;
-  will-change: transform, filter;
 }
 
 /* Animaciones */
@@ -784,13 +793,13 @@ body[data-mode="long"] #tab-long.active {
 }
 
 @keyframes flipTopAnim {
-  0% { transform: rotateX(0deg); filter: brightness(1); }
-  100% { transform: rotateX(-90deg); filter: brightness(0.4); }
+  0% { transform: translateZ(1px) rotateX(0deg); filter: brightness(1); }
+  100% { transform: translateZ(1px) rotateX(-90deg); filter: brightness(0.4); }
 }
 
 @keyframes flipBottomAnim {
-  0% { transform: rotateX(90deg); filter: brightness(0.4); }
-  100% { transform: rotateX(0deg); filter: brightness(1); }
+  0% { transform: translateZ(1px) rotateX(90deg); filter: brightness(0.4); }
+  100% { transform: translateZ(1px) rotateX(0deg); filter: brightness(1); }
 }
 
 .flip-sep {
