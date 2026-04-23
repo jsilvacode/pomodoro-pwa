@@ -563,9 +563,9 @@ input { font-family: inherit; }
   padding: 0.6rem 0;
   border-radius: 0;
   font-family: var(--font-ui);
-  font-size: 0.7rem;
-  font-weight: 400;
-  letter-spacing: normal;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--text-muted);
   background: transparent;
@@ -580,6 +580,7 @@ input { font-family: inherit; }
   background: transparent;
   box-shadow: none;
   border-bottom-color: var(--accent);
+  font-weight: 600;
 }
 
 /* Unificar tabs de color por modo — todo al acento */
