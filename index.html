@@ -26,7 +26,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Azeret+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Tenor+Sans&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -127,20 +127,43 @@
           <button class="mode-tab" id="tab-long" data-mode="long" data-i18n="timer.long">Descanso largo</button>
         </div>
 
-        <!-- SVG Progress Ring -->
-        <div class="timer-ring-wrapper">
-          <svg class="timer-ring" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
-            <circle class="ring-bg" cx="110" cy="110" r="100" />
-            <circle class="ring-progress" id="ringProgress" cx="110" cy="110" r="100"
-              stroke-dasharray="628.3"
-              stroke-dashoffset="0"
-              transform="rotate(-90 110 110)" />
-          </svg>
-          <div class="timer-inner">
-            <div class="timer-display" id="timerDisplay">25:00</div>
-            <div class="timer-session-label" id="sessionLabel" data-i18n="timer.focusTime">Tiempo de enfoque</div>
+        <div class="timer-display-container">
+          <!-- View: Flip (Retro) -->
+          <div class="view-flip" id="viewFlip">
+            <div class="flip-clock">
+              <div class="flip-group">
+                <div class="flip-card" id="flip-m1" data-value="0">
+                  <div class="half top"><span>2</span></div>
+                  <div class="half bottom"><span>2</span></div>
+                  <div class="half flap-top"><span>2</span></div>
+                  <div class="half flap-bottom"><span>2</span></div>
+                </div>
+                <div class="flip-card" id="flip-m2" data-value="0">
+                  <div class="half top"><span>5</span></div>
+                  <div class="half bottom"><span>5</span></div>
+                  <div class="half flap-top"><span>5</span></div>
+                  <div class="half flap-bottom"><span>5</span></div>
+                </div>
+              </div>
+              <span class="flip-sep">:</span>
+              <div class="flip-group">
+                <div class="flip-card" id="flip-s1" data-value="0">
+                  <div class="half top"><span>0</span></div>
+                  <div class="half bottom"><span>0</span></div>
+                  <div class="half flap-top"><span>0</span></div>
+                  <div class="half flap-bottom"><span>0</span></div>
+                </div>
+                <div class="flip-card" id="flip-s2" data-value="0">
+                  <div class="half top"><span>0</span></div>
+                  <div class="half bottom"><span>0</span></div>
+                  <div class="half flap-top"><span>0</span></div>
+                  <div class="half flap-bottom"><span>0</span></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+        <div class="timer-session-label" id="sessionLabel" data-i18n="timer.focusTime">Tiempo de enfoque</div>
 
         <!-- Pomodoro counters -->
         <div class="pomo-counter">

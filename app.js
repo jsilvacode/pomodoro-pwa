@@ -37,6 +37,8 @@ const TRANSLATIONS = {
     'settings.short':   'Descanso corto (min)',
     'settings.long':    'Descanso largo (min)',
     'settings.sound':   'Sonido',
+    'settings.long':    'Descanso largo (min)',
+    'settings.sound':   'Sonido',
     'settings.save':    'Guardar',
     'tasks.badge':      '📋 Gestión de tareas',
     'tasks.title':      '¿En qué vas a trabajar hoy?',
@@ -96,6 +98,8 @@ const TRANSLATIONS = {
     'settings.title':   'Settings',
     'settings.work':    'Work (min)',
     'settings.short':   'Short break (min)',
+    'settings.long':    'Long break (min)',
+    'settings.sound':   'Sound',
     'settings.long':    'Long break (min)',
     'settings.sound':   'Sound',
     'settings.save':    'Save',
@@ -158,6 +162,7 @@ const state = {
   tasks: safeGetJSON('fm_tasks', []),
   activeTaskId: localStorage.getItem('fm_activeTask') || null,
   expandedTasks: new Set(),
+  prevTime: null,
 };
 
 // Pre-fill timeLeft from durations
@@ -199,6 +204,7 @@ const dom = {
   taskList:       $('taskList'),
   taskEmpty:      $('taskEmpty'),
   pomoCount:      [0,1,2,3].map(i => $(`pomo${i}`)),
+  viewFlip:       $('viewFlip'),
 };
 
 // ─── i18n ─────────────────────────────────────────────────────
@@ -282,11 +288,73 @@ const SESSION_LABELS = {
   long:  () => t('timer.longBreak'),
 };
 
-function updateTimerUI() {
-  dom.timerDisplay.textContent = formatTime(state.timeLeft);
-  setRingProgress(state.timeLeft, state.totalTime);
+function updateTimerUI(force = false) {
+  updateFlipClock(force);
   dom.sessionLabel.textContent = SESSION_LABELS[state.currentMode]();
   document.title = `${formatTime(state.timeLeft)} — Flowmodoro`;
+}
+
+function updateFlipClock(force = false) {
+  const m = Math.floor(state.timeLeft / 60).toString().padStart(2, '0');
+  const s = (state.timeLeft % 60).toString().padStart(2, '0');
+  
+  updateFlipCard('flip-m1', m[0], force);
+  updateFlipCard('flip-m2', m[1], force);
+  updateFlipCard('flip-s1', s[0], force);
+  updateFlipCard('flip-s2', s[1], force);
+}
+
+function updateFlipCard(id, value, force = false) {
+  const el = $(id);
+  if (!el) return;
+  const currentVal = el.getAttribute('data-value');
+  
+  if (force || currentVal !== value) {
+    // Si ya hay una animación en curso, la limpiamos
+    if (el.dataset.timeoutId) {
+      clearTimeout(parseInt(el.dataset.timeoutId));
+      el.classList.remove('flipping');
+      delete el.dataset.timeoutId;
+    }
+
+    const top = el.querySelector('.top span');
+    const bottom = el.querySelector('.bottom span');
+    const flapTop = el.querySelector('.flap-top span');
+    const flapBottom = el.querySelector('.flap-bottom span');
+    
+    const prev = currentVal || value; // Si no hay previo, usamos el actual para evitar saltos extraños
+
+    if (force) {
+      top.textContent = value;
+      bottom.textContent = value;
+      flapTop.textContent = value;
+      flapBottom.textContent = value;
+      el.setAttribute('data-value', value);
+      return;
+    }
+
+    // Preparar textos para la animación
+    top.textContent = value;
+    bottom.textContent = prev;
+    flapTop.textContent = prev;
+    flapBottom.textContent = value;
+    
+    // Forzar reinicio de animación
+    el.classList.remove('flipping');
+    void el.offsetWidth; 
+    el.classList.add('flipping');
+    
+    el.setAttribute('data-value', value);
+    
+    const timeoutId = setTimeout(() => {
+      el.classList.remove('flipping');
+      // Asentar valores finales
+      bottom.textContent = value;
+      flapTop.textContent = value;
+      delete el.dataset.timeoutId;
+    }, 850);
+    el.dataset.timeoutId = timeoutId;
+  }
 }
 
 function setMode(mode) {
@@ -726,7 +794,7 @@ function init() {
   applyTheme(state.theme);
   setLang(state.lang);
   dom.body.setAttribute('data-mode', 'work');
-  updateTimerUI();
+  updateTimerUI(true); // Force initial render
   updatePomoDotsUI();
   renderTasks();
 }
