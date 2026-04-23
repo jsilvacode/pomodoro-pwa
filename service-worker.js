@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flowmodoro-v18';
+const CACHE_NAME = 'flowmodoro-v19';
 const ASSETS = [
   './',
   './index.html',
