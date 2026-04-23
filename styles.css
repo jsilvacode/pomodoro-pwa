@@ -703,11 +703,12 @@ body[data-mode="long"] #tab-long.active {
   transform: translateX(-50%);
   width: 100%;
   height: var(--flip-h);
-  line-height: var(--flip-h);
   text-align: center;
   font-size: var(--flip-font-size);
   color: #FFF;
   font-weight: 700;
+  display: flex;
+  justify-content: center;
 }
 
 [data-theme="light"] .half span {
@@ -725,6 +726,7 @@ body[data-mode="long"] #tab-long.active {
 
 .top span, .flap-top span {
   top: 0;
+  align-items: center; /* Centrado base */
 }
 
 [data-theme="light"] .top, [data-theme="light"] .flap-top {
@@ -741,7 +743,9 @@ body[data-mode="long"] #tab-long.active {
 }
 
 .bottom span, .flap-bottom span {
-  bottom: 0;
+  bottom: auto;
+  top: calc(var(--flip-h) * -0.5); /* Desplazar hacia arriba para mostrar mitad inferior */
+  align-items: center;
 }
 
 [data-theme="light"] .bottom, [data-theme="light"] .flap-bottom {
@@ -786,8 +790,12 @@ body[data-mode="long"] #tab-long.active {
   font-size: calc(var(--flip-font-size) * 0.8);
   font-weight: 300;
   color: var(--text-muted);
-  margin-top: calc(var(--flip-h) * -0.05);
   opacity: 0.3;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  height: var(--flip-h);
+  padding-bottom: 10px; /* Ajuste fino visual */
 }
 
 /* Custom settings styles */
