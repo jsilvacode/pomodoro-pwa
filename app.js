@@ -154,7 +154,7 @@ function safeGetJSON(key, fallback) {
 
 // ─── State ────────────────────────────────────────────────────
 const state = {
-  lang: localStorage.getItem('fm_lang') || 'es',
+  lang: localStorage.getItem('fm_lang') || 'en',
   theme: localStorage.getItem('fm_theme') || 'dark',
   durations: safeGetJSON('fm_durations', null) || { work: 25, short: 5, long: 15 },
   currentMode: 'work',    // 'work' | 'short' | 'long'
