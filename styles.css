@@ -691,6 +691,8 @@ body[data-mode="long"] #tab-long.active {
   border-radius: var(--flip-radius);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  /* Fix Safari overflow/border-radius bug */
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
 [data-theme="light"] .half {
@@ -700,7 +702,7 @@ body[data-mode="long"] #tab-long.active {
 .half span {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateZ(0);
   width: 100%;
   height: var(--flip-h);
   text-align: center;
@@ -709,6 +711,7 @@ body[data-mode="long"] #tab-long.active {
   font-weight: 700;
   display: flex;
   justify-content: center;
+  -webkit-font-smoothing: antialiased;
 }
 
 [data-theme="light"] .half span {
