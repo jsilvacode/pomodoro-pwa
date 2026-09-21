@@ -4630,3 +4630,10 @@ body.focus-mode .focus-exit-btn:focus-visible {
     margin-top: 0.9rem;
   }
 }
+
+
+/* Deep Focus removes all informational chrome: only clock, playback and exit remain. */
+body.focus-mode .focus-session-status,
+body.focus-mode .timer-session-label {
+  display: none !important;
+}
