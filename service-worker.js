@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flowmodoro-v37';
+const CACHE_NAME = 'flowmodoro-v38';
 const AUDIO_CACHE_NAME = 'flowmodoro-audio-v1';
 const ASSETS = [
   './',
