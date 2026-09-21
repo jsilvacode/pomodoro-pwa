@@ -329,24 +329,39 @@
           <label for="ambientSelect" data-i18n="ambient.label">Ambiente</label>
           <select id="ambientSelect" class="setting-input">
             <option value="off" data-i18n="ambient.off">Sin audio</option>
-            <option value="rain" data-i18n="ambient.rain">Lluvia suave</option>
-            <option value="nightForest" data-i18n="ambient.nightForest">Bosque nocturno</option>
-            <option value="cafe" data-i18n="ambient.cafe">Café</option>
-            <option value="campfire" data-i18n="ambient.campfire">Fogata</option>
+            <optgroup label="Spotify" data-i18n-label="ambient.spotifyGroup">
+              <option value="spotify1" id="ambientSpotify1">Spotify · Playlist 1</option>
+              <option value="spotify2" id="ambientSpotify2">Spotify · Playlist 2</option>
+              <option value="spotify3" id="ambientSpotify3">Spotify · Playlist 3</option>
+            </optgroup>
+            <optgroup label="Ambientes" data-i18n-label="ambient.localGroup">
+              <option value="rain" data-i18n="ambient.rain">Lluvia suave</option>
+              <option value="nightForest" data-i18n="ambient.nightForest">Bosque nocturno</option>
+              <option value="cafe" data-i18n="ambient.cafe">Café</option>
+              <option value="campfire" data-i18n="ambient.campfire">Fogata</option>
+            </optgroup>
           </select>
         </div>
-        <div class="setting-item">
-          <label class="ambient-volume-label" for="ambientVolume">
-            <span data-i18n="ambient.volume">Volumen</span>
-            <span id="ambientVolumeValue">35%</span>
-          </label>
-          <input id="ambientVolume" class="ambient-volume" type="range" min="0" max="100" step="1" value="35" />
+
+        <div class="spotify-embed-shell" id="spotifyEmbedShell" hidden>
+          <div id="spotifyEmbed"></div>
+          <p class="ambient-note" data-i18n="ambient.spotifyNote">Spotify gestiona el volumen desde su reproductor o desde tu dispositivo.</p>
         </div>
-        <label class="setting-row">
-          <span data-i18n="ambient.attenuate">Atenuar durante descansos</span>
-          <span class="toggle-switch"><input type="checkbox" id="ambientAttenuateToggle" checked /><span class="toggle-slider"></span></span>
-        </label>
-        <p class="ambient-note" data-i18n="ambient.note">Los ambientes se reproducen desde fuentes CC0 y se guardan en caché después del primer uso.</p>
+
+        <div id="ambientLocalControls">
+          <div class="setting-item">
+            <label class="ambient-volume-label" for="ambientVolume">
+              <span data-i18n="ambient.volume">Volumen</span>
+              <span id="ambientVolumeValue">35%</span>
+            </label>
+            <input id="ambientVolume" class="ambient-volume" type="range" min="0" max="100" step="1" value="35" />
+          </div>
+          <label class="setting-row">
+            <span data-i18n="ambient.attenuate">Atenuar durante descansos</span>
+            <span class="toggle-switch"><input type="checkbox" id="ambientAttenuateToggle" checked /><span class="toggle-slider"></span></span>
+          </label>
+          <p class="ambient-note" data-i18n="ambient.note">Los ambientes usan grabaciones CC0 y pueden quedar disponibles en caché después de reproducirse.</p>
+        </div>
       </div>
     </div>
 
@@ -578,5 +593,6 @@
   </div>
 
   <script src="app.js"></script>
+  <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 </body>
 </html>
