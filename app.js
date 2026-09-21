@@ -17,7 +17,9 @@ const TRANSLATIONS = {
     'timer.done.work':'Sesión de foco completada.','timer.done.short':'Descanso terminado.','timer.done.long':'Descanso largo terminado.',
     'timer.done.work.task':'Foco completado · 🍅 {act}/{est} · {task}','timer.done.work.taskComplete':'Tarea completada · {task}',
     'timer.focusTitle':'Enfocar en…','timer.focusChoose':'Elegir tarea','timer.focusQuickAdd':'+ Nueva tarea…','timer.focusCompleted':'Tarea completada',
-    'focus.exit':'Salir del modo foco','focus.session':'Sesión de foco','focus.of':'de','focus.timerControl':'Reloj','focus.soundControl':'Sonido',
+    'focus.exit':'Salir de foco y pausar','focus.session':'Sesión de foco','focus.of':'de','focus.timerControl':'Reloj','focus.soundControl':'Sonido',
+    'prep.kicker':'Preparar sesión','prep.title':'¿Cómo quieres empezar?','prep.text':'Puedes organizar lo que harás o entrar directo al timer.','prep.tasks':'Preparar tareas','prep.timerOnly':'Solo usar el timer',
+    'planner.title':'Tus tareas para este foco.','planner.text':'Agrega tareas, estima pomodoros y elige con cuál comenzar.','planner.placeholder':'Nueva tarea…','planner.start':'Comenzar foco','planner.empty':'Agrega una tarea o entra directo al timer.',
     'complete.kicker':'Sesión completada','complete.later':'Ahora no','complete.startBreak':'Iniciar descanso','complete.startFocus':'Iniciar foco',
     'settings.title':'Ajustes','settings.timer':'Temporizador','settings.flow':'Flujo','settings.experience':'Experiencia',
     'settings.work':'Foco','settings.short':'Descanso corto','settings.long':'Descanso largo','settings.sound':'Aviso al terminar',
@@ -71,7 +73,9 @@ const TRANSLATIONS = {
     'timer.done.work':'Focus session completed.','timer.done.short':'Break finished.','timer.done.long':'Long break finished.',
     'timer.done.work.task':'Focus completed · 🍅 {act}/{est} · {task}','timer.done.work.taskComplete':'Task completed · {task}',
     'timer.focusTitle':'Focus on…','timer.focusChoose':'Choose task','timer.focusQuickAdd':'+ New task…','timer.focusCompleted':'Task completed',
-    'focus.exit':'Exit focus mode','focus.session':'Focus session','focus.of':'of','focus.timerControl':'Timer','focus.soundControl':'Sound',
+    'focus.exit':'Exit focus and pause','focus.session':'Focus session','focus.of':'of','focus.timerControl':'Timer','focus.soundControl':'Sound',
+    'prep.kicker':'Prepare session','prep.title':'How do you want to start?','prep.text':'Organize what you will do or go straight to the timer.','prep.tasks':'Prepare tasks','prep.timerOnly':'Use timer only',
+    'planner.title':'Your tasks for this focus.','planner.text':'Add tasks, estimate pomodoros, and choose where to begin.','planner.placeholder':'New task…','planner.start':'Start focus','planner.empty':'Add a task or go straight to the timer.',
     'complete.kicker':'Session completed','complete.later':'Not now','complete.startBreak':'Start break','complete.startFocus':'Start focus',
     'settings.title':'Settings','settings.timer':'Timer','settings.flow':'Flow','settings.experience':'Experience',
     'settings.work':'Focus','settings.short':'Short break','settings.long':'Long break','settings.sound':'Completion sound',
@@ -232,6 +236,14 @@ const dom = {
   body: document.body,
   navbar: $('navbar'),
   timerSection: $('timer-section'),
+  tasksSection: $('tasks-section'),
+  timerCard: document.querySelector('.timer-card'),
+  focusPrep: $('focusPrep'), prepTasksBtn: $('prepTasksBtn'), prepTimerOnlyBtn: $('prepTimerOnlyBtn'),
+  timerActiveTask: $('timerActiveTask'),
+  plannerDialog: $('sessionPlannerDialog'), plannerCloseBtn: $('plannerCloseBtn'), plannerTaskInput: $('plannerTaskInput'),
+  plannerAddBtn: $('plannerAddBtn'), plannerTaskList: $('plannerTaskList'), plannerTimerOnlyBtn: $('plannerTimerOnlyBtn'), plannerStartBtn: $('plannerStartBtn'),
+  guideDrawerBtn: $('guideDrawerBtn'), guideDialog: $('guideDialog'), guideDialogCloseBtn: $('guideDialogCloseBtn'),
+  supportDrawerBtn: $('supportDrawerBtn'), supportDialog: $('supportDialog'), supportDialogCloseBtn: $('supportDialogCloseBtn'),
   languagePreference: $('languagePreference'),
   installDrawerBtn: $('installDrawerBtn'),
   moreBtn: $('moreBtn'), bottomMoreBtn: $('bottomMoreBtn'),
@@ -357,6 +369,7 @@ function saveTasks() {
   localStorage.setItem('fm_tasks', JSON.stringify(state.tasks));
   renderToday();
   renderProgress();
+  if (dom.plannerDialog && dom.plannerDialog.open) renderPlanner();
 }
 
 function saveHistory() {
@@ -389,6 +402,69 @@ window.addEventListener('scroll', function() {
   if (!dom.navbar) return;
   dom.navbar.style.boxShadow = window.scrollY > 10 ? '0 4px 20px rgba(0,0,0,0.08)' : '';
 }, { passive:true });
+
+
+let activeAppView = 'focus';
+let focusPrepDismissed = false;
+
+function setDialogOpen(dialog, open) {
+  if (!dialog) return;
+  if (open) {
+    if (typeof dialog.showModal === 'function' && !dialog.open) dialog.showModal();
+    else dialog.setAttribute('open','');
+  } else {
+    if (typeof dialog.close === 'function' && dialog.open) dialog.close();
+    else dialog.removeAttribute('open');
+  }
+}
+
+function shouldOfferFocusPrep() {
+  return activeAppView === 'focus' &&
+    !focusMode &&
+    !state.isRunning &&
+    state.currentMode === 'work' &&
+    !focusPrepDismissed;
+}
+
+function syncFocusPrep() {
+  if (!dom.focusPrep || !dom.timerCard) return;
+  const open = shouldOfferFocusPrep();
+  dom.focusPrep.classList.toggle('is-open', open);
+  dom.focusPrep.setAttribute('aria-hidden', open ? 'false' : 'true');
+  dom.timerCard.classList.toggle('session-preparing', open);
+}
+
+function showAppView(view, options) {
+  const next = view === 'today' ? 'today' : 'focus';
+  if (focusMode && next !== 'focus') leaveImmersiveFocus();
+  activeAppView = next;
+  dom.body.dataset.appView = next;
+
+  document.querySelectorAll('.app-view').forEach(function(section) {
+    const active = section.dataset.appView === next;
+    section.classList.toggle('is-active', active);
+    section.setAttribute('aria-hidden', active ? 'false' : 'true');
+  });
+
+  document.querySelectorAll('[data-view-target]').forEach(function(control) {
+    control.classList.toggle('active', control.dataset.viewTarget === next);
+  });
+
+  if (!(options && options.keepHash)) {
+    const hash = next === 'today' ? '#today' : '#focus';
+    if (window.location.hash !== hash) history.replaceState(null,'',hash);
+  }
+
+  closeFocusPopover();
+  closeSoundPopover();
+  syncFocusPrep();
+}
+
+document.querySelectorAll('[data-view-target]').forEach(function(control) {
+  control.addEventListener('click', function() {
+    showAppView(control.dataset.viewTarget);
+  });
+});
 
 function openSettings() {
   dom.setWork.value = state.durations.work;
@@ -822,10 +898,11 @@ function hideCompletion() {
   state.pendingNextMode = null;
 }
 
-function setMode(mode) {
+function setMode(mode, options) {
   if (!['work','short','long'].includes(mode)) return;
+  const preserveImmersive = !!(options && options.preserveImmersive && focusMode);
   pauseTimer();
-  exitFocusMode();
+  if (!preserveImmersive) exitFocusMode();
   hideCompletion();
   state.currentMode = mode;
   state.timeLeft = state.durations[mode] * 60;
@@ -837,10 +914,18 @@ function setMode(mode) {
   updateTimerUI(true);
   syncAmbientVolume();
   persistSession();
+  if (preserveImmersive) {
+    dom.body.classList.add('focus-mode');
+    setThemeUI('dark');
+  } else {
+    syncFocusPrep();
+  }
 }
 
 function startTimer() {
   if (state.isRunning) return;
+  focusPrepDismissed = true;
+  syncFocusPrep();
   hideCompletion();
   if (state.timeLeft <= 0) {
     state.timeLeft = state.durations[state.currentMode] * 60;
@@ -929,10 +1014,10 @@ function showCompletion(nextMode, entry) {
   dom.sessionCompleteCard.hidden = false;
 }
 
-function transitionToPending(startImmediately) {
+function transitionToPending(startImmediately, preserveImmersive) {
   const mode = state.pendingNextMode;
   if (!mode) return;
-  setMode(mode);
+  setMode(mode, { preserveImmersive: !!preserveImmersive });
   if (startImmediately) setTimeout(startTimer, 120);
 }
 
@@ -980,10 +1065,18 @@ function handleSessionEnd(restored) {
   renderToday();
   renderProgress();
   showNotification(message);
-  showCompletion(nextMode, entry);
 
-  const auto = state.currentMode === 'work' ? state.autoStartBreaks : state.autoStartFocus;
-  if (auto && !restored) setTimeout(function(){ transitionToPending(true); }, 900);
+  const completedMode = entry.mode;
+  if (focusMode && completedMode === 'work' && !restored) {
+    state.pendingNextMode = nextMode;
+    dom.sessionCompleteCard.hidden = true;
+    setTimeout(function(){ transitionToPending(true, true); }, 700);
+    return;
+  }
+
+  showCompletion(nextMode, entry);
+  const auto = completedMode === 'work' ? state.autoStartBreaks : state.autoStartFocus;
+  if (auto && !restored) setTimeout(function(){ transitionToPending(true, focusMode); }, 900);
 }
 
 dom.startBtn.addEventListener('click', function() {
@@ -994,7 +1087,7 @@ dom.resetBtn.addEventListener('click', resetTimer);
 dom.tabWork.addEventListener('click', function(){ setMode('work'); });
 dom.tabShort.addEventListener('click', function(){ setMode('short'); });
 dom.tabLong.addEventListener('click', function(){ setMode('long'); });
-dom.nextSessionBtn.addEventListener('click', function(){ transitionToPending(true); });
+dom.nextSessionBtn.addEventListener('click', function(){ transitionToPending(true, focusMode); });
 dom.dismissSessionBtn.addEventListener('click', function(){ transitionToPending(false); });
 
 let focusMode = false;
@@ -1020,9 +1113,17 @@ function exitFocusMode() {
   dom.tabLong.disabled = false;
   setThemeUI(resolveTheme(state.themePreference));
   if (!dom.settingsPanel.classList.contains('open')) dom.body.style.overflow = '';
+  syncFocusPrep();
 }
 
-dom.focusExitBtn.addEventListener('click', exitFocusMode);
+function leaveImmersiveFocus() {
+  if (!focusMode) return;
+  if (state.isRunning) pauseTimer();
+  if (state.ambientPlaying) stopAmbient();
+  exitFocusMode();
+}
+
+dom.focusExitBtn.addEventListener('click', leaveImmersiveFocus);
 
 let audioCtx = null;
 function playSound() {
@@ -1103,6 +1204,7 @@ document.addEventListener('visibilitychange', function() {
 
 function setActiveTask(id) {
   state.activeTaskId = id || null;
+  if (state.activeTaskId) focusPrepDismissed = true;
   persistActiveTask();
   markAsUsed();
   renderTasks();
@@ -1113,11 +1215,15 @@ function setActiveTask(id) {
 function renderFocusUI() {
   const task = state.tasks.find(function(item){ return item.id === state.activeTaskId && !item.done; });
   if (task) {
+    dom.timerActiveTask.hidden = false;
+    dom.timerActiveTask.textContent = task.text + ' · 🍅 ' + task.actPomos + '/' + task.estPomos;
     dom.focusPill.classList.remove('ghost','complete');
     dom.focusPill.classList.add('active');
     dom.focusPillText.textContent = task.text;
     dom.focusPillProgress.textContent = '🍅 ' + task.actPomos + '/' + task.estPomos;
   } else {
+    dom.timerActiveTask.hidden = true;
+    dom.timerActiveTask.textContent = '';
     dom.focusPill.classList.add('ghost');
     dom.focusPill.classList.remove('active','complete');
     dom.focusPillText.textContent = t('timer.focusChoose');
@@ -1201,6 +1307,107 @@ function flashFocusCompleted() {
     renderFocusUI();
   },2200);
 }
+
+
+function renderPlanner() {
+  if (!dom.plannerTaskList) return;
+  const pending = state.tasks.filter(function(task){ return !task.done; });
+  if (!pending.length) {
+    dom.plannerTaskList.innerHTML = '<div class="planner-empty">' + escapeHtml(t('planner.empty')) + '</div>';
+    return;
+  }
+  dom.plannerTaskList.innerHTML = pending.map(function(task) {
+    const selected = task.id === state.activeTaskId;
+    return '<div class="planner-task-row' + (selected ? ' selected' : '') + '" data-id="' + escapeHtml(task.id) + '">' +
+      '<button class="planner-task-select" type="button" data-planner-action="select" aria-pressed="' + selected + '">' +
+        '<span class="planner-radio">' + (selected ? '●' : '○') + '</span>' +
+        '<span class="planner-task-name">' + escapeHtml(task.text) + '</span>' +
+      '</button>' +
+      '<div class="planner-estimate" aria-label="Pomodoros estimados">' +
+        '<button type="button" data-planner-action="dec" ' + (task.estPomos <= 1 ? 'disabled' : '') + '>−</button>' +
+        '<span>🍅 ' + task.estPomos + '</span>' +
+        '<button type="button" data-planner-action="inc">+</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function addPlannerTask() {
+  const text = dom.plannerTaskInput.value.trim();
+  if (!text) return;
+  const task = normalizeTask({ id:generateId(), text:text, done:false, estPomos:1, actPomos:0 });
+  state.tasks.unshift(task);
+  state.activeTaskId = task.id;
+  persistActiveTask();
+  dom.plannerTaskInput.value = '';
+  saveTasks();
+  renderPlanner();
+}
+
+function openPlanner() {
+  closeSettings();
+  renderPlanner();
+  setDialogOpen(dom.plannerDialog, true);
+  requestAnimationFrame(function(){ dom.plannerTaskInput.focus(); });
+}
+
+function closePlanner() {
+  setDialogOpen(dom.plannerDialog, false);
+}
+
+function prepareTimerOnly(startNow) {
+  state.activeTaskId = null;
+  persistActiveTask();
+  focusPrepDismissed = true;
+  closePlanner();
+  renderFocusUI();
+  syncFocusPrep();
+  if (startNow) startTimer();
+}
+
+dom.prepTasksBtn.addEventListener('click', openPlanner);
+dom.prepTimerOnlyBtn.addEventListener('click', function(){ prepareTimerOnly(false); });
+dom.plannerCloseBtn.addEventListener('click', closePlanner);
+dom.plannerAddBtn.addEventListener('click', addPlannerTask);
+dom.plannerTaskInput.addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    addPlannerTask();
+  }
+});
+dom.plannerTaskList.addEventListener('click', function(event) {
+  const row = event.target.closest('.planner-task-row');
+  const control = event.target.closest('[data-planner-action]');
+  if (!row || !control) return;
+  const task = state.tasks.find(function(item){ return item.id === row.dataset.id; });
+  if (!task) return;
+  const action = control.dataset.plannerAction;
+  if (action === 'select') {
+    state.activeTaskId = task.id;
+    persistActiveTask();
+  } else if (action === 'inc') {
+    task.estPomos += 1;
+    saveTasks();
+  } else if (action === 'dec') {
+    task.estPomos = Math.max(1, task.estPomos - 1);
+    saveTasks();
+  }
+  renderPlanner();
+  renderFocusUI();
+});
+dom.plannerTimerOnlyBtn.addEventListener('click', function(){ prepareTimerOnly(true); });
+dom.plannerStartBtn.addEventListener('click', function() {
+  const pending = state.tasks.filter(function(task){ return !task.done; });
+  if (!state.activeTaskId && pending.length) {
+    state.activeTaskId = pending[0].id;
+    persistActiveTask();
+  }
+  focusPrepDismissed = true;
+  closePlanner();
+  renderFocusUI();
+  syncFocusPrep();
+  startTimer();
+});
 
 function renderTasks() {
   dom.taskList.querySelectorAll('.task-item').forEach(function(el){ el.remove(); });
@@ -1452,6 +1659,23 @@ dom.exportHistoryBtn.addEventListener('click', function() {
   URL.revokeObjectURL(url);
 });
 
+
+function openGuideDialog() {
+  closeSettings();
+  setDialogOpen(dom.guideDialog, true);
+}
+function closeGuideDialog() { setDialogOpen(dom.guideDialog, false); }
+function openSupportDialog() {
+  closeSettings();
+  setDialogOpen(dom.supportDialog, true);
+}
+function closeSupportDialog() { setDialogOpen(dom.supportDialog, false); }
+
+dom.guideDrawerBtn.addEventListener('click', openGuideDialog);
+dom.guideDialogCloseBtn.addEventListener('click', closeGuideDialog);
+dom.supportDrawerBtn.addEventListener('click', openSupportDialog);
+dom.supportDialogCloseBtn.addEventListener('click', closeSupportDialog);
+
 function openShortcuts() {
   closeSettings();
   if (typeof dom.shortcutsDialog.showModal === 'function') dom.shortcutsDialog.showModal();
@@ -1473,11 +1697,14 @@ document.addEventListener('keydown', function(event) {
   }
 
   if (event.key === 'Escape') {
+    if (dom.plannerDialog.open) { closePlanner(); return; }
+    if (dom.guideDialog.open) { closeGuideDialog(); return; }
+    if (dom.supportDialog.open) { closeSupportDialog(); return; }
     if (dom.shortcutsDialog.open) { closeShortcuts(); return; }
     if (dom.settingsPanel.classList.contains('open')) { closeSettings(); return; }
     if (!dom.soundPopover.hidden) { closeSoundPopover(); return; }
     if (!dom.focusPopover.hidden) { closeFocusPopover(); return; }
-    if (focusMode) { exitFocusMode(); return; }
+    if (focusMode) { leaveImmersiveFocus(); return; }
   }
 
   if (event.key === ' ') {
@@ -1492,10 +1719,11 @@ document.addEventListener('keydown', function(event) {
   } else if (event.key === '3') {
     setMode('long');
   } else if (event.key.toLowerCase() === 'f') {
-    focusMode ? exitFocusMode() : enterFocusMode();
+    if (focusMode) leaveImmersiveFocus();
+    else showAppView('focus');
   } else if (event.key.toLowerCase() === 'n') {
-    scrollToAnchorTarget(document.getElementById('tasks-section'));
-    setTimeout(function(){ dom.taskInput.focus(); },350);
+    showAppView('today');
+    setTimeout(function(){ dom.taskInput.focus(); },260);
   } else if (event.key === '?') {
     openShortcuts();
   }
@@ -1589,54 +1817,9 @@ class ParallaxController {
 }
 
 
-function getAnchorOffset() {
-  const raw = getComputedStyle(dom.html).getPropertyValue('--nav-height');
-  const navHeight = parseFloat(raw) || 52;
-  return navHeight + 16;
-}
 
-function scrollToAnchorTarget(target, behavior) {
-  if (!target) return;
-  const top = target.getBoundingClientRect().top + window.scrollY - getAnchorOffset();
-  window.scrollTo({
-    top: Math.max(0, Math.round(top)),
-    behavior: behavior || (window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth')
-  });
-}
-
-document.addEventListener('click', function(event) {
-  const link = event.target.closest('a[href^="#"]');
-  if (!link) return;
-  const href = link.getAttribute('href');
-  if (!href || href === '#') return;
-  const target = document.getElementById(href.slice(1));
-  if (!target) return;
-
-  event.preventDefault();
-  if (dom.settingsPanel.classList.contains('open')) closeSettings();
-  closeFocusPopover();
-  closeSoundPopover();
-
-  scrollToAnchorTarget(target);
-  if (window.location.hash !== href) history.pushState(null, '', href);
-});
-
-window.addEventListener('popstate', function() {
-  if (!window.location.hash) return;
-  const target = document.getElementById(window.location.hash.slice(1));
-  if (target) requestAnimationFrame(function(){ scrollToAnchorTarget(target, 'auto'); });
-});
-
-function setupNavigationState() {
-  const sections = ['timer-section','tasks-section'];
-  const links = document.querySelectorAll('.mobile-bottom-link[href]');
-  if (!('IntersectionObserver' in window)) return;
-  const observer = new IntersectionObserver(function(entries) {
-    const visible = entries.filter(function(entry){ return entry.isIntersecting; }).sort(function(a,b){ return b.intersectionRatio - a.intersectionRatio; })[0];
-    if (!visible) return;
-    links.forEach(function(link){ link.classList.toggle('active', link.getAttribute('href') === '#' + visible.target.id); });
-  }, { rootMargin:'-30% 0px -55% 0px', threshold:[0,0.15,0.5] });
-  sections.forEach(function(id){ const el=$(id); if (el) observer.observe(el); });
+function resolveInitialView() {
+  return window.location.hash === '#today' ? 'today' : 'focus';
 }
 
 function init() {
@@ -1667,24 +1850,21 @@ function init() {
   if (state.isRunning) {
     clearInterval(state.intervalId);
     state.intervalId = setInterval(tick,250);
-    if (state.currentMode === 'work') enterFocusMode();
+    if (state.currentMode === 'work') {
+      activeAppView = 'focus';
+      enterFocusMode();
+    }
     acquireWakeLock();
   } else if (state.restoreExpired) {
     state.restoreExpired = false;
     handleSessionEnd(true);
   }
 
-  const usedBefore = localStorage.getItem('fm_has_used_app') === 'true';
-  if (window.location.hash) {
-    const target = document.getElementById(window.location.hash.slice(1));
-    if (target) requestAnimationFrame(function(){ scrollToAnchorTarget(target, 'auto'); });
-  } else if (standalone || usedBefore) {
-    requestAnimationFrame(function(){ scrollToAnchorTarget(dom.timerSection, 'auto'); });
-  }
+  showAppView(resolveInitialView(), { keepHash:true });
+  if (!window.location.hash) history.replaceState(null,'','#focus');
+  syncFocusPrep();
 
-  setupNavigationState();
   registerServiceWorker();
-  new ParallaxController();
   persistSession();
 }
 
