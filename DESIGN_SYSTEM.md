@@ -115,3 +115,38 @@ Antes de crear un estilo nuevo, intentar componerlo con:
 4. un estado de interacción existente.
 
 Si necesita una excepción, debe existir una razón funcional o semántica clara.
+
+
+## App Shell y estados de producto
+
+Flowmodoro v4 no usa scroll de documento como navegación principal. La aplicación se organiza en estados de interfaz:
+
+- **Foco / Preparar:** decide si organizar tareas o usar solo el timer.
+- **Foco / Timer:** el reloj es el elemento central; tareas y audio son contexto secundario.
+- **Foco / Inmersivo:** solo reloj, control Iniciar/Pausar y salida.
+- **Hoy:** gestor completo de tareas e historial.
+- **Más:** ajustes, guía, atajos, instalación y apoyo.
+
+La navegación `Foco / Hoy / Más` cambia estados dentro del mismo viewport. No debe reintroducir anchors de scroll para estas vistas.
+
+### Contrato de inmersión
+
+- `Iniciar` entra a inmersión durante una sesión de trabajo.
+- `Pausar` pausa el timer pero conserva la escena inmersiva y el ambiente.
+- `×` o `Esc` pausan el timer, detienen el ambiente y salen de inmersión.
+- El fin natural de una sesión de trabajo conserva la inmersión y transiciona al descanso.
+- El gestor de tareas, el selector de ambiente, reset y ajustes no aparecen dentro de la escena inmersiva.
+
+### Continuidad espacial
+
+Los cambios importantes deben sentirse como transformaciones de un mismo sistema, no como pantallas que se reemplazan. Priorizar `transform`, `opacity` y cambios de contraste/superficie. Mantener desplazamientos pequeños, delays superpuestos y reposo visual después de cada transición.
+
+La jerarquía de motion es:
+
+- microinteracción: `--motion-fast`;
+- control/panel: `--motion-normal`;
+- transición de escena: `--motion-slow`;
+- inmersión: `--motion-cinematic`;
+- easing principal: `--ease-premium`.
+
+La interfaz debe permanecer completamente usable con `prefers-reduced-motion`.
