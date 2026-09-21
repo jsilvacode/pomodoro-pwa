@@ -3373,3 +3373,50 @@ body.focus-mode .ambient-pill:focus-visible {
     max-width: 9.5rem;
   }
 }
+
+
+/* ═══ SPOTIFY IN FLOWMODORO SOUNDS ═════════════════════════════ */
+.spotify-embed-shell {
+  margin: 0.8rem 0 1rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-alt);
+}
+
+.spotify-embed-shell[hidden],
+#ambientLocalControls[hidden] {
+  display: none;
+}
+
+#spotifyEmbed {
+  min-height: 152px;
+}
+
+#spotifyEmbed iframe {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+  border: 0;
+}
+
+.spotify-embed-shell .ambient-note {
+  margin: 0;
+  padding: 0.65rem 0.8rem 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.ambient-settings optgroup {
+  color: var(--text-muted);
+  font-style: normal;
+}
+
+@media (max-width: 480px) {
+  .spotify-embed-shell {
+    border-radius: var(--radius-md);
+  }
+
+  #spotifyEmbed {
+    min-height: 152px;
+  }
+}
