@@ -4480,3 +4480,153 @@ body.focus-mode .timer-settings-btn:focus-visible {
 }
 
 .duration-quick-btn { display: none !important; }
+
+
+/* ═══ DEEP FOCUS — CLOCK FIRST ════════════════════════════ */
+.timer-action-zone {
+  display: block;
+}
+
+.timer-play-icon {
+  display: none;
+  line-height: 1;
+}
+
+body.focus-mode .timer-task-focus,
+body.focus-mode .pomo-counter {
+  display: none !important;
+}
+
+body.focus-mode .timer-session-label {
+  margin-top: 1.2rem;
+  opacity: 0.58;
+}
+
+body.focus-mode .focus-session-status {
+  opacity: 0.48;
+}
+
+body.focus-mode .timer-action-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  margin-top: 1.5rem;
+}
+
+body.focus-mode .sound-dock {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.62;
+  animation: focusRevealDim 650ms var(--ease-premium) backwards;
+  animation-delay: 220ms;
+}
+
+body.focus-mode .ambient-pill,
+body.focus-mode .sound-popover {
+  display: none !important;
+}
+
+body.focus-mode .ambient-play-btn {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 50%;
+  background: transparent;
+  border-color: color-mix(in srgb, var(--accent) 24%, var(--border));
+  color: var(--text-secondary);
+}
+
+body.focus-mode .ambient-play-btn:hover,
+body.focus-mode .ambient-play-btn:focus-visible,
+body.focus-mode .ambient-play-btn.playing {
+  background: var(--accent-subtle);
+  border-color: color-mix(in srgb, var(--accent) 52%, var(--border));
+  color: var(--accent);
+}
+
+body.focus-mode .timer-controls {
+  margin: 0;
+  gap: 0;
+  opacity: 0.62;
+  animation: focusRevealDim 650ms var(--ease-premium) backwards;
+  animation-delay: 280ms;
+}
+
+body.focus-mode .timer-controls #resetBtn,
+body.focus-mode .timer-controls .timer-settings-btn {
+  display: none !important;
+}
+
+body.focus-mode .ctrl-btn-primary {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--border));
+  color: var(--text-secondary);
+  box-shadow: none;
+  letter-spacing: 0;
+}
+
+[data-theme="dark"] body.focus-mode .ctrl-btn-primary {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: color-mix(in srgb, var(--accent) 24%, var(--border));
+}
+
+body.focus-mode .ctrl-btn-primary:hover,
+body.focus-mode .ctrl-btn-primary:focus-visible,
+[data-theme="dark"] body.focus-mode .ctrl-btn-primary:hover {
+  background: var(--accent-subtle);
+  border-color: color-mix(in srgb, var(--accent) 52%, var(--border));
+  color: var(--accent);
+  transform: none;
+  box-shadow: none;
+}
+
+body.focus-mode .timer-play-label {
+  display: none;
+}
+
+body.focus-mode .timer-play-icon {
+  display: inline;
+  font-size: 0.76rem;
+}
+
+body.focus-mode .timer-action-zone:hover .sound-dock,
+body.focus-mode .timer-action-zone:hover .timer-controls,
+body.focus-mode .timer-action-zone:focus-within .sound-dock,
+body.focus-mode .timer-action-zone:focus-within .timer-controls {
+  opacity: 1;
+}
+
+/* With no selected ambience, the rail naturally contains only timer pause/play. */
+body.focus-mode .ambient-play-btn[hidden] {
+  display: none !important;
+}
+
+/* The exit remains visible but quiet until intentionally approached. */
+body.focus-mode .focus-exit-btn {
+  opacity: 0.58;
+}
+
+body.focus-mode .focus-exit-btn:hover,
+body.focus-mode .focus-exit-btn:focus-visible {
+  opacity: 1;
+}
+
+/* Mobile Focus keeps the same reduced vocabulary. */
+@media (max-width: 768px) {
+  body.focus-mode .timer-action-zone {
+    margin-top: 1rem;
+  }
+
+  body.focus-mode .timer-session-label {
+    margin-top: 0.9rem;
+  }
+}
