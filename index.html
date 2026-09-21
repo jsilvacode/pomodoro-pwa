@@ -423,84 +423,85 @@
   </section>
 
   <!-- ═══════════════════════════════════ GUIDE ════════════════════════════════════ -->
-  <section class="section section-parallax" id="guide-section" data-parallax="0.08">
+  <section class="section guide-section section-parallax" id="guide-section" data-parallax="0.08">
     <div class="section-parallax__bg">
-      <div class="deco-circle" style="top: 20%; left: 80%;"></div>
+      <div class="deco-circle guide-deco"></div>
     </div>
     <div class="container">
-      <div class="section-header">
-        <div class="section-badge" data-i18n="guide.badge">📚 Técnica Pomodoro</div>
-        <h2 class="section-title" data-i18n="guide.title">¿Cómo funciona?</h2>
-        <p class="section-subtitle" data-i18n="guide.subtitle">Desarrollada por Francesco Cirillo a finales de los '80, la técnica Pomodoro es una de las metodologías de productividad más efectivas del mundo.</p>
+      <div class="section-header guide-header">
+        <div class="section-badge" data-i18n="guide.badge">Técnica Pomodoro</div>
+        <h2 class="section-title" data-i18n="guide.title">Una cosa a la vez.</h2>
+        <p class="section-subtitle" data-i18n="guide.subtitle">Trabaja con intención, descansa antes de agotarte y vuelve con claridad.</p>
       </div>
 
-      <!-- Cycle visual -->
-      <div class="cycle-visual">
-        <div class="cycle-step">
-          <div class="cycle-icon">🍅</div>
-          <div class="cycle-time">25 min</div>
-          <div class="cycle-label" data-i18n="guide.cycle.work">Trabajo profundo</div>
+      <div class="guide-sequence" aria-label="Ciclo Pomodoro">
+        <div class="guide-step">
+          <span class="guide-step-index">01</span>
+          <strong>25 min</strong>
+          <span data-i18n="guide.cycle.work">Trabajo profundo</span>
         </div>
-        <div class="cycle-arrow">→</div>
-        <div class="cycle-step">
-          <div class="cycle-icon">☕</div>
-          <div class="cycle-time">5 min</div>
-          <div class="cycle-label" data-i18n="guide.cycle.short">Descanso corto</div>
+        <div class="guide-sequence-line" aria-hidden="true"></div>
+        <div class="guide-step">
+          <span class="guide-step-index">02</span>
+          <strong>5 min</strong>
+          <span data-i18n="guide.cycle.short">Descanso corto</span>
         </div>
-        <div class="cycle-arrow">→</div>
-        <div class="cycle-step cycle-step-repeat">
-          <div class="cycle-icon">🔄</div>
-          <div class="cycle-time">×4</div>
-          <div class="cycle-label" data-i18n="guide.cycle.repeat">Repetir</div>
+        <div class="guide-sequence-line" aria-hidden="true"></div>
+        <div class="guide-step">
+          <span class="guide-step-index">03</span>
+          <strong>×4</strong>
+          <span data-i18n="guide.cycle.repeat">Repetir</span>
         </div>
-        <div class="cycle-arrow">→</div>
-        <div class="cycle-step cycle-step-long">
-          <div class="cycle-icon">🛋️</div>
-          <div class="cycle-time">15-30 min</div>
-          <div class="cycle-label" data-i18n="guide.cycle.long">Descanso largo</div>
+        <div class="guide-sequence-line" aria-hidden="true"></div>
+        <div class="guide-step">
+          <span class="guide-step-index">04</span>
+          <strong>15–30 min</strong>
+          <span data-i18n="guide.cycle.long">Descanso largo</span>
         </div>
       </div>
 
-      <!-- Info cards -->
-      <div class="cards-grid">
-        <div class="info-card">
-          <div class="card-icon">🧠</div>
-          <h3 class="card-title" data-i18n="guide.card1.title">¿Por qué funciona?</h3>
-          <p class="card-text" data-i18n="guide.card1.text">El cerebro humano no está diseñado para mantener foco profundo por horas. Los intervalos cortos e intensos aprovechan los picos naturales de atención y reducen la fatiga cognitiva.</p>
-        </div>
-        <div class="info-card">
-          <div class="card-icon">⏱️</div>
-          <h3 class="card-title" data-i18n="guide.card2.title">El origen del nombre</h3>
-          <p class="card-text" data-i18n="guide.card2.text">Francesco Cirillo usaba un timer de cocina con forma de tomate ("pomodoro" en italiano) cuando era universitario. De ahí el nombre y el ícono 🍅 que hoy conocemos.</p>
-        </div>
-        <div class="info-card">
-          <div class="card-icon">💡</div>
-          <h3 class="card-title" data-i18n="guide.card3.title">Tips para empezar</h3>
-          <p class="card-text" data-i18n="guide.card3.text">Antes de iniciar, define una sola tarea en la que vas a trabajar. Pon el teléfono en silencio. Si surge algo urgente, anótalo y vuelve tu foco. El pomodoro es sagrado.</p>
-        </div>
-        <div class="info-card">
-          <div class="card-icon">📈</div>
-          <h3 class="card-title" data-i18n="guide.card4.title">Adáptalo a ti</h3>
-          <p class="card-text" data-i18n="guide.card4.text">Aunque el estándar es 25/5, puedes ajustar los tiempos. Algunos prefieren 50/10 para trabajo creativo o 15/5 para tareas mecánicas. Experimenta hasta encontrar tu ritmo.</p>
-        </div>
+      <div class="guide-notes">
+        <article class="guide-note">
+          <span class="guide-note-label" data-i18n="guide.card1.title">¿Por qué funciona?</span>
+          <p data-i18n="guide.card1.text">Los intervalos acotados ayudan a proteger la atención y reducen la fatiga de sostener foco continuo.</p>
+        </article>
+        <article class="guide-note">
+          <span class="guide-note-label" data-i18n="guide.card3.title">Para empezar</span>
+          <p data-i18n="guide.card3.text">Antes de iniciar, define una sola tarea. Si surge algo, anótalo y vuelve a tu intención.</p>
+        </article>
+        <article class="guide-note">
+          <span class="guide-note-label" data-i18n="guide.card4.title">Adáptalo a ti</span>
+          <p data-i18n="guide.card4.text">El estándar 25/5 es un punto de partida. Ajusta los tiempos hasta encontrar un ritmo sostenible.</p>
+        </article>
       </div>
+
+      <p class="guide-origin">
+        <span data-i18n="guide.card2.title">El origen del nombre</span>
+        <span aria-hidden="true">—</span>
+        <span data-i18n="guide.card2.text">Francesco Cirillo usaba un temporizador de cocina con forma de tomate cuando era estudiante.</span>
+      </p>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════ DONATION ══════════════════════════════════ -->
-  <section class="section donation-section section-parallax" id="donation-section" data-parallax="0.12">
+  <!-- ═══════════════════════════════════ SUPPORT ══════════════════════════════════ -->
+  <section class="section support-section section-parallax" id="donation-section" data-parallax="0.06">
     <div class="section-parallax__bg">
-      <div class="deco-blob" style="bottom: 0; left: -100px; transform: rotate(45deg);"></div>
+      <div class="deco-blob support-deco"></div>
     </div>
     <div class="container">
-      <div class="section-header">
-        <div class="section-badge" data-i18n="donation.badge">Apoya el proyecto</div>
-      </div>
-      <div class="donation-card">
-        <p class="donation-text" data-i18n="donation.text">Este proyecto es gratuito y sin anuncios. Tu donación ayuda a mantener los servidores y el desarrollo.</p>
-        <div class="donation-actions">
-          <a href="https://link.mercadopago.cl/jsilvacoder" target="_blank" rel="noopener" class="donation-btn mp-btn">Mercado Pago</a>
-          <a href="https://paypal.me/jsilvacode" target="_blank" rel="noopener" class="donation-btn pp-btn">PayPal</a>
+      <div class="support-panel">
+        <div class="support-copy">
+          <span class="support-kicker" data-i18n="donation.badge">Apoya Flowmodoro</span>
+          <h2 data-i18n="donation.title">Si te sirve, puedes ayudar a que siga mejorando.</h2>
+          <p data-i18n="donation.text">Tu aporte ayuda a sostener el desarrollo, probar nuevas ideas y cuidar cada detalle del producto.</p>
+        </div>
+        <div class="support-actions">
+          <a href="https://link.mercadopago.cl/jsilvacoder" target="_blank" rel="noopener" class="support-link support-link-primary">
+            <span>Mercado Pago</span><span aria-hidden="true">↗</span>
+          </a>
+          <a href="https://paypal.me/jsilvacode" target="_blank" rel="noopener" class="support-link">
+            <span>PayPal</span><span aria-hidden="true">↗</span>
+          </a>
         </div>
       </div>
     </div>
