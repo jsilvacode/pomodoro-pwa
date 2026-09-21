@@ -5435,3 +5435,131 @@ body.focus-mode .timer-active-task {
       max(0.75rem, env(safe-area-inset-left));
   }
 }
+
+
+/* ═══ v4.1 — IMMERSIVE AUDIO + CLOSED TODAY→FOCUS LOOP ═══ */
+
+/* One subtle audio switch in Deep Focus. It never opens the selector. */
+.focus-audio-toggle {
+  position: absolute;
+  top: 0.75rem;
+  right: 3.85rem;
+  z-index: 5;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--bg-surface) 88%, transparent);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-6px) scale(0.96);
+  filter: blur(3px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition:
+    opacity 600ms var(--ease-premium),
+    visibility 0s linear 600ms,
+    transform 700ms var(--ease-premium),
+    filter 700ms var(--ease-premium),
+    color var(--motion-fast) var(--ease-standard),
+    border-color var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
+}
+
+.focus-audio-toggle[hidden] {
+  display: none !important;
+}
+
+body.focus-mode .focus-audio-toggle:not([hidden]) {
+  opacity: 0.48;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+  transition-delay: 260ms, 0s, 260ms, 260ms, 0s, 0s, 0s;
+}
+
+body.focus-mode .focus-audio-toggle:hover,
+body.focus-mode .focus-audio-toggle:focus-visible,
+body.focus-mode .focus-audio-toggle.is-playing {
+  opacity: 0.92;
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 48%, var(--border-strong));
+  background: color-mix(in srgb, var(--accent-subtle) 68%, transparent);
+}
+
+/* X and ambience control read as one quiet utility pair. */
+body.focus-mode .focus-exit-btn {
+  border-radius: 50%;
+}
+
+/* Today has a direct, non-dominant return path to the timer. */
+.today-header {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  align-items: end;
+  gap: 1.5rem;
+}
+
+.today-header-copy {
+  min-width: 0;
+}
+
+.today-return-focus {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  transition:
+    color var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard),
+    border-color var(--motion-fast) var(--ease-standard),
+    transform var(--motion-fast) var(--ease-premium);
+}
+
+.today-return-focus:hover,
+.today-return-focus:focus-visible,
+.today-return-focus.has-task {
+  color: var(--accent);
+  border-color: var(--border);
+  background: var(--accent-subtle);
+}
+
+.today-return-focus:hover {
+  transform: translateX(2px);
+}
+
+@media (max-width: 680px) {
+  .today-header {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 0.65rem;
+  }
+
+  .today-return-focus {
+    justify-self: start;
+    padding-left: 0;
+    border-color: transparent !important;
+    background: transparent !important;
+  }
+
+  .focus-audio-toggle {
+    top: max(0.65rem, env(safe-area-inset-top));
+    right: calc(max(0.65rem, env(safe-area-inset-right)) + 3.25rem);
+    width: 40px;
+    height: 40px;
+  }
+}
