@@ -4458,3 +4458,25 @@ body.focus-mode .timer-card {
     transition: none !important;
   }
 }
+
+
+/* Contextual timer settings: one-tap access beside the primary action. */
+.timer-settings-btn {
+  color: var(--text-muted);
+}
+
+.timer-settings-btn:hover,
+.timer-settings-btn:focus-visible {
+  color: var(--accent);
+}
+
+body.focus-mode .timer-settings-btn {
+  opacity: 0.72;
+}
+
+body.focus-mode .timer-settings-btn:hover,
+body.focus-mode .timer-settings-btn:focus-visible {
+  opacity: 1;
+}
+
+.duration-quick-btn { display: none !important; }
