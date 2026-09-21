@@ -1395,7 +1395,7 @@ dom.plannerTaskList.addEventListener('click', function(event) {
   renderPlanner();
   renderFocusUI();
 });
-dom.plannerTimerOnlyBtn.addEventListener('click', function(){ prepareTimerOnly(true); });
+dom.plannerTimerOnlyBtn.addEventListener('click', function(){ prepareTimerOnly(false); });
 dom.plannerStartBtn.addEventListener('click', function() {
   const pending = state.tasks.filter(function(task){ return !task.done; });
   if (!state.activeTaskId && pending.length) {
