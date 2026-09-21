@@ -182,6 +182,30 @@
         </div>
         <div class="timer-session-label" id="sessionLabel" data-i18n="timer.focusTime">Tiempo de enfoque</div>
 
+        <!-- Active task focus pill + popover -->
+        <div class="timer-task-focus">
+          <button class="focus-pill" id="focusPill" aria-haspopup="listbox" aria-expanded="false">
+            <span class="focus-pill-icon" aria-hidden="true">📌</span>
+            <span class="focus-pill-text" id="focusPillText">Elegir tarea</span>
+            <span class="focus-pill-progress" id="focusPillProgress"></span>
+            <span class="focus-pill-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="focus-popover" id="focusPopover" hidden>
+            <div class="focus-popover-title" data-i18n="timer.focusTitle">Enfocar en…</div>
+            <div class="focus-list" id="focusList" role="listbox" aria-label="Elegir tarea"></div>
+            <div class="focus-quickadd">
+              <input
+                type="text"
+                id="focusQuickAdd"
+                class="focus-quickadd-input"
+                placeholder="+ Nueva tarea…"
+                data-i18n-placeholder="timer.focusQuickAdd"
+                maxlength="120"
+              />
+            </div>
+          </div>
+        </div>
+
         <!-- Pomodoro counters -->
         <div class="pomo-counter">
           <span class="pomo-dot active" id="pomo0">🍅</span>
@@ -206,12 +230,6 @@
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
             </svg>
           </button>
-        </div>
-
-        <!-- Active task indicator -->
-        <div class="active-task-bar" id="activeTaskBar" style="display:none">
-          <span class="active-task-icon">📌</span>
-          <span class="active-task-name" id="activeTaskName"></span>
         </div>
       </div>
 
@@ -256,6 +274,16 @@
         <p class="section-subtitle" data-i18n="tasks.subtitle">Agrega tus tareas y marca la activa para enfocar el timer en ella.</p>
       </div>
 
+      <!-- Task toolbar: filters + clear done -->
+      <div class="task-toolbar">
+        <div class="task-filters" role="group" aria-label="Filtros de tareas">
+          <button class="task-filter active" data-filter="all" data-i18n="tasks.filter.all">Todas</button>
+          <button class="task-filter" data-filter="active" data-i18n="tasks.filter.active">Pendientes</button>
+          <button class="task-filter" data-filter="done" data-i18n="tasks.filter.done">Completadas</button>
+        </div>
+        <button class="btn-clear-done" id="clearDoneBtn" data-i18n="tasks.clearDone">Limpiar completadas</button>
+      </div>
+
       <!-- Add task input -->
       <div class="task-input-row">
         <input
@@ -274,7 +302,7 @@
         <!-- Tasks rendered by JS -->
         <div class="task-empty" id="taskEmpty">
           <div class="task-empty-icon">🎯</div>
-          <p data-i18n="tasks.empty">No hay tareas aún. ¡Agrega la primera!</p>
+          <p id="taskEmptyText" data-i18n="tasks.empty">No hay tareas aún. ¡Agrega la primera!</p>
         </div>
       </div>
     </div>
@@ -376,6 +404,9 @@
     </div>
   </footer>
 
+
+  <!-- Exit focus mode -->
+  <button id="focusExitBtn" class="focus-exit-btn" aria-label="Salir del modo foco" data-i18n-aria="focus.exit">✕</button>
 
   <script src="app.js"></script>
 

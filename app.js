@@ -33,6 +33,13 @@ const TRANSLATIONS = {
     'timer.done.work':  '¡Tiempo de descanso! 🎉',
     'timer.done.short': '¡A trabajar de nuevo! 💪',
     'timer.done.long':  '¡Recargado! Volvamos al foco 🚀',
+    'timer.done.work.task':         '¡Descanso! 🍅 {act}/{est} · {task}',
+    'timer.done.work.taskComplete': '¡Tarea completada! 🎉 {task}',
+    'timer.focusTitle':     'Enfocar en…',
+    'timer.focusChoose':    'Elegir tarea',
+    'timer.focusQuickAdd':  '+ Nueva tarea…',
+    'timer.focusCompleted': '¡Tarea completada! 🎉',
+    'focus.exit':       'Salir del modo foco',
     'settings.title':   'Configuración',
     'settings.work':    'Trabajo (min)',
     'settings.short':   'Descanso corto (min)',
@@ -47,6 +54,22 @@ const TRANSLATIONS = {
     'tasks.placeholder':'Agregar nueva tarea...',
     'tasks.add':        '+ Agregar',
     'tasks.empty':      'No hay tareas aún. ¡Agrega la primera!',
+    'tasks.empty.filter':'No hay tareas aquí.',
+    'tasks.noTask':      'Sin tarea',
+    'tasks.filter.all':   'Todas',
+    'tasks.filter.active':'Pendientes',
+    'tasks.filter.done':  'Completadas',
+    'tasks.clearDone':        'Limpiar completadas',
+    'tasks.clearDone.confirm':'¿Seguro?',
+    'tasks.estimation': 'Pomodoros estimados',
+    'tasks.delete':     'Eliminar tarea',
+    'tasks.focus':      'Enfocar timer en esta tarea',
+    'tasks.unfocus':    'Quitar foco',
+    'tasks.complete':   'Marcar como completada',
+    'tasks.reorder.up':   'Subir tarea',
+    'tasks.reorder.down': 'Bajar tarea',
+    'tasks.inc.pomos':  'Aumentar pomodoros estimados',
+    'tasks.dec.pomos':  'Reducir pomodoros estimados',
     'guide.badge':      '📚 Técnica Pomodoro',
     'guide.title':      '¿Cómo funciona?',
     'guide.subtitle':   "Desarrollada por Francesco Cirillo a finales de los '80, la técnica Pomodoro es una de las metodologías de productividad más efectivas del mundo.",
@@ -62,12 +85,6 @@ const TRANSLATIONS = {
     'guide.card3.text': 'Antes de iniciar, define una sola tarea en la que vas a trabajar. Pon el teléfono en silencio. Si surge algo urgente, anótalo y vuelve tu foco. El pomodoro es sagrado.',
     'guide.card4.title':'Adáptalo a ti',
     'guide.card4.text': 'Aunque el estándar es 25/5, puedes ajustar los tiempos. Algunos prefieren 50/10 para trabajo creativo o 15/5 para tareas mecánicas. Experimenta hasta encontrar tu ritmo.',
-    'tasks.notes':      'Notas o indicaciones',
-    'tasks.notes.placeholder': 'Escribe detalles, enlaces o contexto...',
-    'tasks.subtasks':   'Subtareas',
-    'tasks.subtasks.placeholder': '+ Agregar subtarea y presiona Enter',
-    'tasks.estimation': 'Pomodoros estimados',
-    'tasks.delete':     'Eliminar tarea',
     'footer.tagline':   'Tu flujo de trabajo perfecto.',
     'footer.developed': 'Desarrollado con ❤️ por Julio Silva',
     'donation.badge':   'Apoya el proyecto',
@@ -99,6 +116,13 @@ const TRANSLATIONS = {
     'timer.done.work':  'Break time! 🎉',
     'timer.done.short': 'Back to work! 💪',
     'timer.done.long':  'Recharged! Back to focus 🚀',
+    'timer.done.work.task':         'Break! 🍅 {act}/{est} · {task}',
+    'timer.done.work.taskComplete': 'Task completed! 🎉 {task}',
+    'timer.focusTitle':     'Focus on…',
+    'timer.focusChoose':    'Choose task',
+    'timer.focusQuickAdd':  '+ New task…',
+    'timer.focusCompleted': 'Task completed! 🎉',
+    'focus.exit':       'Exit focus mode',
     'settings.title':   'Settings',
     'settings.work':    'Work (min)',
     'settings.short':   'Short break (min)',
@@ -113,6 +137,22 @@ const TRANSLATIONS = {
     'tasks.placeholder':'Add a new task...',
     'tasks.add':        '+ Add',
     'tasks.empty':      'No tasks yet. Add your first one!',
+    'tasks.empty.filter':'No tasks here.',
+    'tasks.noTask':      'No task',
+    'tasks.filter.all':   'All',
+    'tasks.filter.active':'Active',
+    'tasks.filter.done':  'Completed',
+    'tasks.clearDone':        'Clear completed',
+    'tasks.clearDone.confirm':'Sure?',
+    'tasks.estimation': 'Estimated pomodoros',
+    'tasks.delete':     'Delete task',
+    'tasks.focus':      'Focus timer on this task',
+    'tasks.unfocus':    'Remove focus',
+    'tasks.complete':   'Mark as completed',
+    'tasks.reorder.up':   'Move task up',
+    'tasks.reorder.down': 'Move task down',
+    'tasks.inc.pomos':  'Increase estimated pomodoros',
+    'tasks.dec.pomos':  'Decrease estimated pomodoros',
     'guide.badge':      '📚 Pomodoro Technique',
     'guide.title':      'How does it work?',
     'guide.subtitle':   "Developed by Francesco Cirillo in the late '80s, the Pomodoro Technique is one of the world's most effective productivity methods.",
@@ -128,12 +168,6 @@ const TRANSLATIONS = {
     'guide.card3.text': 'Before starting, define just one task to work on. Put your phone on silent. If something urgent comes up, note it down and return your focus. The pomodoro is sacred.',
     'guide.card4.title':'Adapt it to you',
     'guide.card4.text': 'While the standard is 25/5, you can adjust the times. Some prefer 50/10 for creative work or 15/5 for mechanical tasks. Experiment until you find your rhythm.',
-    'tasks.notes':      'Notes or context',
-    'tasks.notes.placeholder': 'Add details, links, or context...',
-    'tasks.subtasks':   'Subtasks',
-    'tasks.subtasks.placeholder': '+ Add subtask and press Enter',
-    'tasks.estimation': 'Estimated pomodoros',
-    'tasks.delete':     'Delete task',
     'footer.tagline':   'Your perfect workflow.',
     'footer.developed': 'Developed with ❤️ by Julio Silva',
     'donation.badge':   'Support the project',
@@ -153,6 +187,16 @@ function safeGetJSON(key, fallback) {
 }
 
 // ─── State ────────────────────────────────────────────────────
+function normalizeTask(t) {
+  return {
+    id: String(t.id || generateId()),
+    text: String(t.text || ''),
+    done: !!t.done,
+    estPomos: Math.max(1, parseInt(t.estPomos) || 1),
+    actPomos: Math.max(0, parseInt(t.actPomos) || 0),
+  };
+}
+
 const state = {
   lang: localStorage.getItem('fm_lang') || 'en',
   theme: localStorage.getItem('fm_theme') || 'dark',
@@ -165,9 +209,9 @@ const state = {
   endTime: null,
   pomoCount: 0,           // 0-3 in current set
   soundEnabled: true,
-  tasks: safeGetJSON('fm_tasks', []),
+  tasks: safeGetJSON('fm_tasks', []).map(normalizeTask),
   activeTaskId: localStorage.getItem('fm_activeTask') || null,
-  expandedTasks: new Set(),
+  taskFilter: 'all',      // 'all' | 'active' | 'done'
   prevTime: null,
 };
 
@@ -180,6 +224,7 @@ const $ = id => document.getElementById(id);
 const dom = {
   html:           document.documentElement,
   body:           document.body,
+  timerSection:   $('timer-section'),
   themeToggle:    $('themeToggle'),
   sunIcon:        $('sunIcon'),
   moonIcon:       $('moonIcon'),
@@ -195,8 +240,13 @@ const dom = {
   resetBtn:       $('resetBtn'),
   settingsBtn:    $('settingsBtn'),
   settingsPanel:  $('settingsPanel'),
-  activeTaskBar:  $('activeTaskBar'),
-  activeTaskName: $('activeTaskName'),
+  focusPill:      $('focusPill'),
+  focusPillText:  $('focusPillText'),
+  focusPillProgress: $('focusPillProgress'),
+  focusPopover:   $('focusPopover'),
+  focusList:      $('focusList'),
+  focusQuickAdd:  $('focusQuickAdd'),
+  focusExitBtn:   $('focusExitBtn'),
   tabWork:        $('tab-work'),
   tabShort:       $('tab-short'),
   tabLong:        $('tab-long'),
@@ -209,22 +259,34 @@ const dom = {
   addTaskBtn:     $('addTaskBtn'),
   taskList:       $('taskList'),
   taskEmpty:      $('taskEmpty'),
+  taskEmptyText:  $('taskEmptyText'),
+  clearDoneBtn:   $('clearDoneBtn'),
   pomoCount:      [0,1,2,3].map(i => $(`pomo${i}`)),
   viewFlip:       $('viewFlip'),
 };
 
 // ─── i18n ─────────────────────────────────────────────────────
-function t(key) {
-  return TRANSLATIONS[state.lang][key] || TRANSLATIONS['es'][key] || key;
+function t(key, vars) {
+  let str = TRANSLATIONS[state.lang][key] || TRANSLATIONS['es'][key] || key;
+  if (vars) {
+    for (const [k, v] of Object.entries(vars)) {
+      str = str.replaceAll(`{${k}}`, v);
+    }
+  }
+  return str;
 }
 
 function applyTranslations() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
+    if (el.classList.contains('confirm')) return;
     const key = el.getAttribute('data-i18n');
     el.textContent = t(key);
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+  });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+    el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
   });
   dom.html.lang = state.lang;
 }
@@ -235,6 +297,8 @@ function setLang(lang) {
   dom.langLabel.textContent = lang === 'es' ? 'EN' : 'ES';
   applyTranslations();
   updateTimerUI(); // re-apply session label
+  renderTasks();
+  renderFocusUI();
 }
 
 dom.langToggle.addEventListener('click', () => {
@@ -242,12 +306,16 @@ dom.langToggle.addEventListener('click', () => {
 });
 
 // ─── Theme ────────────────────────────────────────────────────
-function applyTheme(theme) {
-  state.theme = theme;
+function setThemeUI(theme) {
   dom.html.setAttribute('data-theme', theme);
-  localStorage.setItem('fm_theme', theme);
   dom.sunIcon.style.display  = theme === 'dark'  ? 'block' : 'none';
   dom.moonIcon.style.display = theme === 'light' ? 'block' : 'none';
+}
+
+function applyTheme(theme) {
+  state.theme = theme;
+  setThemeUI(theme);
+  localStorage.setItem('fm_theme', theme);
 }
 
 dom.themeToggle.addEventListener('click', () => {
@@ -365,6 +433,7 @@ function updateFlipCard(id, value, force = false) {
 
 function setMode(mode) {
   pauseTimer();
+  exitFocusMode();
   state.currentMode = mode;
   state.timeLeft = state.durations[mode] * 60;
   state.totalTime = state.timeLeft;
@@ -386,6 +455,7 @@ function startTimer() {
   state.endTime = Date.now() + (state.timeLeft * 1000);
   dom.startBtn.textContent = t('timer.pause');
   state.intervalId = setInterval(tick, 200);
+  if (state.currentMode === 'work') enterFocusMode();
 }
 
 function pauseTimer() {
@@ -398,6 +468,7 @@ function pauseTimer() {
     state.endTime = null;
   }
   updateTimerUI();
+  exitFocusMode();
 }
 
 function resetTimer() {
@@ -439,11 +510,20 @@ function handleSessionEnd() {
 
   if (state.currentMode === 'work') {
     // Add completed pomo to active task
-    if (state.activeTaskId) {
-      const task = state.tasks.find(t => t.id === state.activeTaskId);
-      if (task) {
-        task.actPomos = (task.actPomos || 0) + 1;
-        saveTasks();
+    let taskMsg = null;
+    const task = state.tasks.find(t => t.id === state.activeTaskId);
+    if (task && !task.done) {
+      task.actPomos = (task.actPomos || 0) + 1;
+      if (task.actPomos >= task.estPomos) {
+        task.done = true;
+        taskMsg = t('timer.done.work.taskComplete', { task: task.text });
+      } else {
+        taskMsg = t('timer.done.work.task', { act: task.actPomos, est: task.estPomos, task: task.text });
+      }
+      saveTasks();
+      if (task.done) {
+        setActiveTask(null);
+        flashFocusCompleted();
       }
     }
 
@@ -452,7 +532,7 @@ function handleSessionEnd() {
     updatePomoDotsUI();
 
     // Notify
-    showNotification(t('timer.done.work'));
+    showNotification(taskMsg || t('timer.done.work'));
 
     // After 4 pomodoros → long break (and reset counter), else short
     if (state.pomoCount >= 4) {
@@ -467,6 +547,70 @@ function handleSessionEnd() {
     setTimeout(() => setMode('work'), 1000);
   }
 }
+
+// ─── Focus mode (inmersivo: noche al reproducir trabajo) ─────
+let focusMode = false;
+let focusPrevTheme = null;
+
+// Aplica el estado focus-mode y, si el movimiento no está reducido,
+// anima el zoom espacial del reloj (transform, sin tocar layout)
+function prepareFocusZoom(focusOn) {
+  const flip = dom.viewFlip;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const from = !reduced && flip ? flip.getBoundingClientRect().width : 0;
+
+  if (focusOn) document.body.classList.add('focus-mode');
+  else document.body.classList.remove('focus-mode');
+
+  if (reduced || !flip) return;
+  const to = flip.getBoundingClientRect().width;
+  if (!to || Math.abs(from - to) < 2) return;
+  const ratio = from / to;
+  flip.style.transition = 'none';
+  flip.style.transform = `scale(${ratio})`;
+  void flip.getBoundingClientRect();
+  requestAnimationFrame(() => {
+    flip.style.transition = '';
+    flip.style.transform = '';
+  });
+}
+
+function enterFocusMode() {
+  if (focusMode) return;
+  focusMode = true;
+  focusPrevTheme = state.theme;
+  // Alinear la sección del timer con el viewport para que el vidrio
+  // quede realmente centrado y ocupe el centro de la pantalla
+  if (dom.timerSection && typeof dom.timerSection.scrollIntoView === 'function') {
+    dom.timerSection.scrollIntoView({ behavior: 'auto', block: 'start' });
+  }
+  dom.tabShort.disabled = true;
+  dom.tabLong.disabled = true;
+  prepareFocusZoom(true);
+  setThemeUI('dark');
+}
+
+function exitFocusMode() {
+  if (!focusMode) return;
+  focusMode = false;
+  dom.tabShort.disabled = false;
+  dom.tabLong.disabled = false;
+  prepareFocusZoom(false);
+  setThemeUI(focusPrevTheme || 'dark');
+}
+
+// Salir del foco pausando: si el timer corre, se pausa (pauseTimer ya
+// sale del modo foco); si no corre, solo se sale del modo foco.
+function exitFocusAndPause() {
+  if (state.isRunning) pauseTimer();
+  else exitFocusMode();
+}
+
+if (dom.focusExitBtn) dom.focusExitBtn.addEventListener('click', exitFocusAndPause);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && focusMode && dom.focusPopover.hidden) exitFocusAndPause();
+});
 
 // Start/pause toggle
 dom.startBtn.addEventListener('click', () => {
@@ -539,7 +683,13 @@ dom.saveSettings.addEventListener('click', () => {
 // ─── Tasks ────────────────────────────────────────────────────
 function saveTasks() {
   localStorage.setItem('fm_tasks', JSON.stringify(state.tasks));
-  // Store null explicitly so we don't read back an empty string as truthy
+}
+
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2);
+}
+
+function persistActiveTask() {
   if (state.activeTaskId) {
     localStorage.setItem('fm_activeTask', state.activeTaskId);
   } else {
@@ -547,119 +697,219 @@ function saveTasks() {
   }
 }
 
-function generateId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2);
+// Validate the stored active task (missing or completed → clear)
+function validateActiveTask() {
+  const task = state.tasks.find(t => t.id === state.activeTaskId);
+  if (!task || task.done) {
+    state.activeTaskId = null;
+    persistActiveTask();
+  }
 }
+
+function setActiveTask(id) {
+  state.activeTaskId = id || null;
+  persistActiveTask();
+  renderTasks();
+  renderFocusUI();
+}
+
+// ─── Focus pill + popover (timer ↔ tasks integration) ────────
+let focusCompletedTimer = null;
+
+function renderFocusUI() {
+  const pill = dom.focusPill;
+  const task = state.tasks.find(t => t.id === state.activeTaskId && !t.done);
+
+  if (task) {
+    pill.classList.remove('ghost', 'complete');
+    pill.classList.add('active');
+    dom.focusPillText.textContent = task.text;
+    dom.focusPillProgress.textContent = `🍅 ${task.actPomos}/${task.estPomos}`;
+  } else {
+    pill.classList.add('ghost');
+    pill.classList.remove('active');
+    dom.focusPillText.textContent = t('timer.focusChoose');
+    dom.focusPillProgress.textContent = '';
+  }
+
+  renderFocusList();
+}
+
+function renderFocusList() {
+  const pending = state.tasks.filter(t => !t.done);
+  const items = pending.map(task => `
+    <div class="focus-option ${task.id === state.activeTaskId ? 'selected' : ''}"
+         data-id="${task.id}" role="option" aria-selected="${task.id === state.activeTaskId}">
+      <span class="focus-option-text">${escapeHtml(task.text)}</span>
+      <span class="focus-option-progress">🍅 ${task.actPomos}/${task.estPomos}</span>
+    </div>
+  `).join('');
+
+  const noneSelected = !state.activeTaskId;
+  dom.focusList.innerHTML = `
+    <div class="focus-option ${noneSelected ? 'selected' : ''}" data-id="" role="option" aria-selected="${noneSelected}">
+      <span class="focus-option-text">— ${t('tasks.noTask')} —</span>
+    </div>
+    ${items}
+  `;
+}
+
+function positionFocusPopover() {
+  const pop = dom.focusPopover;
+  const pillRect = dom.focusPill.getBoundingClientRect();
+  const popWidth = Math.min(300, window.innerWidth - 32);
+  const popHeight = pop.offsetHeight || 0;
+  let left = pillRect.left + pillRect.width / 2 - popWidth / 2;
+  left = Math.max(16, Math.min(left, window.innerWidth - popWidth - 16));
+  let top = pillRect.bottom + 10;
+  if (popHeight && top + popHeight > window.innerHeight - 8) {
+    top = Math.max(8, pillRect.top - popHeight - 10);
+  }
+  pop.style.width = popWidth + 'px';
+  pop.style.left = left + 'px';
+  pop.style.top = top + 'px';
+}
+
+function openFocusPopover() {
+  renderFocusList();
+  dom.focusPopover.hidden = false;
+  dom.focusPill.setAttribute('aria-expanded', 'true');
+  positionFocusPopover();
+}
+
+function closeFocusPopover() {
+  dom.focusPopover.hidden = true;
+  dom.focusPill.setAttribute('aria-expanded', 'false');
+}
+
+function toggleFocusPopover() {
+  if (dom.focusPopover.hidden) openFocusPopover();
+  else closeFocusPopover();
+}
+
+window.addEventListener('scroll', () => {
+  if (!dom.focusPopover.hidden) positionFocusPopover();
+}, { passive: true });
+
+window.addEventListener('resize', () => {
+  if (!dom.focusPopover.hidden) positionFocusPopover();
+});
+
+function flashFocusCompleted() {
+  clearTimeout(focusCompletedTimer);
+  dom.focusPill.classList.add('complete');
+  dom.focusPillText.textContent = t('timer.focusCompleted');
+  dom.focusPillProgress.textContent = '';
+  focusCompletedTimer = setTimeout(() => {
+    dom.focusPill.classList.remove('complete');
+    renderFocusUI();
+  }, 2500);
+}
+
+dom.focusPill.addEventListener('click', () => {
+  renderFocusList();
+  toggleFocusPopover();
+});
+
+dom.focusList.addEventListener('click', e => {
+  const option = e.target.closest('.focus-option');
+  if (!option) return;
+  setActiveTask(option.dataset.id || null);
+  closeFocusPopover();
+});
+
+function submitFocusQuickAdd() {
+  const text = dom.focusQuickAdd.value.trim();
+  if (!text) return;
+  const task = normalizeTask({ id: generateId(), text, done: false, estPomos: 1, actPomos: 0 });
+  state.tasks.unshift(task);
+  dom.focusQuickAdd.value = '';
+  saveTasks();
+  setActiveTask(task.id);
+  closeFocusPopover();
+}
+
+dom.focusQuickAdd.addEventListener('keydown', e => {
+  if (e.key === 'Enter') submitFocusQuickAdd();
+});
+
+document.addEventListener('click', e => {
+  if (dom.focusPopover.hidden) return;
+  if (dom.focusPopover.contains(e.target) || dom.focusPill.contains(e.target)) return;
+  closeFocusPopover();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !dom.focusPopover.hidden) closeFocusPopover();
+});
 
 function renderTasks() {
   const list = dom.taskList;
   // Remove all task items (keep the empty state div)
   list.querySelectorAll('.task-item').forEach(el => el.remove());
 
-  if (state.tasks.length === 0) {
-    dom.taskEmpty.style.display = 'block';
-    return;
-  }
-  dom.taskEmpty.style.display = 'none';
+  const visible = state.tasks.filter(task => {
+    if (state.taskFilter === 'active') return !task.done;
+    if (state.taskFilter === 'done') return task.done;
+    return true;
+  });
 
-  state.tasks.forEach(task => {
-    // Data backwards compatibility
-    task.notes = task.notes || '';
-    task.subtasks = task.subtasks || [];
-    task.estPomos = task.estPomos || 1;
-    task.actPomos = task.actPomos || 0;
+  dom.taskEmpty.style.display = visible.length === 0 ? 'block' : 'none';
+  dom.taskEmptyText.textContent = state.tasks.length === 0
+    ? t('tasks.empty')
+    : t('tasks.empty.filter');
 
+  dom.clearDoneBtn.disabled = !state.tasks.some(t => t.done);
+
+  visible.forEach(task => {
+    const idx = state.tasks.indexOf(task);
     const item = document.createElement('div');
     item.className = 'task-item' +
       (task.id === state.activeTaskId ? ' active-task' : '') +
-      (task.done ? ' done' : '') +
-      (state.expandedTasks.has(task.id) ? ' expanded' : '');
+      (task.done ? ' done' : '');
     item.dataset.id = task.id;
 
+    const isActive = state.activeTaskId === task.id;
     item.innerHTML = `
-      <div class="task-header">
-        <div class="task-check" data-action="toggle" aria-label="Completar">
-          ${task.done ? '✓' : ''}
-        </div>
-        <div class="task-content">
-          <span class="task-text">${escapeHtml(task.text)}</span>
-          <div class="task-meta">
-            ${task.subtasks.length > 0 ? `<span class="meta-item">🔖 ${task.subtasks.filter(s=>s.done).length}/${task.subtasks.length}</span>` : ''}
-            <span class="meta-item pomo-badge">🍅 ${task.actPomos}/${task.estPomos}</span>
-          </div>
-        </div>
-        <div class="task-actions">
-          <button class="task-action-btn focus-btn ${state.activeTaskId === task.id ? 'active' : ''}" data-action="focus" title="Enfocar timer en esta tarea" aria-label="Foco">📌</button>
-          <button class="task-action-btn expand-btn" data-action="expand" aria-label="Expandir">▼</button>
-        </div>
+      <button class="task-check" data-action="toggle" aria-pressed="${task.done}" aria-label="${t('tasks.complete')}">
+        ${task.done ? '✓' : ''}
+      </button>
+      <span class="task-text">${escapeHtml(task.text)}</span>
+      <div class="pomo-badge" title="${t('tasks.estimation')}">
+        <button class="pomo-ctrl-btn" data-action="dec-pomo" aria-label="${t('tasks.dec.pomos')}" ${task.estPomos <= 1 ? 'disabled' : ''}>−</button>
+        <span class="pomo-count">🍅 ${task.actPomos}/${task.estPomos}</span>
+        <button class="pomo-ctrl-btn" data-action="inc-pomo" aria-label="${t('tasks.inc.pomos')}">+</button>
       </div>
-      <div class="task-details">
-        <div class="details-section">
-          <label class="details-label">${t('tasks.notes')}</label>
-          <textarea class="task-notes-input" data-id="${task.id}" placeholder="${t('tasks.notes.placeholder')}">${escapeHtml(task.notes)}</textarea>
-        </div>
-        
-        <div class="details-section">
-          <label class="details-label">${t('tasks.subtasks')}</label>
-          <div class="subtask-list">
-            ${task.subtasks.map(s => `
-              <div class="subtask-item ${s.done ? 'done' : ''}" data-subid="${s.id}">
-                <div class="subtask-check" data-action="toggle-subtask">${s.done ? '✓' : ''}</div>
-                <span class="subtask-text">${escapeHtml(s.text)}</span>
-                <button class="subtask-delete" data-action="delete-subtask">✕</button>
-              </div>
-            `).join('')}
-          </div>
-          <input type="text" class="subtask-input" data-id="${task.id}" placeholder="${t('tasks.subtasks.placeholder')}">
-        </div>
-
-        <div class="details-section pomo-estimation">
-          <label class="details-label">${t('tasks.estimation')}</label>
-          <div class="pomo-controls">
-            <button class="pomo-ctrl-btn" data-action="dec-pomo">-</button>
-            <span class="pomo-count">🍅 ${task.estPomos}</span>
-            <button class="pomo-ctrl-btn" data-action="inc-pomo">+</button>
-          </div>
-        </div>
-        <div class="task-details-footer">
-           <button class="delete-btn" data-action="delete" title="${t('tasks.delete')}">🗑️ ${t('tasks.delete')}</button>
-        </div>
+      <div class="task-actions">
+        <button class="task-action-btn focus-btn ${isActive ? 'active' : ''}" data-action="focus"
+          title="${t(isActive ? 'tasks.unfocus' : 'tasks.focus')}" aria-label="${t(isActive ? 'tasks.unfocus' : 'tasks.focus')}"
+          ${task.done ? 'disabled' : ''}>📌</button>
+        <button class="task-action-btn reorder-btn" data-action="up" aria-label="${t('tasks.reorder.up')}" ${idx === 0 ? 'disabled' : ''}>↑</button>
+        <button class="task-action-btn reorder-btn" data-action="down" aria-label="${t('tasks.reorder.down')}" ${idx === state.tasks.length - 1 ? 'disabled' : ''}>↓</button>
+        <button class="task-action-btn delete-btn-icon" data-action="delete" aria-label="${t('tasks.delete')}">🗑️</button>
       </div>
     `;
 
     list.appendChild(item);
   });
-
-  updateActiveTaskBar();
-}
-
-function updateActiveTaskBar() {
-  const task = state.tasks.find(t => t.id === state.activeTaskId);
-  if (task && !task.done) {
-    dom.activeTaskBar.style.display = 'flex';
-    dom.activeTaskName.textContent = task.text;
-  } else {
-    dom.activeTaskBar.style.display = 'none';
-    state.activeTaskId = null;
-  }
 }
 
 function addTask() {
   const text = dom.taskInput.value.trim();
   if (!text) return;
-  const task = { 
-    id: generateId(), 
-    text, 
-    done: false,
-    notes: '',
-    subtasks: [],
-    estPomos: 1,
-    actPomos: 0
-  };
+  const task = normalizeTask({ id: generateId(), text, done: false, estPomos: 1, actPomos: 0 });
   state.tasks.unshift(task);
   dom.taskInput.value = '';
   saveTasks();
   renderTasks();
+  renderFocusUI();
+}
+
+function moveTask(task, delta) {
+  const i = state.tasks.indexOf(task);
+  const j = i + delta;
+  if (i === -1 || j < 0 || j >= state.tasks.length) return;
+  [state.tasks[i], state.tasks[j]] = [state.tasks[j], state.tasks[i]];
 }
 
 // Delegate task list actions
@@ -672,92 +922,81 @@ dom.taskList.addEventListener('click', e => {
 
   const action = e.target.closest('[data-action]')?.dataset.action;
 
-  if (action === 'toggle') {
-    task.done = !task.done;
-    if (task.done && state.activeTaskId === id) state.activeTaskId = null;
-    saveTasks();
-    renderTasks();
-  } else if (action === 'focus') {
-    state.activeTaskId = (state.activeTaskId === id) ? null : id;
-    saveTasks();
-    renderTasks();
-  } else if (action === 'delete') {
-    state.tasks = state.tasks.filter(t => t.id !== id);
-    if (state.activeTaskId === id) state.activeTaskId = null;
-    saveTasks();
-    renderTasks();
-  } else if (action === 'expand') {
-    if (state.expandedTasks.has(id)) {
-      state.expandedTasks.delete(id);
-      item.classList.remove('expanded');
-    } else {
-      state.expandedTasks.add(id);
-      item.classList.add('expanded');
-    }
-  } else if (action === 'toggle-subtask') {
-    const subtaskId = e.target.closest('.subtask-item').dataset.subid;
-    const subtask = task.subtasks.find(s => s.id === subtaskId);
-    if (subtask) {
-      subtask.done = !subtask.done;
+  switch (action) {
+    case 'toggle':
+      task.done = !task.done;
+      saveTasks();
+      if (task.done && state.activeTaskId === id) setActiveTask(null);
+      else renderTasks();
+      break;
+    case 'focus':
+      setActiveTask(state.activeTaskId === id ? null : id);
+      break;
+    case 'delete':
+      state.tasks = state.tasks.filter(t => t.id !== id);
+      if (state.activeTaskId === id) state.activeTaskId = null;
+      persistActiveTask();
       saveTasks();
       renderTasks();
-    }
-  } else if (action === 'delete-subtask') {
-    const subtaskId = e.target.closest('.subtask-item').dataset.subid;
-    task.subtasks = task.subtasks.filter(s => s.id !== subtaskId);
-    saveTasks();
-    renderTasks();
-  } else if (action === 'inc-pomo') {
-    task.estPomos++;
-    saveTasks();
-    renderTasks();
-  } else if (action === 'dec-pomo') {
-    if (task.estPomos > 1) {
-      task.estPomos--;
+      renderFocusUI();
+      break;
+    case 'inc-pomo':
+      task.estPomos++;
       saveTasks();
       renderTasks();
-    }
+      break;
+    case 'dec-pomo':
+      if (task.estPomos > 1) {
+        task.estPomos--;
+        saveTasks();
+        renderTasks();
+      }
+      break;
+    case 'up':
+      moveTask(task, -1);
+      saveTasks();
+      renderTasks();
+      break;
+    case 'down':
+      moveTask(task, 1);
+      saveTasks();
+      renderTasks();
+      break;
   }
 });
 
-// Debounce helper
-function debounce(fn, delay) {
-  let timer;
-  return function(...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn.apply(this, args), delay);
-  };
+// Filters
+document.querySelectorAll('.task-filter').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.taskFilter = btn.dataset.filter;
+    document.querySelectorAll('.task-filter').forEach(b => b.classList.toggle('active', b === btn));
+    renderTasks();
+  });
+});
+
+// Clear completed (two-step confirm)
+let clearDoneArmed = false;
+let clearDoneTimer = null;
+
+function resetClearDone() {
+  clearDoneArmed = false;
+  clearTimeout(clearDoneTimer);
+  dom.clearDoneBtn.classList.remove('confirm');
+  dom.clearDoneBtn.textContent = t('tasks.clearDone');
 }
 
-const saveNotesDebounced = debounce(saveTasks, 500);
-
-dom.taskList.addEventListener('input', e => {
-  if (e.target.classList.contains('task-notes-input')) {
-    const id = e.target.dataset.id;
-    const task = state.tasks.find(t => t.id === id);
-    if (task) {
-      task.notes = e.target.value;
-      saveNotesDebounced(); // debounced: save after 500ms of inactivity
-    }
-  }
-});
-
-dom.taskList.addEventListener('keydown', e => {
-  if (e.target.classList.contains('subtask-input') && e.key === 'Enter') {
-    const text = e.target.value.trim();
-    if (!text) return;
-    const id = e.target.dataset.id;
-    const task = state.tasks.find(t => t.id === id);
-    if (task) {
-      task.subtasks.push({ id: generateId(), text, done: false });
-      saveTasks();
-      renderTasks();
-      // focus again to allow typing multiple subtasks quickly
-      setTimeout(() => {
-        const input = document.querySelector(`.subtask-input[data-id="${id}"]`);
-        if (input) input.focus();
-      }, 0);
-    }
+dom.clearDoneBtn.addEventListener('click', () => {
+  if (!clearDoneArmed) {
+    clearDoneArmed = true;
+    dom.clearDoneBtn.classList.add('confirm');
+    dom.clearDoneBtn.textContent = t('tasks.clearDone.confirm');
+    clearDoneTimer = setTimeout(resetClearDone, 3000);
+  } else {
+    state.tasks = state.tasks.filter(t => !t.done);
+    saveTasks();
+    resetClearDone();
+    renderTasks();
+    renderFocusUI();
   }
 });
 
@@ -854,7 +1093,11 @@ function init() {
   dom.body.setAttribute('data-mode', 'work');
   updateTimerUI(true); // Force initial render
   updatePomoDotsUI();
+  validateActiveTask();
   renderTasks();
+  renderFocusUI();
+  // Move popover to body so section transforms/overflow can never clip it
+  document.body.appendChild(dom.focusPopover);
   new ParallaxController();
 }
 
