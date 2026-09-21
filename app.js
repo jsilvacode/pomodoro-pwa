@@ -300,7 +300,7 @@ function applyThemePreference(preference, persist) {
     localStorage.setItem('fm_theme_preference', state.themePreference);
     localStorage.removeItem('fm_theme');
   }
-  setThemeUI(resolveTheme(state.themePreference));
+  setThemeUI((typeof focusMode !== 'undefined' && focusMode) ? 'dark' : resolveTheme(state.themePreference));
   if (dom.themePreference) dom.themePreference.value = state.themePreference;
 }
 
