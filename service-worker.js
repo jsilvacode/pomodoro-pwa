@@ -1,4 +1,5 @@
-const CACHE_NAME = 'flowmodoro-v30';
+const CACHE_NAME = 'flowmodoro-v31';
+const AUDIO_CACHE_NAME = 'flowmodoro-audio-v1';
 const ASSETS = [
   './',
   './index.html',
@@ -31,6 +32,28 @@ self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
+
+  // CC0 ambient recordings are streamed from Freesound's CDN and cached
+  // after first playback when the response is cacheable. This keeps the
+  // repository light while allowing repeat sessions to avoid re-downloading.
+  if (url.hostname === 'cdn.freesound.org' && event.request.destination === 'audio') {
+    event.respondWith(
+      caches.open(AUDIO_CACHE_NAME).then(async cache => {
+        const cached = await cache.match(event.request);
+        if (cached) return cached;
+        try {
+          const response = await fetch(event.request);
+          if (response && (response.ok || response.type === 'opaque')) {
+            await cache.put(event.request, response.clone());
+          }
+          return response;
+        } catch (error) {
+          return cached || Response.error();
+        }
+      })
+    );
+    return;
+  }
 
   if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
     event.respondWith(
