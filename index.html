@@ -220,11 +220,60 @@
           <span class="pomo-dot" id="pomo3">🍅</span>
         </div>
 
-        <button class="ambient-pill" id="ambientPill" type="button" hidden aria-pressed="false">
-          <span class="ambient-pill-icon" aria-hidden="true">♫</span>
-          <span class="ambient-pill-name" id="ambientPillName">Ambiente</span>
-          <span class="ambient-pill-state" id="ambientPillState" aria-hidden="true">Ⅱ</span>
-        </button>
+        <div class="sound-dock" id="soundDock">
+          <button class="ambient-pill" id="ambientPill" type="button" aria-haspopup="dialog" aria-expanded="false">
+            <span class="ambient-pill-icon" aria-hidden="true">♫</span>
+            <span class="ambient-pill-name" id="ambientPillName" data-i18n="ambient.sound">Sonido</span>
+            <span class="ambient-pill-state" id="ambientPillState" aria-hidden="true">▾</span>
+          </button>
+
+          <div class="sound-popover" id="soundPopover" hidden role="dialog" aria-label="Sonido de foco">
+            <div class="sound-popover-header">
+              <div>
+                <span class="sound-popover-kicker">FLOWMODORO SOUNDS</span>
+                <strong data-i18n="ambient.focusSound">Sonido de foco</strong>
+              </div>
+              <button class="sound-popover-close" id="soundPopoverClose" type="button" aria-label="Cerrar">✕</button>
+            </div>
+
+            <div class="sound-options" role="group" aria-label="Ambientes">
+              <button class="sound-option" type="button" data-sound="off"><span>—</span><small data-i18n="ambient.off">Sin audio</small></button>
+              <button class="sound-option" type="button" data-sound="rain"><span>☂</span><small data-i18n="ambient.rain">Lluvia suave</small></button>
+              <button class="sound-option" type="button" data-sound="nightForest"><span>✦</span><small data-i18n="ambient.nightForest">Bosque nocturno</small></button>
+              <button class="sound-option" type="button" data-sound="cafe"><span>☕</span><small data-i18n="ambient.cafe">Café</small></button>
+              <button class="sound-option" type="button" data-sound="campfire"><span>♨</span><small data-i18n="ambient.campfire">Fogata</small></button>
+            </div>
+
+            <div class="sound-volume-row">
+              <label for="ambientVolume">
+                <span data-i18n="ambient.volume">Volumen</span>
+                <span id="ambientVolumeValue">35%</span>
+              </label>
+              <input id="ambientVolume" class="ambient-volume" type="range" min="0" max="100" step="1" value="35" />
+            </div>
+
+            <label class="sound-attenuate-row">
+              <span data-i18n="ambient.attenuate">Atenuar durante descansos</span>
+              <span class="toggle-switch"><input type="checkbox" id="ambientAttenuateToggle" checked /><span class="toggle-slider"></span></span>
+            </label>
+
+            <div class="spotify-external">
+              <div class="spotify-external-head">
+                <span data-i18n="ambient.spotifySection">Playlists en Spotify</span>
+                <small data-i18n="ambient.spotifyExternal">Se abren en Spotify</small>
+              </div>
+              <a id="spotifyLink1" href="https://open.spotify.com/playlist/0oZy1DMRofAqvOO9P4Z8qr" target="_blank" rel="noopener">
+                <span id="spotifyLink1Label">Flowmodoro · Spotify 1</span><span aria-hidden="true">↗</span>
+              </a>
+              <a id="spotifyLink2" href="https://open.spotify.com/playlist/1YGk1NFAw8l9zPwHReImrY" target="_blank" rel="noopener">
+                <span id="spotifyLink2Label">Flowmodoro · Spotify 2</span><span aria-hidden="true">↗</span>
+              </a>
+              <a id="spotifyLink3" href="https://open.spotify.com/playlist/1c62qIWEuYaRGAEYpFcZTs" target="_blank" rel="noopener">
+                <span id="spotifyLink3Label">Flowmodoro · Spotify 3</span><span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
 
         <!-- Controls -->
         <div class="timer-controls">
@@ -324,44 +373,6 @@
         </select>
       </div>
 
-      <div class="ambient-settings">
-        <div class="setting-item">
-          <label for="ambientSelect" data-i18n="ambient.label">Ambiente</label>
-          <select id="ambientSelect" class="setting-input">
-            <option value="off" data-i18n="ambient.off">Sin audio</option>
-            <optgroup label="Spotify" data-i18n-label="ambient.spotifyGroup">
-              <option value="spotify1" id="ambientSpotify1">Spotify · Playlist 1</option>
-              <option value="spotify2" id="ambientSpotify2">Spotify · Playlist 2</option>
-              <option value="spotify3" id="ambientSpotify3">Spotify · Playlist 3</option>
-            </optgroup>
-            <optgroup label="Ambientes" data-i18n-label="ambient.localGroup">
-              <option value="rain" data-i18n="ambient.rain">Lluvia suave</option>
-              <option value="nightForest" data-i18n="ambient.nightForest">Bosque nocturno</option>
-              <option value="cafe" data-i18n="ambient.cafe">Café</option>
-              <option value="campfire" data-i18n="ambient.campfire">Fogata</option>
-            </optgroup>
-          </select>
-        </div>
-
-        <div class="spotify-embed-shell" id="spotifyEmbedShell" hidden>
-          <div id="spotifyEmbed"></div>
-          <p class="ambient-note" data-i18n="ambient.spotifyNote">Spotify gestiona el volumen desde su reproductor o desde tu dispositivo.</p>
-        </div>
-
-        <div id="ambientLocalControls">
-          <div class="setting-item">
-            <label class="ambient-volume-label" for="ambientVolume">
-              <span data-i18n="ambient.volume">Volumen</span>
-              <span id="ambientVolumeValue">35%</span>
-            </label>
-            <input id="ambientVolume" class="ambient-volume" type="range" min="0" max="100" step="1" value="35" />
-          </div>
-          <label class="setting-row">
-            <span data-i18n="ambient.attenuate">Atenuar durante descansos</span>
-            <span class="toggle-switch"><input type="checkbox" id="ambientAttenuateToggle" checked /><span class="toggle-slider"></span></span>
-          </label>
-          <p class="ambient-note" data-i18n="ambient.note">Los ambientes usan grabaciones CC0 y pueden quedar disponibles en caché después de reproducirse.</p>
-        </div>
       </div>
     </div>
 
@@ -593,6 +604,5 @@
   </div>
 
   <script src="app.js"></script>
-  <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 </body>
 </html>
