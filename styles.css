@@ -4685,3 +4685,80 @@ body.focus-mode .timer-controls {
 body.focus-mode .ambient-play-btn[hidden] + .focus-control-label {
   display: none;
 }
+
+
+/* ═══ DEEP FOCUS FINAL CONTRACT — clock + timer + exit ═══ */
+body.focus-mode .sound-dock {
+  display: none !important;
+}
+
+body.focus-mode .timer-action-zone {
+  display: block;
+  margin-top: 1.5rem;
+}
+
+body.focus-mode .timer-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 0;
+  opacity: 0.82;
+}
+
+body.focus-mode .timer-controls:hover,
+body.focus-mode .timer-controls:focus-within {
+  opacity: 1;
+}
+
+body.focus-mode .timer-controls #resetBtn,
+body.focus-mode .timer-controls .timer-settings-btn {
+  display: none !important;
+}
+
+/* Restore the normal Flowmodoro timer action — no generic round playback icon. */
+body.focus-mode .ctrl-btn-primary,
+[data-theme="dark"] body.focus-mode .ctrl-btn-primary {
+  width: auto;
+  height: auto;
+  min-width: 130px;
+  min-height: var(--control-h);
+  padding: 0.72rem 1.4rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-control);
+  background: var(--accent);
+  color: var(--obsidian-800);
+  box-shadow: none;
+  letter-spacing: 0.1em;
+}
+
+body.focus-mode .ctrl-btn-primary:hover,
+body.focus-mode .ctrl-btn-primary:focus-visible,
+[data-theme="dark"] body.focus-mode .ctrl-btn-primary:hover {
+  border-color: color-mix(in srgb, var(--accent) 82%, var(--text-primary));
+  background: color-mix(in srgb, var(--accent) 88%, var(--text-primary));
+  color: var(--obsidian-800);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+body.focus-mode .timer-play-icon {
+  display: none !important;
+}
+
+body.focus-mode .timer-play-label {
+  display: inline !important;
+}
+
+/* Remove the transient two-control labeling layer from the final composition. */
+body.focus-mode .focus-control-label,
+body.focus-mode .focus-control-unit {
+  display: none !important;
+}
+
+@media (max-width: 480px) {
+  body.focus-mode .ctrl-btn-primary {
+    min-width: 118px;
+    padding-inline: 1.15rem;
+  }
+}
