@@ -249,7 +249,8 @@ const dom = {
   tabWork: $('tab-work'), tabShort: $('tab-short'), tabLong: $('tab-long'),
   tabWorkDuration: $('tabWorkDuration'), tabShortDuration: $('tabShortDuration'), tabLongDuration: $('tabLongDuration'),
   timerSettingsBtn: $('timerSettingsBtn'), timerSettingsSection: $('timerSettingsSection'),
-  sessionLabel: $('sessionLabel'), breakTip: $('breakTip'), startBtn: $('startBtn'), resetBtn: $('resetBtn'),
+  sessionLabel: $('sessionLabel'), breakTip: $('breakTip'), startBtn: $('startBtn'),
+  timerPlayIcon: $('timerPlayIcon'), timerPlayLabel: $('timerPlayLabel'), resetBtn: $('resetBtn'),
   focusSessionCycle: $('focusSessionCycle'), focusExitBtn: $('focusExitBtn'), viewFlip: $('viewFlip'),
   focusPill: $('focusPill'), focusPillText: $('focusPillText'), focusPillProgress: $('focusPillProgress'),
   focusPopover: $('focusPopover'), focusList: $('focusList'), focusQuickAdd: $('focusQuickAdd'),
@@ -743,7 +744,11 @@ function formatTime(seconds) {
 function updateTimerUI(force) {
   updateFlipClock(!!force);
   dom.sessionLabel.textContent = SESSION_LABELS[state.currentMode]();
-  dom.startBtn.textContent = state.isRunning ? t('timer.pause') : t('timer.start');
+  const timerActionLabel = state.isRunning ? t('timer.pause') : t('timer.start');
+  dom.timerPlayLabel.textContent = timerActionLabel;
+  dom.timerPlayIcon.textContent = state.isRunning ? 'Ⅱ' : '▶';
+  dom.startBtn.setAttribute('aria-label', timerActionLabel);
+  dom.startBtn.title = timerActionLabel;
   dom.focusSessionCycle.textContent = String(Math.min(state.pomoCount + 1, 4)) + ' ' + t('focus.of') + ' 4';
   const isBreak = state.currentMode !== 'work';
   dom.breakTip.hidden = !isBreak;
