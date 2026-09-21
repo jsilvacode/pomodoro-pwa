@@ -3888,3 +3888,154 @@ body.focus-mode .sound-dock:focus-within {
     font-size: clamp(2rem,11vw,2.65rem);
   }
 }
+
+
+/* ═══ TIMER CLARITY + FOCUS CENTERING — 2026-09-21 ═══════ */
+.mode-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12rem;
+}
+
+.mode-tab small {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  text-transform: none;
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.mode-tab.active small {
+  color: currentColor;
+  opacity: 0.85;
+}
+
+.duration-quick-btn {
+  display: block;
+  margin: -1.25rem auto 1.5rem;
+  padding: 0.35rem 0.55rem;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid transparent;
+}
+
+.duration-quick-btn:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.sound-dock {
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.ambient-play-btn {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--bg-surface) 92%, transparent);
+  color: var(--accent);
+  font-size: 0.72rem;
+  transition:
+    border-color var(--transition),
+    background var(--transition),
+    transform var(--transition);
+}
+
+.ambient-play-btn[hidden] {
+  display: none;
+}
+
+.ambient-play-btn:hover,
+.ambient-play-btn.playing {
+  border-color: var(--accent);
+  background: var(--accent-subtle);
+}
+
+.ambient-play-btn:active {
+  transform: scale(0.96);
+}
+
+/* Focus is a viewport-level scene, independent of the document scroll. */
+body.focus-mode #timer-section {
+  position: fixed;
+  inset: 0;
+  z-index: 190;
+  width: 100%;
+  height: 100dvh;
+  min-height: 100dvh;
+  padding: clamp(1rem, 3vw, 3rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+
+body.focus-mode #timer-section .container {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 769px) {
+  body.focus-mode .timer-card {
+    width: min(100%, 1540px);
+    height: min(820px, calc(100dvh - 6rem));
+    max-height: calc(100dvh - 2rem);
+    min-height: 0;
+    margin: 0;
+    padding: clamp(1.5rem, 3vh, 2.5rem) 3rem;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  body.focus-mode .timer-card::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+body.focus-mode .duration-quick-btn {
+  display: none;
+}
+
+body.focus-mode .sound-dock {
+  opacity: 0.9;
+}
+
+body.focus-mode .sound-dock:hover,
+body.focus-mode .sound-dock:focus-within {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  body.focus-mode #timer-section {
+    padding:
+      max(0.75rem, env(safe-area-inset-top))
+      max(0.75rem, env(safe-area-inset-right))
+      max(0.75rem, env(safe-area-inset-bottom))
+      max(0.75rem, env(safe-area-inset-left));
+  }
+
+  body.focus-mode #timer-section .container {
+    height: 100%;
+  }
+
+  body.focus-mode .timer-card {
+    max-height: 100%;
+    overflow-y: auto;
+  }
+}
