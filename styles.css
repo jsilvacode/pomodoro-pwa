@@ -2189,3 +2189,303 @@ a, button, input, textarea,
 /* Timer display: sin transición para que marque limpio */
 .timer-display { transition: none; }
 .ring-progress { transition: stroke-dashoffset 1s linear, stroke var(--transition); }
+
+
+/* ═══ MOBILE-FIRST HARDENING — 2026-09-21 ═════════════════ */
+/* Refuerzos responsive finales. Mantienen intacta la composición desktop y
+   evitan solapamientos, cortes y overflow en viewports móviles. */
+@media (max-width: 768px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .nav-inner,
+  .hero__content,
+  .container,
+  .timer-card,
+  .settings-panel,
+  .donation-card,
+  .info-card,
+  .task-item {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .nav-inner {
+    gap: 0.65rem;
+    padding-left: max(0.85rem, env(safe-area-inset-left));
+    padding-right: max(0.85rem, env(safe-area-inset-right));
+  }
+
+  .nav-logo {
+    min-width: 0;
+    font-size: clamp(1.45rem, 6vw, 1.8rem);
+  }
+
+  .logo-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nav-actions {
+    flex-shrink: 0;
+  }
+
+  .mode-tab {
+    min-width: 0;
+    white-space: normal;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  .focus-pill {
+    width: min(100%, 320px);
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .focus-pill-text,
+  .focus-option-text,
+  .task-text {
+    min-width: 0;
+  }
+
+  .timer-controls {
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .task-filters {
+    max-width: 100%;
+  }
+
+  .donation-btn {
+    max-width: 100%;
+  }
+
+  /* Focus: reservar una franja limpia para la X y proteger safe areas. */
+  body.focus-mode #timer-section {
+    min-height: 100dvh;
+    padding-left: max(0.75rem, env(safe-area-inset-left));
+    padding-right: max(0.75rem, env(safe-area-inset-right));
+  }
+
+  body.focus-mode .timer-card {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding-top: 4rem;
+  }
+
+  body.focus-mode .focus-exit-btn {
+    top: max(0.75rem, env(safe-area-inset-top));
+    right: max(0.75rem, env(safe-area-inset-right));
+  }
+}
+
+@media (max-width: 480px) {
+  /* Dos filas reales: nada de comprimir tres etiquetas en una sola línea. */
+  .mode-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    border-bottom: 0;
+    margin-bottom: 1rem;
+  }
+
+  .mode-tab {
+    min-width: 0;
+    min-height: 44px;
+    padding: 0.55rem 0.35rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.01em;
+    text-align: center;
+  }
+
+  #tab-long {
+    grid-column: 1 / -1;
+  }
+
+  .mode-tab.active,
+  body[data-mode="work"] #tab-work.active,
+  body[data-mode="short"] #tab-short.active,
+  body[data-mode="long"] #tab-long.active {
+    border-bottom-color: var(--accent);
+  }
+
+  /* La X vive arriba; los tabs comienzan debajo y nunca compiten por espacio. */
+  body.focus-mode .timer-card {
+    padding: 4rem 0.875rem 1.15rem;
+  }
+
+  body.focus-mode .mode-tabs {
+    margin-bottom: 0.8rem;
+  }
+
+  .hero,
+  .section,
+  .donation-section,
+  .footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #timer-section {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .hero-badge {
+    max-width: 100%;
+    white-space: normal;
+    line-height: 1.4;
+  }
+
+  .hero-stats {
+    width: 100%;
+  }
+
+  .stat-item {
+    min-width: 0;
+    flex: 1 1 8rem;
+  }
+
+  .stat-label {
+    white-space: normal;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .stat-divider {
+    display: none;
+  }
+
+  .cards-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .settings-panel,
+  .donation-card {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .donation-btn {
+    width: 100%;
+    min-width: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .task-filters {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .task-filter {
+    min-width: 0;
+    padding: 0.4rem 0.3rem;
+    white-space: normal;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .task-item {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .pomo-badge {
+    margin-left: auto;
+  }
+
+  .task-actions {
+    flex: 1 0 100%;
+    justify-content: flex-end;
+    margin-left: 0;
+  }
+
+  .focus-popover {
+    max-width: calc(100vw - 24px);
+  }
+
+  /* El botón de instalación puede aparecer dinámicamente y no debe romper
+     una navbar de 320–480 px. La instalación sigue disponible desde el PWA/browser. */
+  #installBtn {
+    display: none !important;
+  }
+}
+
+/* Viewports bajos (teléfonos pequeños / landscape): compactar sin cortar. */
+@media (max-width: 768px) and (max-height: 700px) {
+  body.focus-mode {
+    --flip-w: clamp(76px, 25vw, 96px);
+    --flip-h: calc(var(--flip-w) * 1.5);
+    --flip-font-size: calc(var(--flip-w) * 1.0);
+  }
+
+  body.focus-mode .timer-card {
+    padding-top: 3.55rem;
+    padding-bottom: 0.75rem;
+  }
+
+  body.focus-mode .mode-tabs {
+    margin-bottom: 0.55rem;
+  }
+
+  body.focus-mode .mode-tab {
+    min-height: 40px;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
+
+  body.focus-mode .timer-session-label {
+    margin-top: 0.65rem;
+  }
+
+  body.focus-mode .timer-task-focus {
+    margin-top: 0.45rem;
+  }
+
+  body.focus-mode .focus-pill {
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+  }
+
+  body.focus-mode .pomo-counter {
+    margin-bottom: 0.65rem;
+  }
+
+  body.focus-mode .timer-controls {
+    gap: 0.65rem;
+  }
+
+  body.focus-mode .ctrl-btn-primary {
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+/* En landscape extremo es preferible permitir desplazamiento vertical
+   controlado a ocultar controles o cortar el reloj. */
+@media (max-height: 520px) {
+  body.focus-mode {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  body.focus-mode #timer-section {
+    justify-content: flex-start;
+    min-height: 100dvh;
+  }
+
+  body.focus-mode .focus-exit-btn {
+    position: fixed;
+    z-index: 220;
+  }
+}
