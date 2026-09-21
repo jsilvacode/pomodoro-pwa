@@ -63,12 +63,25 @@
   --mode-short: #7A9E8A;
   --mode-long:  #8A9E7A;
 
-  /* Radios: austeros */
-  --radius-sm:   4px;
-  --radius-md:   6px;
-  --radius-lg:   10px;
-  --radius-xl:   14px;
-  --radius-full: 2px;
+  /* Component geometry — one shared visual grammar */
+  --radius-sm:      6px;
+  --radius-md:      10px;
+  --radius-lg:      14px;
+  --radius-xl:      20px;
+  --radius-full:    999px;
+  --radius-control: 10px;
+  --radius-panel:   16px;
+  --radius-pill:    999px;
+
+  --control-h:         44px;
+  --control-h-compact: 36px;
+  --control-px:        1rem;
+
+  --surface-interactive: color-mix(in srgb, var(--bg-surface) 94%, transparent);
+  --surface-hover:       var(--accent-subtle);
+  --border-interactive:  var(--border-strong);
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+  --shadow-float: 0 18px 50px rgba(26,22,18,0.12);
 
   --nav-height: 52px;
 
@@ -113,6 +126,9 @@
   --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
   --shadow-lg: 0 12px 40px rgba(0,0,0,0.6);
   --shadow-xl: 0 24px 64px rgba(0,0,0,0.7);
+  --shadow-float: 0 22px 64px rgba(0,0,0,0.52);
+
+  --surface-interactive: color-mix(in srgb, var(--bg-surface) 95%, transparent);
 
   --mode-work:  #C8A050;
   --mode-short: #7A9E8A;
@@ -4037,5 +4053,408 @@ body.focus-mode .sound-dock:focus-within {
   body.focus-mode .timer-card {
     max-height: 100%;
     overflow-y: auto;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   FLOWMODORO DESIGN SYSTEM v3 — UNIFIED COMPONENT GRAMMAR
+   Geometry: control / pill / panel / overlay
+   Interaction: rest → hover → focus → active
+═══════════════════════════════════════════════════════════ */
+
+/* ── Universal interaction language ─────────────────────── */
+:where(
+  button,
+  a,
+  input,
+  select,
+  textarea,
+  summary
+):focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+:where(
+  .btn-primary,
+  .btn-ghost,
+  .ctrl-btn,
+  .nav-link,
+  .drawer-link,
+  .support-link,
+  .ambient-pill,
+  .ambient-play-btn,
+  .sound-option,
+  .task-action-btn,
+  .task-menu button,
+  .focus-pill,
+  .focus-option,
+  .duration-quick-btn,
+  .mobile-bottom-link
+) {
+  transition:
+    color var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard),
+    border-color var(--motion-fast) var(--ease-standard),
+    opacity var(--motion-fast) var(--ease-standard),
+    transform var(--motion-fast) var(--ease-premium),
+    box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+/* ── Primary actions: same component everywhere ─────────── */
+.btn-primary,
+.ctrl-btn-primary,
+.drawer-save {
+  min-height: var(--control-h);
+  padding: 0.72rem 1.4rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-control);
+  background: var(--accent);
+  color: #fffaf4;
+  box-shadow: none;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .ctrl-btn-primary,
+[data-theme="dark"] .drawer-save,
+[data-theme="dark"] body[data-mode="short"] .ctrl-btn-primary,
+[data-theme="dark"] body[data-mode="long"] .ctrl-btn-primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--obsidian-800);
+}
+
+.btn-primary:hover,
+.ctrl-btn-primary:hover,
+.drawer-save:hover,
+body[data-mode="short"] .ctrl-btn-primary:hover,
+body[data-mode="long"] .ctrl-btn-primary:hover {
+  border-color: color-mix(in srgb, var(--accent) 82%, var(--text-primary));
+  background: color-mix(in srgb, var(--accent) 88%, var(--text-primary));
+  color: #fffaf4;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+[data-theme="dark"] .btn-primary:hover,
+[data-theme="dark"] .ctrl-btn-primary:hover,
+[data-theme="dark"] .drawer-save:hover {
+  color: var(--obsidian-800);
+}
+
+.btn-primary:active,
+.ctrl-btn-primary:active,
+.drawer-save:active {
+  transform: translateY(0) scale(0.985);
+  box-shadow: none;
+}
+
+.btn-large {
+  min-height: 48px;
+  padding-inline: 1.6rem;
+}
+
+.btn-sm {
+  min-height: var(--control-h-compact);
+  padding: 0.45rem 0.8rem;
+  font-size: 0.7rem;
+}
+
+/* ── Secondary actions: quiet surface + one border ──────── */
+.btn-ghost,
+.ctrl-btn-ghost,
+.drawer-close,
+.sound-popover-close,
+.ambient-play-btn {
+  border: 1px solid var(--border-interactive);
+  border-radius: var(--radius-control);
+  background: var(--surface-interactive);
+  color: var(--text-secondary);
+  box-shadow: none;
+}
+
+.btn-ghost {
+  min-height: var(--control-h);
+  padding: 0.7rem 1.15rem;
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ctrl-btn-ghost,
+.drawer-close,
+.sound-popover-close,
+.ambient-play-btn {
+  width: var(--control-h);
+  height: var(--control-h);
+  min-width: var(--control-h);
+}
+
+.btn-ghost:hover,
+.ctrl-btn-ghost:hover,
+.drawer-close:hover,
+.sound-popover-close:hover,
+.ambient-play-btn:hover,
+.ambient-play-btn.playing {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border-interactive));
+  background: var(--surface-hover);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.btn-ghost:active,
+.ctrl-btn-ghost:active,
+.drawer-close:active,
+.sound-popover-close:active,
+.ambient-play-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ── Pills: contextual selection controls ───────────────── */
+.focus-pill,
+.ambient-pill {
+  min-height: 40px;
+  padding: 0.48rem 0.85rem;
+  border: 1px solid var(--border-interactive);
+  border-radius: var(--radius-pill);
+  background: var(--surface-interactive);
+  color: var(--text-secondary);
+  box-shadow: none;
+}
+
+.focus-pill:hover,
+.ambient-pill:hover,
+.focus-pill:focus-visible,
+.ambient-pill:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border-interactive));
+  background: var(--surface-hover);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.focus-pill.active,
+.focus-pill.complete,
+.ambient-pill.sound-active {
+  border-color: color-mix(in srgb, var(--accent) 68%, var(--border-interactive));
+  background: var(--accent-subtle);
+  color: var(--accent);
+}
+
+.focus-pill.ghost {
+  border-style: solid;
+  color: var(--text-muted);
+}
+
+/* ── Fields: same height, border and focus response ─────── */
+.setting-input,
+.focus-quickadd-input {
+  min-height: var(--control-h);
+  padding: 0.58rem 0.75rem;
+  border: 1px solid var(--border-interactive);
+  border-radius: var(--radius-control);
+  background: var(--surface-interactive);
+  color: var(--text-primary);
+  box-shadow: none;
+}
+
+.setting-input:hover,
+.focus-quickadd-input:hover {
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border-interactive));
+}
+
+.setting-input:focus,
+.focus-quickadd-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+/* Main task entry remains editorial, but uses the same focus signal. */
+.task-input:focus {
+  border-bottom-color: var(--accent);
+  box-shadow: 0 2px 0 -1px var(--accent);
+}
+
+/* ── Option tiles and contextual rows ───────────────────── */
+.sound-option,
+.focus-option,
+.task-menu button {
+  border-radius: var(--radius-control);
+}
+
+.sound-option {
+  border: 1px solid var(--border);
+  background: var(--surface-interactive);
+}
+
+.sound-option:hover,
+.sound-option.selected {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border-interactive));
+  background: var(--surface-hover);
+  color: var(--accent);
+}
+
+.focus-option:hover,
+.focus-option.selected,
+.task-menu button:hover {
+  background: var(--surface-hover);
+  color: var(--accent);
+}
+
+.task-action-btn {
+  border-radius: var(--radius-control);
+}
+
+.task-action-btn:hover:not(:disabled) {
+  background: var(--surface-hover);
+  color: var(--accent);
+}
+
+/* ── Panels / menus / popovers: one elevation language ──── */
+.focus-popover,
+.sound-popover,
+.task-menu,
+.shortcuts-dialog {
+  border: 1px solid var(--border-interactive);
+  border-radius: var(--radius-panel);
+  background: color-mix(in srgb, var(--bg-surface) 97%, transparent);
+  box-shadow: var(--shadow-float);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.settings-drawer {
+  border-left: 1px solid var(--border-interactive);
+  background: var(--bg-surface);
+  box-shadow: -20px 0 56px rgba(0,0,0,0.18);
+}
+
+/* ── Drawer rows and utility links ───────────────────────── */
+.drawer-link,
+.support-link {
+  min-height: var(--control-h);
+  padding: 0.65rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  color: var(--text-secondary);
+}
+
+.drawer-link {
+  border-bottom-color: transparent;
+}
+
+.drawer-link:hover,
+.support-link:hover {
+  padding-left: 0.85rem;
+  border-color: var(--border);
+  background: var(--surface-hover);
+  color: var(--accent);
+}
+
+.support-link {
+  border-bottom-color: var(--border);
+}
+
+.support-link-primary {
+  color: var(--text-primary);
+}
+
+/* ── Navigation: same accent logic, lower visual weight ─── */
+.nav-link {
+  border-radius: var(--radius-control);
+}
+
+.nav-link:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.mobile-bottom-link {
+  border-radius: var(--radius-control);
+}
+
+.mobile-bottom-link:hover,
+.mobile-bottom-link.active {
+  background: var(--accent-subtle);
+  color: var(--accent);
+}
+
+/* ── Close / dismiss controls are the same family ───────── */
+.focus-exit-btn,
+.session-complete-dismiss {
+  border: 1px solid var(--border-interactive);
+  border-radius: var(--radius-control);
+  background: var(--surface-interactive);
+  color: var(--text-secondary);
+}
+
+.focus-exit-btn:hover,
+.session-complete-dismiss:hover {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border-interactive));
+  background: var(--surface-hover);
+  color: var(--accent);
+}
+
+/* ── Secondary micro-actions stay typographic, not buttony ─ */
+.duration-quick-btn,
+.clear-done-subtle {
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+}
+
+.duration-quick-btn:hover,
+.clear-done-subtle:hover,
+.clear-done-subtle.confirm {
+  background: transparent;
+  color: var(--accent);
+}
+
+/* ── Toggle geometry follows the pill language ──────────── */
+.toggle-slider {
+  border-radius: var(--radius-pill);
+}
+
+.toggle-slider::before {
+  border-radius: 50%;
+}
+
+/* ── Cards/surfaces share panel curvature when enclosed ─── */
+.sound-popover,
+.shortcuts-dialog,
+.settings-panel,
+.session-complete-card {
+  border-radius: var(--radius-panel);
+}
+
+/* Focus workspace is intentionally larger, but uses the same family. */
+body.focus-mode .timer-card {
+  border-radius: clamp(var(--radius-xl), 2vw, 28px);
+}
+
+/* Destructive state is the only semantic color exception. */
+.task-menu button.danger:hover {
+  color: #ef4444;
+  background: rgba(239,68,68,0.10);
+  border-color: transparent;
+}
+
+/* Disabled controls are visually quiet in the same way everywhere. */
+:where(button, input, select):disabled {
+  cursor: default;
+  opacity: 0.42;
+}
+
+/* Respect motion preference while retaining state clarity. */
+@media (prefers-reduced-motion: reduce) {
+  :where(button, a, input, select, textarea, summary) {
+    transition: none !important;
   }
 }
