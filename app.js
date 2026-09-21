@@ -1481,6 +1481,7 @@ document.addEventListener('keydown', function(event) {
   if (event.key === 'Escape') {
     if (dom.shortcutsDialog.open) { closeShortcuts(); return; }
     if (dom.settingsPanel.classList.contains('open')) { closeSettings(); return; }
+    if (!dom.soundPopover.hidden) { closeSoundPopover(); return; }
     if (!dom.focusPopover.hidden) { closeFocusPopover(); return; }
     if (focusMode) { exitFocusMode(); return; }
   }
