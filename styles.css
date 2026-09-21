@@ -649,6 +649,7 @@ input { font-family: inherit; }
 
 /* ═══ TIMER CARD ════════════════════════════════════════════ */
 .timer-card {
+  position: relative;
   background: transparent;
   border: 1px solid transparent;
   border-radius: var(--radius-xl);
@@ -1816,24 +1817,25 @@ body[data-mode="long"] .ctrl-btn-primary {
   .stat-item { padding: 0.5rem 1rem; }
 
   .timer-card { padding: 2rem 1.25rem; }
-  .mode-tab { font-size: 0.68rem; padding: 0.4rem 0; letter-spacing: -0.01em; }
+  .mode-tab { font-size: 0.72rem; padding: 0.4rem 0; letter-spacing: -0.01em; }
   .timer-display { font-size: 4rem; }
 
   /* Legibilidad móvil */
-  .timer-session-label { font-size: 0.9rem; }
-  .focus-pill { font-size: 0.95rem; }
-  .focus-pill-progress { font-size: 0.85rem; }
-  .focus-option { font-size: 0.95rem; }
-  .focus-quickadd-input { font-size: 0.95rem; }
-  .pomo-dot { font-size: 1.05rem; }
-  .ctrl-btn-primary { font-size: 0.88rem; }
-  .hero-subtitle { font-size: 1rem; }
-  .stat-label { font-size: 0.8rem; }
-  .section-subtitle { font-size: 0.98rem; }
-  .task-input { font-size: 0.98rem; }
-  .task-text { font-size: 0.98rem; }
-  .task-filter { font-size: 0.85rem; }
-  .btn-clear-done { font-size: 0.85rem; }
+  html { font-size: 110%; }
+  .timer-session-label { font-size: 0.95rem; }
+  .focus-pill { font-size: 1rem; }
+  .focus-pill-progress { font-size: 0.9rem; }
+  .focus-option { font-size: 1rem; }
+  .focus-quickadd-input { font-size: 1rem; }
+  .pomo-dot { font-size: 1.1rem; }
+  .ctrl-btn-primary { font-size: 0.92rem; }
+  .hero-subtitle { font-size: 1.05rem; }
+  .stat-label { font-size: 0.85rem; }
+  .section-subtitle { font-size: 1.02rem; }
+  .task-input { font-size: 1rem; }
+  .task-text { font-size: 1rem; }
+  .task-filter { font-size: 0.9rem; }
+  .btn-clear-done { font-size: 0.9rem; }
 
   .settings-grid { grid-template-columns: 1fr; }
 
@@ -1868,8 +1870,8 @@ body[data-mode="long"] .ctrl-btn-primary {
   .hero-stats { display: none; }
   .timer-ring-wrapper { width: 180px; height: 180px; }
   .timer-display { font-size: 3rem; }
-  .mode-tab { font-size: 0.64rem; padding: 0.4rem 0; letter-spacing: -0.02em; }
-  .ctrl-btn-primary { min-width: 100px; font-size: 0.85rem; }
+  .mode-tab { font-size: 0.68rem; padding: 0.4rem 0; letter-spacing: -0.02em; }
+  .ctrl-btn-primary { min-width: 100px; font-size: 0.88rem; }
   .section { padding: 3rem 1rem; }
   .section-title { font-size: 1.75rem; }
   .cycle-step { min-width: 70px; padding: 0.75rem; }
@@ -2091,11 +2093,15 @@ body.focus-mode .timer-task-focus:has(.focus-pill.complete) {
   opacity: 1;
 }
 
-/* Los descansos no son accionables durante el modo foco */
+/* Los tabs de modo no son accionables durante el foco (solo indicadores) */
 body.focus-mode .mode-tab:disabled {
   opacity: 0.35;
   pointer-events: none;
   cursor: default;
+}
+
+body.focus-mode .mode-tab.active:disabled {
+  opacity: 0.65;
 }
 
 /* ─── Reposo: la ambientación se detiene durante el foco ─── */
@@ -2114,12 +2120,12 @@ body.focus-mode .hero__orb {
   }
 }
 
-/* Botón para salir del modo foco */
+/* Botón para salir del modo foco — contenido en la esquina del vidrio */
 .focus-exit-btn {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 300;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 5;
   width: 42px;
   height: 42px;
   display: flex;
@@ -2133,6 +2139,7 @@ body.focus-mode .hero__orb {
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transform: translateY(-6px) scale(0.96);
   filter: blur(3px);
   transition: opacity 600ms var(--ease-premium), visibility 0s linear 600ms,
@@ -2144,6 +2151,7 @@ body.focus-mode .hero__orb {
 body.focus-mode .focus-exit-btn {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
   transform: translateY(0) scale(1);
   filter: blur(0);
   transition: opacity 600ms var(--ease-premium) 0.35s, visibility 0s linear 0s,

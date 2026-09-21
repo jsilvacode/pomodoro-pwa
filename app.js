@@ -584,6 +584,8 @@ function enterFocusMode() {
   if (dom.timerSection && typeof dom.timerSection.scrollIntoView === 'function') {
     dom.timerSection.scrollIntoView({ behavior: 'auto', block: 'start' });
   }
+  // Los tabs de modo son solo indicadores durante el foco
+  dom.tabWork.disabled = true;
   dom.tabShort.disabled = true;
   dom.tabLong.disabled = true;
   prepareFocusZoom(true);
@@ -593,6 +595,7 @@ function enterFocusMode() {
 function exitFocusMode() {
   if (!focusMode) return;
   focusMode = false;
+  dom.tabWork.disabled = false;
   dom.tabShort.disabled = false;
   dom.tabLong.disabled = false;
   prepareFocusZoom(false);
