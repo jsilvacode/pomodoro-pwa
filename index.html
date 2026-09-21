@@ -47,10 +47,10 @@
         <span class="logo-text">Flowmodoro</span>
       </a>
       <div class="nav-links">
-        <a href="#timer-section" class="nav-link" data-i18n="nav.timer">Timer</a>
-        <a href="#tasks-section" class="nav-link" data-i18n="nav.tasks">Tareas</a>
-        <a href="#guide-section" class="nav-link" data-i18n="nav.guide">Guía</a>
-        <a href="#donation-section" class="nav-link" data-i18n="nav.support">Apoyar</a>
+        <a href="#timer-section" class="nav-link" data-i18n="nav.focus">Foco</a>
+        <a href="#tasks-section" class="nav-link" data-i18n="nav.today">Hoy</a>
+        <a href="#progress-section" class="nav-link" data-i18n="nav.progress">Progreso</a>
+        <button class="nav-link nav-more-btn" id="moreBtn" type="button" data-i18n="nav.more">Más</button>
       </div>
       <div class="nav-actions">
         <!-- Lang switcher -->
@@ -79,10 +79,10 @@
     </div>
     <!-- Mobile menu -->
     <div class="mobile-menu" id="mobileMenu">
-      <a href="#timer-section" class="nav-link" data-i18n="nav.timer">Timer</a>
-      <a href="#tasks-section" class="nav-link" data-i18n="nav.tasks">Tareas</a>
-      <a href="#guide-section" class="nav-link" data-i18n="nav.guide">Guía</a>
-      <a href="#donation-section" class="nav-link" data-i18n="nav.support">Apoyar</a>
+      <a href="#timer-section" class="nav-link" data-i18n="nav.focus">Foco</a>
+      <a href="#tasks-section" class="nav-link" data-i18n="nav.today">Hoy</a>
+      <a href="#progress-section" class="nav-link" data-i18n="nav.progress">Progreso</a>
+      <button class="nav-link nav-more-btn" id="mobileMoreBtn" type="button" data-i18n="nav.more">Más</button>
     </div>
   </nav>
 
@@ -137,6 +137,11 @@
     </div>
     <div class="container">
       <div class="timer-card">
+        <div class="focus-session-status" id="focusSessionStatus" aria-live="polite">
+          <span data-i18n="focus.session">Sesión de foco</span>
+          <span class="focus-session-cycle" id="focusSessionCycle">1 de 4</span>
+        </div>
+
         <!-- Mode tabs -->
         <div class="mode-tabs">
           <button class="mode-tab active" id="tab-work" data-mode="work" data-i18n="timer.work">Trabajo</button>
@@ -181,6 +186,7 @@
           </div>
         </div>
         <div class="timer-session-label" id="sessionLabel" data-i18n="timer.focusTime">Tiempo de enfoque</div>
+        <div class="break-tip" id="breakTip" hidden></div>
 
         <!-- Active task focus pill + popover -->
         <div class="timer-task-focus">
@@ -232,38 +238,96 @@
           </button>
         </div>
 
-        <!-- Exit focus mode (contenido dentro del vidrio) -->
-        <button id="focusExitBtn" class="focus-exit-btn" aria-label="Salir del modo foco" data-i18n-aria="focus.exit">✕</button>
-      </div>
-
-      <!-- Settings panel (hidden by default) -->
-      <div class="settings-panel" id="settingsPanel" style="display:none">
-        <h3 class="settings-title" data-i18n="settings.title">Configuración</h3>
-        <div class="settings-grid">
-          <div class="setting-item">
-            <label data-i18n="settings.work">Trabajo (min)</label>
-            <input type="number" id="setWork" min="1" max="60" value="25" class="setting-input" />
-          </div>
-          <div class="setting-item">
-            <label data-i18n="settings.short">Descanso corto (min)</label>
-            <input type="number" id="setShort" min="1" max="30" value="5" class="setting-input" />
-          </div>
-          <div class="setting-item">
-            <label data-i18n="settings.long">Descanso largo (min)</label>
-            <input type="number" id="setLong" min="1" max="60" value="15" class="setting-input" />
-          </div>
-          <div class="setting-item">
-            <label data-i18n="settings.sound">Sonido</label>
-            <label class="toggle-switch">
-              <input type="checkbox" id="soundToggle" checked />
-              <span class="toggle-slider"></span>
-            </label>
+        <div class="session-complete-card" id="sessionCompleteCard" hidden aria-live="polite">
+          <span class="session-complete-kicker" data-i18n="complete.kicker">Sesión completada</span>
+          <strong class="session-complete-title" id="sessionCompleteTitle">25 min de foco</strong>
+          <span class="session-complete-task" id="sessionCompleteTask"></span>
+          <div class="session-complete-actions">
+            <button class="btn-primary" id="nextSessionBtn" type="button">Iniciar descanso</button>
+            <button class="btn-ghost" id="dismissSessionBtn" type="button" data-i18n="complete.later">Ahora no</button>
           </div>
         </div>
-        <button class="btn-primary" id="saveSettings" data-i18n="settings.save">Guardar</button>
+
+        <!-- Exit focus mode: only exits the immersive UI; it never pauses the clock -->
+        <button id="focusExitBtn" class="focus-exit-btn" aria-label="Salir del modo foco" data-i18n-aria="focus.exit">✕</button>
       </div>
     </div>
   </section>
+
+  <!-- Settings / More drawer -->
+  <div class="drawer-backdrop" id="settingsBackdrop" hidden></div>
+  <aside class="settings-drawer" id="settingsPanel" aria-hidden="true" aria-labelledby="settingsTitle">
+    <div class="drawer-header">
+      <div>
+        <span class="drawer-eyebrow" data-i18n="nav.more">Más</span>
+        <h2 class="settings-title" id="settingsTitle" data-i18n="settings.title">Preferencias</h2>
+      </div>
+      <button class="drawer-close" id="settingsCloseBtn" type="button" aria-label="Cerrar">✕</button>
+    </div>
+
+    <div class="drawer-section">
+      <h3 data-i18n="settings.timer">Temporizador</h3>
+      <div class="settings-grid">
+        <div class="setting-item">
+          <label data-i18n="settings.work">Trabajo (min)</label>
+          <input type="number" id="setWork" min="1" max="60" value="25" class="setting-input" />
+        </div>
+        <div class="setting-item">
+          <label data-i18n="settings.short">Descanso corto (min)</label>
+          <input type="number" id="setShort" min="1" max="30" value="5" class="setting-input" />
+        </div>
+        <div class="setting-item">
+          <label data-i18n="settings.long">Descanso largo (min)</label>
+          <input type="number" id="setLong" min="1" max="60" value="15" class="setting-input" />
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <h3 data-i18n="settings.flow">Flujo</h3>
+      <label class="setting-row">
+        <span data-i18n="settings.autoBreak">Iniciar descansos automáticamente</span>
+        <span class="toggle-switch"><input type="checkbox" id="autoBreakToggle" /><span class="toggle-slider"></span></span>
+      </label>
+      <label class="setting-row">
+        <span data-i18n="settings.autoFocus">Iniciar siguiente foco automáticamente</span>
+        <span class="toggle-switch"><input type="checkbox" id="autoFocusToggle" /><span class="toggle-slider"></span></span>
+      </label>
+    </div>
+
+    <div class="drawer-section">
+      <h3 data-i18n="settings.experience">Experiencia</h3>
+      <label class="setting-row">
+        <span data-i18n="settings.sound">Sonido</span>
+        <span class="toggle-switch"><input type="checkbox" id="soundToggle" checked /><span class="toggle-slider"></span></span>
+      </label>
+      <label class="setting-row">
+        <span data-i18n="settings.wakeLock">Mantener pantalla activa</span>
+        <span class="toggle-switch"><input type="checkbox" id="wakeLockToggle" /><span class="toggle-slider"></span></span>
+      </label>
+      <div class="setting-row setting-row-stack">
+        <span data-i18n="settings.notifications">Notificaciones</span>
+        <button class="btn-ghost btn-sm" id="notificationBtn" type="button" data-i18n="settings.enableNotifications">Activar</button>
+      </div>
+      <div class="setting-item">
+        <label for="themePreference" data-i18n="settings.appearance">Apariencia</label>
+        <select id="themePreference" class="setting-input">
+          <option value="system" data-i18n="settings.theme.system">Sistema</option>
+          <option value="light" data-i18n="settings.theme.light">Claro</option>
+          <option value="dark" data-i18n="settings.theme.dark">Oscuro</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="drawer-section drawer-links">
+      <a href="#guide-section" class="drawer-link" data-drawer-close data-i18n="nav.guide">Guía Pomodoro</a>
+      <a href="#donation-section" class="drawer-link" data-drawer-close data-i18n="nav.support">Apoyar proyecto</a>
+      <button class="drawer-link" id="installDrawerBtn" type="button" data-i18n="nav.install">Instalar App</button>
+      <button class="drawer-link" id="shortcutsBtn" type="button" data-i18n="shortcuts.title">Atajos de teclado</button>
+    </div>
+
+    <button class="btn-primary drawer-save" id="saveSettings" data-i18n="settings.save">Guardar cambios</button>
+  </aside>
 
   <!-- ═══════════════════════════════════ TASKS ════════════════════════════════════ -->
   <section class="section section-alt section-parallax" id="tasks-section" data-parallax="0.15">
@@ -275,6 +339,18 @@
         <div class="section-badge" data-i18n="tasks.badge">📋 Gestión de tareas</div>
         <h2 class="section-title" data-i18n="tasks.title">¿En qué vas a trabajar hoy?</h2>
         <p class="section-subtitle" data-i18n="tasks.subtitle">Agrega tus tareas y marca la activa para enfocar el timer en ella.</p>
+      </div>
+
+      <div class="today-dashboard" aria-label="Resumen de hoy">
+        <div class="today-stat"><strong id="todaySessions">0</strong><span data-i18n="today.sessions">sesiones</span></div>
+        <div class="today-stat"><strong id="todayMinutes">0 min</strong><span data-i18n="today.focus">en foco</span></div>
+        <div class="today-stat"><strong id="todayTasks">0 / 0</strong><span data-i18n="today.tasks">tareas</span></div>
+        <div class="today-stat"><strong id="todayPlan">0 🍅</strong><span data-i18n="today.plan">planificados</span></div>
+      </div>
+      <div class="next-task-card" id="nextTaskCard" hidden>
+        <span data-i18n="today.next">Próxima tarea</span>
+        <strong id="nextTaskText"></strong>
+        <small id="nextTaskMeta"></small>
       </div>
 
       <!-- Task toolbar: filters + clear done -->
@@ -308,6 +384,35 @@
           <p id="taskEmptyText" data-i18n="tasks.empty">No hay tareas aún. ¡Agrega la primera!</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ PROGRESS ════════════════════════════════ -->
+  <section class="section progress-section" id="progress-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge" data-i18n="progress.badge">Progreso</div>
+        <h2 class="section-title" data-i18n="progress.title">Tu trabajo deja huella.</h2>
+        <p class="section-subtitle" data-i18n="progress.subtitle">Compara lo que planeaste con lo que realmente tomó, sin convertir el foco en una competencia.</p>
+      </div>
+
+      <div class="progress-summary">
+        <div class="progress-stat"><span data-i18n="progress.weekSessions">Sesiones esta semana</span><strong id="weekSessions">0</strong></div>
+        <div class="progress-stat"><span data-i18n="progress.weekMinutes">Minutos de foco</span><strong id="weekMinutes">0</strong></div>
+        <div class="progress-stat"><span data-i18n="progress.completedTasks">Tareas completadas</span><strong id="completedTasksCount">0</strong></div>
+        <div class="progress-stat"><span data-i18n="progress.estimateRatio">Real / estimado</span><strong id="estimateRatio">—</strong></div>
+      </div>
+
+      <div class="week-chart" id="weekChart" aria-label="Sesiones de foco de los últimos siete días"></div>
+
+      <div class="history-header">
+        <div>
+          <h3 data-i18n="progress.history">Historial reciente</h3>
+          <p data-i18n="progress.localOnly">Tus datos permanecen en este dispositivo.</p>
+        </div>
+        <button class="btn-ghost btn-sm" id="exportHistoryBtn" type="button" data-i18n="progress.export">Exportar</button>
+      </div>
+      <div class="session-history" id="sessionHistory"></div>
     </div>
   </section>
 
@@ -400,7 +505,7 @@
     <div class="footer-inner">
       <div class="footer-brand">
         <img src="icons/icon-192.png" alt="Logo" class="logo-img" />
-        <span class="footer-name">Flowmodoro <span class="footer-version">v2.5</span></span>
+        <span class="footer-name">Flowmodoro <span class="footer-version">v3.0</span></span>
       </div>
       <p class="footer-tagline" data-i18n="footer.developed">Desarrollado con ❤️ por Julio Silva</p>
       <p class="footer-email">jsilvacode@gmail.com</p>
@@ -408,17 +513,34 @@
   </footer>
 
 
-  <script src="app.js"></script>
+  <nav class="mobile-bottom-nav" aria-label="Navegación principal">
+    <a href="#timer-section" class="mobile-bottom-link"><span>◎</span><small data-i18n="nav.focus">Foco</small></a>
+    <a href="#tasks-section" class="mobile-bottom-link"><span>✓</span><small data-i18n="nav.today">Hoy</small></a>
+    <a href="#progress-section" class="mobile-bottom-link"><span>↗</span><small data-i18n="nav.progress">Progreso</small></a>
+    <button class="mobile-bottom-link" id="bottomMoreBtn" type="button"><span>•••</span><small data-i18n="nav.more">Más</small></button>
+  </nav>
 
-  <!-- Service Worker registration -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js')
-          .then(reg => console.log('SW registered:', reg.scope))
-          .catch(err => console.warn('SW failed:', err));
-      });
-    }
-  </script>
+  <div class="update-toast" id="updateToast" hidden>
+    <span data-i18n="update.available">Hay una nueva versión disponible.</span>
+    <button id="updateAppBtn" type="button" data-i18n="update.action">Actualizar</button>
+  </div>
+
+  <dialog class="shortcuts-dialog" id="shortcutsDialog">
+    <div class="shortcuts-header">
+      <h2 data-i18n="shortcuts.title">Atajos de teclado</h2>
+      <button id="shortcutsCloseBtn" type="button" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="shortcut-grid">
+      <kbd>Space</kbd><span data-i18n="shortcuts.toggle">Iniciar / pausar</span>
+      <kbd>R</kbd><span data-i18n="shortcuts.reset">Reiniciar</span>
+      <kbd>1 / 2 / 3</kbd><span data-i18n="shortcuts.modes">Cambiar modo</span>
+      <kbd>F</kbd><span data-i18n="shortcuts.focus">Entrar / salir de Focus</span>
+      <kbd>N</kbd><span data-i18n="shortcuts.newTask">Nueva tarea</span>
+      <kbd>?</kbd><span data-i18n="shortcuts.help">Ver atajos</span>
+      <kbd>Esc</kbd><span data-i18n="shortcuts.escape">Cerrar / salir</span>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
 </body>
 </html>
