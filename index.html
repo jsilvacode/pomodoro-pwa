@@ -299,6 +299,10 @@
           </div>
         </div>
 
+        <button id="focusAudioToggleBtn" class="focus-audio-toggle" type="button" hidden aria-label="Reproducir ambiente" title="Reproducir ambiente">
+          <span aria-hidden="true">♫</span>
+        </button>
+
         <!-- Exit immersive focus: pauses the timer, stops ambience and returns to the Focus view. -->
         <button id="focusExitBtn" class="focus-exit-btn" aria-label="Salir del modo foco" data-i18n-aria="focus.exit">✕</button>
       </div>
@@ -391,10 +395,16 @@
       <div class="deco-blob"></div>
     </div>
     <div class="container">
-      <div class="section-header section-header-lean">
-        <div class="section-badge" data-i18n="nav.today">Hoy</div>
-        <h2 class="section-title" data-i18n="tasks.title">¿Qué vas a hacer ahora?</h2>
-        <p class="section-subtitle" data-i18n="tasks.subtitle">Elige una tarea y vuelve al foco.</p>
+      <div class="section-header section-header-lean today-header">
+        <div class="today-header-copy">
+          <div class="section-badge" data-i18n="nav.today">Hoy</div>
+          <h2 class="section-title" data-i18n="tasks.title">¿Qué vas a hacer ahora?</h2>
+          <p class="section-subtitle" data-i18n="tasks.subtitle">Elige una tarea y vuelve al foco.</p>
+        </div>
+        <button class="today-return-focus" id="todayReturnFocusBtn" type="button">
+          <span id="todayReturnFocusLabel" data-i18n="today.returnFocus">Volver al timer</span>
+          <span aria-hidden="true">→</span>
+        </button>
       </div>
 
       <div class="today-strip" aria-label="Resumen de hoy">
