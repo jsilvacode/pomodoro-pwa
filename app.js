@@ -29,7 +29,7 @@ const TRANSLATIONS = {
     'settings.appearance':'Apariencia','settings.themeLabel':'Tema','settings.language':'Idioma','settings.advanced':'Avanzado',
     'settings.theme.system':'Sistema','settings.theme.light':'Claro','settings.theme.dark':'Oscuro',
     'settings.save':'Guardar cambios',
-    'today.sessions':'sesiones','today.focus':'en foco','today.tasks':'tareas','today.plan':'planificados','today.next':'Próxima tarea',
+    'today.sessions':'sesiones','today.focus':'en foco','today.tasks':'tareas','today.plan':'planificados','today.next':'Próxima tarea','today.returnFocus':'Volver al timer','today.useInFocus':'Usar en foco',
     'tasks.badge':'Hoy','tasks.title':'¿Qué vas a hacer ahora?','tasks.subtitle':'Elige una tarea y vuelve al foco.',
     'tasks.placeholder':'Agregar nueva tarea...','tasks.add':'+ Agregar','tasks.empty':'No hay tareas aún. Agrega la primera.','tasks.empty.filter':'No hay tareas aquí.',
     'tasks.noTask':'Sin tarea','tasks.filter.all':'Todas','tasks.filter.active':'Pendientes','tasks.filter.done':'Completadas',
@@ -85,7 +85,7 @@ const TRANSLATIONS = {
     'settings.appearance':'Appearance','settings.themeLabel':'Theme','settings.language':'Language','settings.advanced':'Advanced',
     'settings.theme.system':'System','settings.theme.light':'Light','settings.theme.dark':'Dark',
     'settings.save':'Save changes',
-    'today.sessions':'sessions','today.focus':'in focus','today.tasks':'tasks','today.plan':'planned','today.next':'Next task',
+    'today.sessions':'sessions','today.focus':'in focus','today.tasks':'tasks','today.plan':'planned','today.next':'Next task','today.returnFocus':'Back to timer','today.useInFocus':'Use in focus',
     'tasks.badge':'Today','tasks.title':'What will you do now?','tasks.subtitle':'Choose one task and return to focus.',
     'tasks.placeholder':'Add a new task...','tasks.add':'+ Add','tasks.empty':'No tasks yet. Add your first one.','tasks.empty.filter':'No tasks here.',
     'tasks.noTask':'No task','tasks.filter.all':'All','tasks.filter.active':'Pending','tasks.filter.done':'Completed',
@@ -263,7 +263,7 @@ const dom = {
   timerSettingsBtn: $('timerSettingsBtn'), timerSettingsSection: $('timerSettingsSection'),
   sessionLabel: $('sessionLabel'), breakTip: $('breakTip'), startBtn: $('startBtn'),
   timerPlayIcon: $('timerPlayIcon'), timerPlayLabel: $('timerPlayLabel'), resetBtn: $('resetBtn'),
-  focusSessionCycle: $('focusSessionCycle'), focusExitBtn: $('focusExitBtn'), viewFlip: $('viewFlip'),
+  focusSessionCycle: $('focusSessionCycle'), focusExitBtn: $('focusExitBtn'), focusAudioToggleBtn: $('focusAudioToggleBtn'), viewFlip: $('viewFlip'),
   focusPill: $('focusPill'), focusPillText: $('focusPillText'), focusPillProgress: $('focusPillProgress'),
   focusPopover: $('focusPopover'), focusList: $('focusList'), focusQuickAdd: $('focusQuickAdd'),
   pomoCount: [0,1,2,3].map(function(i){ return $('pomo' + i); }),
@@ -271,6 +271,7 @@ const dom = {
   sessionCompleteTask: $('sessionCompleteTask'), nextSessionBtn: $('nextSessionBtn'), dismissSessionBtn: $('dismissSessionBtn'),
   taskInput: $('taskInput'), addTaskBtn: $('addTaskBtn'), taskList: $('taskList'), taskEmpty: $('taskEmpty'), taskEmptyText: $('taskEmptyText'),
   clearDoneBtn: $('clearDoneBtn'),
+  todayReturnFocusBtn: $('todayReturnFocusBtn'), todayReturnFocusLabel: $('todayReturnFocusLabel'),
   todaySessions: $('todaySessions'), todayMinutes: $('todayMinutes'), todayTasks: $('todayTasks'),
   weekSessions: $('weekSessions'), weekMinutes: $('weekMinutes'), weekChart: $('weekChart'),
   sessionHistory: $('sessionHistory'), exportHistoryBtn: $('exportHistoryBtn'),
@@ -611,6 +612,13 @@ function updateAmbientUI() {
   dom.ambientPlayBtn.classList.toggle('playing', state.ambientPlaying);
   dom.ambientPlayBtn.setAttribute('aria-label', state.ambientPlaying ? t('ambient.pause') : t('ambient.play'));
   dom.ambientPlayBtn.title = state.ambientPlaying ? t('ambient.pause') : t('ambient.play');
+  if (dom.focusAudioToggleBtn) {
+    dom.focusAudioToggleBtn.hidden = !active;
+    dom.focusAudioToggleBtn.classList.toggle('is-playing', active && state.ambientPlaying);
+    const immersiveAudioLabel = state.ambientPlaying ? t('ambient.pause') : t('ambient.play');
+    dom.focusAudioToggleBtn.setAttribute('aria-label', immersiveAudioLabel);
+    dom.focusAudioToggleBtn.title = immersiveAudioLabel;
+  }
   dom.ambientPill.setAttribute('aria-label',
     active
       ? (state.ambientPlaying ? t('ambient.playing') : t('ambient.paused')) + ' · ' + t(config.labelKey)
@@ -757,6 +765,12 @@ dom.ambientPlayBtn.addEventListener('click', async function() {
     openSoundPopover();
     return;
   }
+  if (state.ambientPlaying) pauseAmbient();
+  else await startAmbient();
+});
+
+dom.focusAudioToggleBtn.addEventListener('click', async function() {
+  if (state.ambientPreset === 'off') return;
   if (state.ambientPlaying) pauseAmbient();
   else await startAmbient();
 });
@@ -1511,6 +1525,7 @@ dom.taskList.addEventListener('click', function(event) {
     }
   } else if (action === 'focus') {
     if (!task.done) state.activeTaskId = state.activeTaskId === task.id ? null : task.id;
+    if (state.activeTaskId) focusPrepDismissed = true;
     persistActiveTask();
   } else if (action === 'edit') {
     beginTaskEdit(item, task);
@@ -1552,7 +1567,11 @@ document.addEventListener('click', function(event) {
 function addTask() {
   const text = dom.taskInput.value.trim();
   if (!text) return;
-  state.tasks.unshift(normalizeTask({ id:generateId(), text:text, done:false, estPomos:1, actPomos:0 }));
+  const task = normalizeTask({ id:generateId(), text:text, done:false, estPomos:1, actPomos:0 });
+  state.tasks.unshift(task);
+  state.activeTaskId = task.id;
+  focusPrepDismissed = true;
+  persistActiveTask();
   dom.taskInput.value = '';
   markAsUsed();
   saveTasks();
@@ -1600,7 +1619,21 @@ function renderToday() {
   dom.todaySessions.textContent = String(workToday.length);
   dom.todayMinutes.textContent = String(minutes) + ' min';
   dom.todayTasks.textContent = completed + ' / ' + state.tasks.length;
+
+  const activeTask = state.tasks.find(function(task){ return task.id === state.activeTaskId && !task.done; });
+  dom.todayReturnFocusLabel.textContent = activeTask ? t('today.useInFocus') : t('today.returnFocus');
+  dom.todayReturnFocusBtn.classList.toggle('has-task', !!activeTask);
+  dom.todayReturnFocusBtn.setAttribute(
+    'aria-label',
+    activeTask ? t('today.useInFocus') + ': ' + activeTask.text : t('today.returnFocus')
+  );
 }
+
+dom.todayReturnFocusBtn.addEventListener('click', function() {
+  if (state.activeTaskId) focusPrepDismissed = true;
+  showAppView('focus');
+  syncFocusPrep();
+});
 
 function startOfDay(date) {
   const d = new Date(date);
