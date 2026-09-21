@@ -220,6 +220,12 @@
           <span class="pomo-dot" id="pomo3">🍅</span>
         </div>
 
+        <button class="ambient-pill" id="ambientPill" type="button" hidden aria-pressed="false">
+          <span class="ambient-pill-icon" aria-hidden="true">♫</span>
+          <span class="ambient-pill-name" id="ambientPillName">Ambiente</span>
+          <span class="ambient-pill-state" id="ambientPillState" aria-hidden="true">Ⅱ</span>
+        </button>
+
         <!-- Controls -->
         <div class="timer-controls">
           <button class="ctrl-btn ctrl-btn-ghost" id="resetBtn" aria-label="Reset">
@@ -316,6 +322,31 @@
           <option value="light" data-i18n="settings.theme.light">Claro</option>
           <option value="dark" data-i18n="settings.theme.dark">Oscuro</option>
         </select>
+      </div>
+
+      <div class="ambient-settings">
+        <div class="setting-item">
+          <label for="ambientSelect" data-i18n="ambient.label">Ambiente</label>
+          <select id="ambientSelect" class="setting-input">
+            <option value="off" data-i18n="ambient.off">Sin audio</option>
+            <option value="rain" data-i18n="ambient.rain">Lluvia suave</option>
+            <option value="nightForest" data-i18n="ambient.nightForest">Bosque nocturno</option>
+            <option value="cafe" data-i18n="ambient.cafe">Café</option>
+            <option value="campfire" data-i18n="ambient.campfire">Fogata</option>
+          </select>
+        </div>
+        <div class="setting-item">
+          <label class="ambient-volume-label" for="ambientVolume">
+            <span data-i18n="ambient.volume">Volumen</span>
+            <span id="ambientVolumeValue">35%</span>
+          </label>
+          <input id="ambientVolume" class="ambient-volume" type="range" min="0" max="100" step="1" value="35" />
+        </div>
+        <label class="setting-row">
+          <span data-i18n="ambient.attenuate">Atenuar durante descansos</span>
+          <span class="toggle-switch"><input type="checkbox" id="ambientAttenuateToggle" checked /><span class="toggle-slider"></span></span>
+        </label>
+        <p class="ambient-note" data-i18n="ambient.note">Los ambientes se reproducen desde fuentes CC0 y se guardan en caché después del primer uso.</p>
       </div>
     </div>
 
@@ -540,6 +571,11 @@
       <kbd>Esc</kbd><span data-i18n="shortcuts.escape">Cerrar / salir</span>
     </div>
   </dialog>
+
+  <div class="ambient-audio-host" aria-hidden="true">
+    <audio id="ambientAudioPrimary" loop preload="none"></audio>
+    <audio id="ambientAudioSecondary" loop preload="none"></audio>
+  </div>
 
   <script src="app.js"></script>
 </body>
