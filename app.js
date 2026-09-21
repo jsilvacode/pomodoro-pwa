@@ -52,9 +52,8 @@ const TRANSLATIONS = {
     'shortcuts.focus':'Entrar / salir de Focus','shortcuts.newTask':'Nueva tarea','shortcuts.help':'Ver atajos','shortcuts.escape':'Cerrar / salir',
     'install.ios':'En iPhone o iPad: abre Compartir en Safari y elige “Añadir a pantalla de inicio”.',
     'ambient.label':'Ambiente','ambient.off':'Sin audio','ambient.rain':'Lluvia suave','ambient.nightForest':'Bosque nocturno','ambient.cafe':'Café','ambient.campfire':'Fogata',
-    'ambient.spotifyGroup':'Spotify','ambient.localGroup':'Ambientes',
-    'ambient.spotify1':'Spotify · Playlist 1','ambient.spotify2':'Spotify · Playlist 2','ambient.spotify3':'Spotify · Playlist 3',
-    'ambient.spotifyNote':'Spotify gestiona el volumen desde su reproductor o desde tu dispositivo.',
+    'ambient.sound':'Sonido','ambient.focusSound':'Sonido de foco',
+    'ambient.spotifySection':'Playlists en Spotify','ambient.spotifyExternal':'Se abren en Spotify',
     'ambient.volume':'Volumen','ambient.attenuate':'Atenuar durante descansos',
     'ambient.note':'Los ambientes usan grabaciones CC0 y pueden quedar disponibles en caché después de reproducirse.',
     'ambient.paused':'Pausado','ambient.playing':'Reproduciendo',
@@ -106,9 +105,8 @@ const TRANSLATIONS = {
     'shortcuts.focus':'Enter / exit Focus','shortcuts.newTask':'New task','shortcuts.help':'Show shortcuts','shortcuts.escape':'Close / exit',
     'install.ios':'On iPhone or iPad: open Share in Safari and choose “Add to Home Screen”.',
     'ambient.label':'Ambience','ambient.off':'No audio','ambient.rain':'Gentle rain','ambient.nightForest':'Night forest','ambient.cafe':'Café','ambient.campfire':'Campfire',
-    'ambient.spotifyGroup':'Spotify','ambient.localGroup':'Ambiences',
-    'ambient.spotify1':'Spotify · Playlist 1','ambient.spotify2':'Spotify · Playlist 2','ambient.spotify3':'Spotify · Playlist 3',
-    'ambient.spotifyNote':'Spotify volume is controlled from its player or from your device.',
+    'ambient.sound':'Sound','ambient.focusSound':'Focus sound',
+    'ambient.spotifySection':'Spotify playlists','ambient.spotifyExternal':'Opens in Spotify',
     'ambient.volume':'Volume','ambient.attenuate':'Lower during breaks',
     'ambient.note':'Ambient presets use CC0 recordings and may remain cached after first playback.',
     'ambient.paused':'Paused','ambient.playing':'Playing',
@@ -242,11 +240,12 @@ const dom = {
   setWork: $('setWork'), setShort: $('setShort'), setLong: $('setLong'), soundToggle: $('soundToggle'),
   autoBreakToggle: $('autoBreakToggle'), autoFocusToggle: $('autoFocusToggle'), wakeLockToggle: $('wakeLockToggle'),
   notificationBtn: $('notificationBtn'), themePreference: $('themePreference'), saveSettings: $('saveSettings'),
-  ambientSelect: $('ambientSelect'), ambientVolume: $('ambientVolume'), ambientVolumeValue: $('ambientVolumeValue'),
+  ambientVolume: $('ambientVolume'), ambientVolumeValue: $('ambientVolumeValue'),
   ambientAttenuateToggle: $('ambientAttenuateToggle'), ambientPill: $('ambientPill'),
   ambientPillName: $('ambientPillName'), ambientPillState: $('ambientPillState'),
   ambientAudioPrimary: $('ambientAudioPrimary'), ambientAudioSecondary: $('ambientAudioSecondary'),
-  ambientLocalControls: $('ambientLocalControls'), spotifyEmbedShell: $('spotifyEmbedShell'), spotifyEmbed: $('spotifyEmbed'),
+  soundPopover: $('soundPopover'), soundPopoverClose: $('soundPopoverClose'),
+  spotifyLink1Label: $('spotifyLink1Label'), spotifyLink2Label: $('spotifyLink2Label'), spotifyLink3Label: $('spotifyLink3Label'),
   tabWork: $('tab-work'), tabShort: $('tab-short'), tabLong: $('tab-long'),
   sessionLabel: $('sessionLabel'), breakTip: $('breakTip'), startBtn: $('startBtn'), resetBtn: $('resetBtn'),
   focusSessionCycle: $('focusSessionCycle'), focusExitBtn: $('focusExitBtn'), viewFlip: $('viewFlip'),
@@ -303,6 +302,7 @@ function setLang(lang) {
   renderFocusUI();
   renderToday();
   renderProgress();
+  updateAmbientUI();
 }
 
 function resolveTheme(preference) {
@@ -411,10 +411,6 @@ function openSettings() {
   dom.autoFocusToggle.checked = state.autoStartFocus;
   dom.wakeLockToggle.checked = state.keepAwake;
   dom.themePreference.value = state.themePreference;
-  dom.ambientSelect.value = state.ambientPreset;
-  dom.ambientVolume.value = String(state.ambientVolume);
-  dom.ambientVolumeValue.textContent = state.ambientVolume + '%';
-  dom.ambientAttenuateToggle.checked = state.ambientAttenuate;
   dom.settingsPanel.classList.add('open');
   dom.settingsPanel.setAttribute('aria-hidden','false');
   dom.settingsBackdrop.hidden = false;
@@ -446,15 +442,12 @@ dom.saveSettings.addEventListener('click', function() {
   state.autoStartBreaks = !!dom.autoBreakToggle.checked;
   state.autoStartFocus = !!dom.autoFocusToggle.checked;
   state.keepAwake = !!dom.wakeLockToggle.checked;
-  state.ambientAttenuate = !!dom.ambientAttenuateToggle.checked;
   localStorage.setItem('fm_durations', JSON.stringify(state.durations));
   setBool('fm_sound', state.soundEnabled);
   setBool('fm_auto_breaks', state.autoStartBreaks);
   setBool('fm_auto_focus', state.autoStartFocus);
   setBool('fm_wake_lock', state.keepAwake);
-  setBool('fm_ambient_attenuate', state.ambientAttenuate);
   applyThemePreference(dom.themePreference.value, true);
-  syncAmbientVolume();
   if (!state.isRunning) {
     state.timeLeft = state.durations[state.currentMode] * 60;
     state.totalTime = state.timeLeft;
@@ -468,24 +461,19 @@ dom.saveSettings.addEventListener('click', function() {
 });
 
 
-const SPOTIFY_PLAYLISTS = {
-  spotify1: 'https://open.spotify.com/playlist/0oZy1DMRofAqvOO9P4Z8qr',
-  spotify2: 'https://open.spotify.com/playlist/1YGk1NFAw8l9zPwHReImrY',
-  spotify3: 'https://open.spotify.com/playlist/1c62qIWEuYaRGAEYpFcZTs'
-};
+const SPOTIFY_PLAYLISTS = [
+  { url:'https://open.spotify.com/playlist/0oZy1DMRofAqvOO9P4Z8qr', labelEl:function(){ return dom.spotifyLink1Label; } },
+  { url:'https://open.spotify.com/playlist/1YGk1NFAw8l9zPwHReImrY', labelEl:function(){ return dom.spotifyLink2Label; } },
+  { url:'https://open.spotify.com/playlist/1c62qIWEuYaRGAEYpFcZTs', labelEl:function(){ return dom.spotifyLink3Label; } }
+];
 
 const AMBIENT_PRESETS = {
-  off: { type:'off', labelKey:'ambient.off', layers:[] },
-  spotify1: { type:'spotify', labelKey:'ambient.spotify1', url:SPOTIFY_PLAYLISTS.spotify1 },
-  spotify2: { type:'spotify', labelKey:'ambient.spotify2', url:SPOTIFY_PLAYLISTS.spotify2 },
-  spotify3: { type:'spotify', labelKey:'ambient.spotify3', url:SPOTIFY_PLAYLISTS.spotify3 },
+  off: { labelKey:'ambient.off', layers:[] },
   rain: {
-    type:'local',
     labelKey:'ambient.rain',
     layers:[{ src:'https://cdn.freesound.org/previews/523/523405_8448725-hq.mp3', gain:1 }]
   },
   nightForest: {
-    type:'local',
     labelKey:'ambient.nightForest',
     layers:[
       { src:'https://cdn.freesound.org/previews/181/181801_3153523-hq.mp3', gain:0.42 },
@@ -493,36 +481,25 @@ const AMBIENT_PRESETS = {
     ]
   },
   cafe: {
-    type:'local',
     labelKey:'ambient.cafe',
     layers:[{ src:'https://cdn.freesound.org/previews/370/370973_5835751-hq.mp3', gain:0.88 }]
   },
   campfire: {
-    type:'local',
     labelKey:'ambient.campfire',
     layers:[{ src:'https://cdn.freesound.org/previews/681/681366_5752443-hq.mp3', gain:0.92 }]
   }
 };
 
+if (!AMBIENT_PRESETS[state.ambientPreset]) {
+  state.ambientPreset = 'off';
+  localStorage.setItem('fm_ambient','off');
+}
+
 const ambientPlayers = [dom.ambientAudioPrimary, dom.ambientAudioSecondary].filter(Boolean);
 let ambientFadeFrame = null;
-let spotifyIframeAPI = null;
-let spotifyController = null;
-let spotifyControllerPromise = null;
-let spotifyLoadedPreset = null;
 
 function ambientPresetConfig() {
   return AMBIENT_PRESETS[state.ambientPreset] || AMBIENT_PRESETS.off;
-}
-
-function isSpotifyPreset(preset) {
-  const config = AMBIENT_PRESETS[preset || state.ambientPreset];
-  return !!config && config.type === 'spotify';
-}
-
-function isLocalAmbientPreset(preset) {
-  const config = AMBIENT_PRESETS[preset || state.ambientPreset];
-  return !!config && config.type === 'local';
 }
 
 function ambientModeFactor() {
@@ -531,7 +508,6 @@ function ambientModeFactor() {
 
 function ambientTargetVolumes() {
   const config = ambientPresetConfig();
-  if (config.type !== 'local') return ambientPlayers.map(function(){ return 0; });
   const master = state.ambientVolume / 100;
   const factor = ambientModeFactor();
   return ambientPlayers.map(function(player,index) {
@@ -540,32 +516,31 @@ function ambientTargetVolumes() {
   });
 }
 
-function getSpotifyDisplayName(preset) {
-  const option = document.querySelector('#ambientSelect option[value="' + preset + '"]');
-  return option ? option.textContent : t(AMBIENT_PRESETS[preset].labelKey);
-}
-
-function updateAmbientControlsVisibility() {
-  const spotify = isSpotifyPreset();
-  dom.spotifyEmbedShell.hidden = !spotify;
-  dom.ambientLocalControls.hidden = spotify || state.ambientPreset === 'off';
+function updateSoundOptions() {
+  document.querySelectorAll('.sound-option[data-sound]').forEach(function(button) {
+    const selected = button.dataset.sound === state.ambientPreset;
+    button.classList.toggle('selected', selected);
+    button.setAttribute('aria-pressed', selected ? 'true' : 'false');
+  });
 }
 
 function updateAmbientUI() {
   const config = ambientPresetConfig();
   const active = state.ambientPreset !== 'off';
-  dom.ambientPill.hidden = !active;
-  dom.ambientPillName.textContent = active
-    ? (config.type === 'spotify' ? getSpotifyDisplayName(state.ambientPreset) : t(config.labelKey))
-    : t('ambient.off');
-  dom.ambientPillState.textContent = state.ambientPlaying ? 'Ⅱ' : '▶';
-  dom.ambientPill.setAttribute('aria-pressed', state.ambientPlaying ? 'true' : 'false');
-  dom.ambientPill.setAttribute(
-    'aria-label',
-    (state.ambientPlaying ? t('ambient.playing') : t('ambient.paused')) + ' · ' + dom.ambientPillName.textContent
+
+  dom.ambientPillName.textContent = active ? t(config.labelKey) : t('ambient.sound');
+  dom.ambientPillState.textContent = dom.soundPopover && !dom.soundPopover.hidden
+    ? '⌃'
+    : (active && state.ambientPlaying ? 'Ⅱ' : '▾');
+  dom.ambientPill.classList.toggle('sound-active', active);
+  dom.ambientPill.setAttribute('aria-expanded', dom.soundPopover && !dom.soundPopover.hidden ? 'true' : 'false');
+  dom.ambientPill.setAttribute('aria-label',
+    active
+      ? (state.ambientPlaying ? t('ambient.playing') : t('ambient.paused')) + ' · ' + t(config.labelKey)
+      : t('ambient.sound')
   );
   dom.ambientVolumeValue.textContent = state.ambientVolume + '%';
-  updateAmbientControlsVisibility();
+  updateSoundOptions();
 }
 
 function fadeAmbientTo(targets, duration) {
@@ -587,10 +562,6 @@ function fadeAmbientTo(targets, duration) {
 }
 
 function syncAmbientVolume() {
-  if (!isLocalAmbientPreset()) {
-    updateAmbientUI();
-    return;
-  }
   if (!state.ambientPlaying) fadeAmbientTo(ambientPlayers.map(function(){ return 0; }), 260);
   else fadeAmbientTo(ambientTargetVolumes(), 520);
   updateAmbientUI();
@@ -605,9 +576,12 @@ function stopLocalAmbient(reset) {
   });
 }
 
-async function startLocalAmbient() {
+async function startAmbient() {
   const config = ambientPresetConfig();
-  if (config.type !== 'local') return false;
+  if (!config.layers.length) {
+    stopAmbient();
+    return false;
+  }
 
   ambientPlayers.forEach(function(player,index) {
     const layer = config.layers[index];
@@ -635,170 +609,75 @@ async function startLocalAmbient() {
   return state.ambientPlaying;
 }
 
-function ensureSpotifyController() {
-  if (spotifyController) return Promise.resolve(spotifyController);
-  if (spotifyControllerPromise) return spotifyControllerPromise;
-  if (!spotifyIframeAPI || !dom.spotifyEmbed) return Promise.resolve(null);
-
-  spotifyControllerPromise = new Promise(function(resolve) {
-    const initialUrl = isSpotifyPreset() ? ambientPresetConfig().url : SPOTIFY_PLAYLISTS.spotify1;
-    spotifyIframeAPI.createController(
-      dom.spotifyEmbed,
-      { width:'100%', height:'152', url:initialUrl },
-      function(controller) {
-        spotifyController = controller;
-        spotifyLoadedPreset = isSpotifyPreset() ? state.ambientPreset : 'spotify1';
-
-        controller.addListener('playback_started', function() {
-          if (isSpotifyPreset()) {
-            state.ambientPlaying = true;
-            updateAmbientUI();
-          }
-        });
-
-        controller.addListener('playback_update', function(event) {
-          if (!isSpotifyPreset() || !event || !event.data) return;
-          state.ambientPlaying = !event.data.isPaused;
-          updateAmbientUI();
-        });
-
-        resolve(controller);
-      }
-    );
-  });
-
-  return spotifyControllerPromise;
-}
-
-async function loadSpotifyPreset(preset) {
-  const config = AMBIENT_PRESETS[preset];
-  if (!config || config.type !== 'spotify') return null;
-  dom.spotifyEmbedShell.hidden = false;
-  const controller = await ensureSpotifyController();
-  if (!controller) return null;
-  if (spotifyLoadedPreset !== preset) {
-    controller.loadEntity(config.url);
-    spotifyLoadedPreset = preset;
-  }
-  return controller;
-}
-
-async function startSpotify() {
-  const controller = await loadSpotifyPreset(state.ambientPreset);
-  if (!controller) {
-    state.ambientPlaying = false;
-    updateAmbientUI();
-    return false;
-  }
-  try {
-    controller.resume();
-    return true;
-  } catch (error) {
-    console.warn('[Flowmodoro] Spotify playback requires user interaction in this browser.', error);
-    state.ambientPlaying = false;
-    updateAmbientUI();
-    return false;
-  }
-}
-
-function pauseSpotify() {
-  if (spotifyController) {
-    try { spotifyController.pause(); } catch (error) {}
-  }
-  state.ambientPlaying = false;
-  updateAmbientUI();
-}
-
-async function startAmbient() {
-  if (state.ambientPreset === 'off') {
-    stopAmbient();
-    return false;
-  }
-  if (isSpotifyPreset()) {
-    stopLocalAmbient(false);
-    return startSpotify();
-  }
-  if (spotifyController) {
-    try { spotifyController.pause(); } catch (error) {}
-  }
-  return startLocalAmbient();
-}
-
 function pauseAmbient() {
-  if (isSpotifyPreset()) {
-    pauseSpotify();
-    return;
-  }
   state.ambientPlaying = false;
   fadeAmbientTo(ambientPlayers.map(function(){ return 0; }), 360);
   setTimeout(function(){
-    if (!state.ambientPlaying && isLocalAmbientPreset()) {
-      ambientPlayers.forEach(function(player){ player.pause(); });
-    }
-  }, 400);
+    if (!state.ambientPlaying) ambientPlayers.forEach(function(player){ player.pause(); });
+  },400);
   updateAmbientUI();
 }
 
 function stopAmbient() {
   state.ambientPlaying = false;
   stopLocalAmbient(true);
-  if (spotifyController) {
-    try { spotifyController.pause(); } catch (error) {}
-  }
   updateAmbientUI();
 }
 
 async function setAmbientPreset(preset, autoplay) {
   const next = AMBIENT_PRESETS[preset] ? preset : 'off';
-  const previousWasSpotify = isSpotifyPreset(state.ambientPreset);
-
-  if (previousWasSpotify && spotifyController) {
-    try { spotifyController.pause(); } catch (error) {}
-  }
   stopLocalAmbient(false);
   state.ambientPlaying = false;
   state.ambientPreset = next;
   localStorage.setItem('fm_ambient', state.ambientPreset);
-  if (dom.ambientSelect) dom.ambientSelect.value = state.ambientPreset;
-
   updateAmbientUI();
 
-  if (state.ambientPreset === 'off') return;
-  if (isSpotifyPreset()) await loadSpotifyPreset(state.ambientPreset);
-  if (autoplay) await startAmbient();
+  if (next !== 'off' && autoplay) await startAmbient();
 }
 
-async function hydrateSpotifyLabels() {
-  const entries = Object.entries(SPOTIFY_PLAYLISTS);
-  await Promise.all(entries.map(async function(entry) {
-    const preset = entry[0];
-    const url = entry[1];
-    const option = document.querySelector('#ambientSelect option[value="' + preset + '"]');
-    if (!option) return;
-    try {
-      const response = await fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(url));
-      if (!response.ok) return;
-      const data = await response.json();
-      if (!data || !data.title) return;
-      option.textContent = data.title;
-      if (state.ambientPreset === preset) updateAmbientUI();
-    } catch (error) {
-      // Fallback labels remain usable when oEmbed is blocked or offline.
-    }
-  }));
-}
+function positionSoundPopover() {
+  if (!dom.soundPopover || dom.soundPopover.hidden) return;
+  const rect = dom.ambientPill.getBoundingClientRect();
+  const width = Math.min(360, window.innerWidth - 24);
+  dom.soundPopover.style.width = width + 'px';
 
-window.onSpotifyIframeApiReady = function(IFrameAPI) {
-  spotifyIframeAPI = IFrameAPI;
-  if (isSpotifyPreset()) {
-    ensureSpotifyController().then(function(){
-      if (state.ambientPlaying) startSpotify();
-    });
+  const measuredHeight = dom.soundPopover.offsetHeight || 390;
+  let left = rect.left + rect.width / 2 - width / 2;
+  left = Math.max(12, Math.min(left, window.innerWidth - width - 12));
+
+  let top = rect.bottom + 10;
+  if (top + measuredHeight > window.innerHeight - 12) {
+    top = Math.max(12, rect.top - measuredHeight - 10);
   }
-};
 
-dom.ambientSelect.addEventListener('change', function() {
-  setAmbientPreset(dom.ambientSelect.value, true);
+  dom.soundPopover.style.left = left + 'px';
+  dom.soundPopover.style.top = top + 'px';
+}
+
+function openSoundPopover() {
+  dom.soundPopover.hidden = false;
+  dom.ambientPill.setAttribute('aria-expanded','true');
+  updateAmbientUI();
+  requestAnimationFrame(positionSoundPopover);
+}
+
+function closeSoundPopover() {
+  dom.soundPopover.hidden = true;
+  dom.ambientPill.setAttribute('aria-expanded','false');
+  updateAmbientUI();
+}
+
+dom.ambientPill.addEventListener('click', function() {
+  if (dom.soundPopover.hidden) openSoundPopover();
+  else closeSoundPopover();
+});
+
+dom.soundPopoverClose.addEventListener('click', closeSoundPopover);
+
+document.querySelectorAll('.sound-option[data-sound]').forEach(function(button) {
+  button.addEventListener('click', function() {
+    setAmbientPreset(button.dataset.sound, button.dataset.sound !== 'off');
+  });
 });
 
 dom.ambientVolume.addEventListener('input', function() {
@@ -813,16 +692,29 @@ dom.ambientAttenuateToggle.addEventListener('change', function() {
   syncAmbientVolume();
 });
 
-dom.ambientPill.addEventListener('click', function() {
-  if (state.ambientPlaying) pauseAmbient();
-  else startAmbient();
-});
+window.addEventListener('resize', positionSoundPopover);
+window.addEventListener('scroll', positionSoundPopover, { passive:true });
 
 ambientPlayers.forEach(function(player) {
   player.addEventListener('error', function() {
     console.warn('[Flowmodoro] Ambient audio source unavailable:', player.currentSrc || player.src);
   });
 });
+
+async function hydrateSpotifyLinkLabels() {
+  await Promise.all(SPOTIFY_PLAYLISTS.map(async function(playlist,index) {
+    const label = playlist.labelEl();
+    if (!label) return;
+    try {
+      const response = await fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(playlist.url));
+      if (!response.ok) return;
+      const data = await response.json();
+      if (data && data.title) label.textContent = data.title;
+    } catch (error) {
+      // The links remain fully usable with fallback names when oEmbed is unavailable.
+    }
+  }));
+}
 
 const SESSION_LABELS = {
   work: function(){ return t('timer.focusTime'); },
@@ -942,13 +834,8 @@ function startTimer() {
   markAsUsed();
   if (state.currentMode === 'work') enterFocusMode();
   if (state.ambientPreset !== 'off') {
-    if (isSpotifyPreset()) {
-      if (state.currentMode === 'work' && !state.ambientPlaying) startAmbient();
-    } else if (!state.ambientPlaying) {
-      startAmbient();
-    } else {
-      syncAmbientVolume();
-    }
+    if (!state.ambientPlaying) startAmbient();
+    else syncAmbientVolume();
   }
   acquireWakeLock();
   persistSession();
@@ -992,8 +879,7 @@ function tick() {
     state.endTime = null;
     releaseWakeLock();
     if (state.ambientPlaying) {
-      if (isSpotifyPreset()) pauseAmbient();
-      else fadeAmbientTo(ambientTargetVolumes().map(function(v){ return v * 0.22; }), 700);
+      fadeAmbientTo(ambientTargetVolumes().map(function(v){ return v * 0.22; }), 700);
     }
     handleSessionEnd(false);
   }
@@ -1434,6 +1320,7 @@ dom.taskList.addEventListener('keydown', function(event) {
 document.addEventListener('click', function(event) {
   if (!event.target.closest('.task-actions')) closeTaskMenus();
   if (!dom.focusPopover.hidden && !dom.focusPopover.contains(event.target) && !dom.focusPill.contains(event.target)) closeFocusPopover();
+  if (!dom.soundPopover.hidden && !dom.soundPopover.contains(event.target) && !dom.ambientPill.contains(event.target)) closeSoundPopover();
 });
 
 function addTask() {
@@ -1724,13 +1611,13 @@ function init() {
   renderToday();
   renderProgress();
   updateTimerUI(true);
-  dom.ambientSelect.value = state.ambientPreset;
   dom.ambientVolume.value = String(state.ambientVolume);
   dom.ambientVolumeValue.textContent = state.ambientVolume + '%';
   dom.ambientAttenuateToggle.checked = state.ambientAttenuate;
   updateAmbientUI();
-  hydrateSpotifyLabels();
+  hydrateSpotifyLinkLabels();
   document.body.appendChild(dom.focusPopover);
+  document.body.appendChild(dom.soundPopover);
 
   if (state.isRunning) {
     clearInterval(state.intervalId);
