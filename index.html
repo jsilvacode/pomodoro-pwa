@@ -38,23 +38,23 @@
 
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="app-shell-body" data-app-view="focus">
   <!-- ═══════════════════════════════════ NAVBAR ═══════════════════════════════════ -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
-      <a href="#hero" class="nav-logo">
-        <img src="icons/icon-192.png" alt="Flowmodoro" class="logo-img" />
+      <button class="nav-logo app-home-btn" id="homeFocusBtn" type="button" data-view-target="focus" aria-label="Flowmodoro · Foco">
+        <img src="icons/icon-192.png" alt="" class="logo-img" aria-hidden="true" />
         <span class="logo-text">Flowmodoro</span>
-      </a>
+      </button>
       <div class="nav-links">
-        <a href="#timer-section" class="nav-link" data-i18n="nav.focus">Foco</a>
-        <a href="#tasks-section" class="nav-link" data-i18n="nav.today">Hoy</a>
-        <button class="nav-link nav-more-btn" id="moreBtn" type="button" data-i18n="nav.settings">Ajustes</button>
+        <button type="button" class="nav-link active" data-view-target="focus" data-i18n="nav.focus">Foco</button>
+        <button type="button" class="nav-link" data-view-target="today" data-i18n="nav.today">Hoy</button>
+        <button class="nav-link nav-more-btn" id="moreBtn" type="button" data-i18n="nav.more">Más</button>
       </div>
     </div>
   </nav>
 
-  <section class="hero" id="hero">
+  <section class="hero legacy-landing" id="hero" hidden aria-hidden="true">
     <!-- Capa de gradiente (orbs) -->
     <div class="hero__gradient" aria-hidden="true">
       <div class="hero__orb hero__orb--1"></div>
@@ -99,7 +99,7 @@
   </section>
 
   <!-- ═══════════════════════════════════ TIMER ════════════════════════════════════ -->
-  <section class="section section-parallax" id="timer-section" data-parallax="0.1">
+  <section class="section app-view app-view-focus is-active" id="timer-section" data-app-view="focus" aria-label="Foco">
     <div class="section-parallax__bg">
       <div class="deco-circle"></div>
     </div>
@@ -108,6 +108,18 @@
         <div class="focus-session-status" id="focusSessionStatus" aria-live="polite">
           <span data-i18n="focus.session">Sesión de foco</span>
           <span class="focus-session-cycle" id="focusSessionCycle">1 de 4</span>
+        </div>
+
+        <div class="focus-prep" id="focusPrep" aria-hidden="true">
+          <div class="focus-prep-inner">
+            <span class="focus-prep-kicker" data-i18n="prep.kicker">Preparar sesión</span>
+            <h2 data-i18n="prep.title">¿Cómo quieres empezar?</h2>
+            <p data-i18n="prep.text">Puedes organizar lo que harás o entrar directo al timer.</p>
+            <div class="focus-prep-actions">
+              <button class="btn-primary" id="prepTasksBtn" type="button" data-i18n="prep.tasks">Preparar tareas</button>
+              <button class="btn-ghost" id="prepTimerOnlyBtn" type="button" data-i18n="prep.timerOnly">Solo usar el timer</button>
+            </div>
+          </div>
         </div>
 
         <!-- Mode tabs -->
@@ -164,8 +176,9 @@
         </div>
         <div class="timer-session-label" id="sessionLabel" data-i18n="timer.focusTime">Tiempo de enfoque</div>
         <div class="break-tip" id="breakTip" hidden></div>
+        <div class="timer-active-task" id="timerActiveTask" hidden aria-live="polite"></div>
 
-        <!-- Active task focus pill + popover -->
+        <!-- Legacy task selector retained for state compatibility; hidden in App Shell -->
         <div class="timer-task-focus">
           <button class="focus-pill" id="focusPill" aria-haspopup="listbox" aria-expanded="false">
             <span class="focus-pill-icon" aria-hidden="true">📌</span>
@@ -298,7 +311,7 @@
     <div class="drawer-header">
       <div>
         <span class="drawer-eyebrow">Flowmodoro</span>
-        <h2 class="settings-title" id="settingsTitle" data-i18n="settings.title">Ajustes</h2>
+        <h2 class="settings-title" id="settingsTitle" data-i18n="nav.more">Más</h2>
       </div>
       <button class="drawer-close" id="settingsCloseBtn" type="button" aria-label="Cerrar">✕</button>
     </div>
@@ -364,16 +377,16 @@
 
     <div class="drawer-section drawer-links">
       <button class="drawer-link" id="installDrawerBtn" type="button" data-i18n="nav.install" hidden>Instalar App</button>
-      <a href="#guide-section" class="drawer-link" data-drawer-close data-i18n="nav.guide">Guía Pomodoro</a>
+      <button class="drawer-link" id="guideDrawerBtn" type="button" data-i18n="nav.guide">Guía Pomodoro</button>
       <button class="drawer-link" id="shortcutsBtn" type="button" data-i18n="shortcuts.title">Atajos de teclado</button>
-      <a href="#donation-section" class="drawer-link" data-drawer-close data-i18n="nav.support">Apoyar proyecto</a>
+      <button class="drawer-link" id="supportDrawerBtn" type="button" data-i18n="nav.support">Apoyar proyecto</button>
     </div>
 
     <button class="btn-primary drawer-save" id="saveSettings" data-i18n="settings.save">Guardar cambios</button>
   </aside>
 
   <!-- ═══════════════════════════════════ TODAY ════════════════════════════════════ -->
-  <section class="section section-alt section-parallax" id="tasks-section" data-parallax="0.15">
+  <section class="section section-alt app-view app-view-today" id="tasks-section" data-app-view="today" aria-label="Hoy" aria-hidden="true">
     <div class="section-parallax__bg">
       <div class="deco-blob"></div>
     </div>
@@ -438,7 +451,7 @@
   </section>
 
   <!-- ═══════════════════════════════════ GUIDE ════════════════════════════════════ -->
-  <section class="section guide-section section-parallax" id="guide-section" data-parallax="0.08">
+  <section class="section guide-section legacy-section" id="guide-section" hidden aria-hidden="true">
     <div class="section-parallax__bg">
       <div class="deco-circle guide-deco"></div>
     </div>
@@ -499,7 +512,7 @@
   </section>
 
   <!-- ═══════════════════════════════════ SUPPORT ══════════════════════════════════ -->
-  <section class="section support-section section-parallax" id="donation-section" data-parallax="0.06">
+  <section class="section support-section legacy-section" id="donation-section" hidden aria-hidden="true">
     <div class="section-parallax__bg">
       <div class="deco-blob support-deco"></div>
     </div>
@@ -523,7 +536,7 @@
   </section>
 
   <!-- ═══════════════════════════════════ FOOTER ═══════════════════════════════════ -->
-  <footer class="footer">
+  <footer class="footer legacy-section" hidden aria-hidden="true">
     <div class="footer-inner">
       <div class="footer-brand">
         <img src="icons/icon-192.png" alt="Logo" class="logo-img" />
@@ -536,10 +549,73 @@
 
 
   <nav class="mobile-bottom-nav" aria-label="Navegación principal">
-    <a href="#timer-section" class="mobile-bottom-link"><span>◎</span><small data-i18n="nav.focus">Foco</small></a>
-    <a href="#tasks-section" class="mobile-bottom-link"><span>✓</span><small data-i18n="nav.today">Hoy</small></a>
-    <button class="mobile-bottom-link" id="bottomMoreBtn" type="button"><span>⚙</span><small data-i18n="nav.settings">Ajustes</small></button>
+    <button type="button" class="mobile-bottom-link active" data-view-target="focus"><span>◎</span><small data-i18n="nav.focus">Foco</small></button>
+    <button type="button" class="mobile-bottom-link" data-view-target="today"><span>✓</span><small data-i18n="nav.today">Hoy</small></button>
+    <button class="mobile-bottom-link" id="bottomMoreBtn" type="button"><span>•••</span><small data-i18n="nav.more">Más</small></button>
   </nav>
+
+
+  <dialog class="flow-dialog planner-dialog" id="sessionPlannerDialog" aria-labelledby="plannerTitle">
+    <div class="flow-dialog-shell">
+      <header class="flow-dialog-header">
+        <div>
+          <span class="flow-dialog-kicker" data-i18n="prep.kicker">Preparar sesión</span>
+          <h2 id="plannerTitle" data-i18n="planner.title">Tus tareas para este foco.</h2>
+        </div>
+        <button class="flow-dialog-close" id="plannerCloseBtn" type="button" aria-label="Cerrar">✕</button>
+      </header>
+      <p class="flow-dialog-intro" data-i18n="planner.text">Agrega tareas, estima pomodoros y elige con cuál comenzar.</p>
+      <div class="planner-add">
+        <input id="plannerTaskInput" class="setting-input" type="text" maxlength="120" placeholder="Nueva tarea…" data-i18n-placeholder="planner.placeholder" />
+        <button class="btn-ghost" id="plannerAddBtn" type="button" data-i18n="tasks.add">+ Agregar</button>
+      </div>
+      <div class="planner-task-list" id="plannerTaskList"></div>
+      <footer class="flow-dialog-actions">
+        <button class="btn-ghost" id="plannerTimerOnlyBtn" type="button" data-i18n="prep.timerOnly">Solo usar el timer</button>
+        <button class="btn-primary" id="plannerStartBtn" type="button" data-i18n="planner.start">Comenzar foco</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <dialog class="flow-dialog guide-dialog" id="guideDialog" aria-labelledby="guideDialogTitle">
+    <div class="flow-dialog-shell guide-dialog-shell">
+      <header class="flow-dialog-header">
+        <div>
+          <span class="flow-dialog-kicker" data-i18n="guide.badge">Técnica Pomodoro</span>
+          <h2 id="guideDialogTitle" data-i18n="guide.title">Una cosa a la vez.</h2>
+        </div>
+        <button class="flow-dialog-close" id="guideDialogCloseBtn" type="button" aria-label="Cerrar">✕</button>
+      </header>
+      <p class="flow-dialog-intro" data-i18n="guide.subtitle">Trabaja con intención, descansa antes de agotarte y vuelve con claridad.</p>
+      <div class="guide-modal-sequence" aria-label="Ciclo Pomodoro">
+        <div><span>01</span><strong>25 min</strong><small data-i18n="guide.cycle.work">Trabajo profundo</small></div>
+        <div><span>02</span><strong>5 min</strong><small data-i18n="guide.cycle.short">Descanso corto</small></div>
+        <div><span>03</span><strong>×4</strong><small data-i18n="guide.cycle.repeat">Repetir</small></div>
+        <div><span>04</span><strong>15–30</strong><small data-i18n="guide.cycle.long">Descanso largo</small></div>
+      </div>
+      <div class="guide-modal-notes">
+        <p><strong data-i18n="guide.card3.title">Para empezar</strong><span data-i18n="guide.card3.text">Antes de iniciar, define una sola tarea. Si surge algo, anótalo y vuelve a tu intención.</span></p>
+        <p><strong data-i18n="guide.card4.title">Adáptalo a ti</strong><span data-i18n="guide.card4.text">El estándar 25/5 es un punto de partida. Ajusta los tiempos hasta encontrar un ritmo sostenible.</span></p>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="flow-dialog support-dialog" id="supportDialog" aria-labelledby="supportDialogTitle">
+    <div class="flow-dialog-shell support-dialog-shell">
+      <header class="flow-dialog-header">
+        <div>
+          <span class="flow-dialog-kicker" data-i18n="donation.badge">Apoya Flowmodoro</span>
+          <h2 id="supportDialogTitle" data-i18n="donation.title">Si te sirve, puedes ayudar a que siga mejorando.</h2>
+        </div>
+        <button class="flow-dialog-close" id="supportDialogCloseBtn" type="button" aria-label="Cerrar">✕</button>
+      </header>
+      <p class="flow-dialog-intro" data-i18n="donation.text">Tu aporte ayuda a sostener el desarrollo, probar nuevas ideas y cuidar cada detalle del producto.</p>
+      <div class="support-dialog-actions">
+        <a class="support-link support-link-primary" href="https://link.mercadopago.cl/jsilvacoder" target="_blank" rel="noopener"><span>Mercado Pago</span><span>↗</span></a>
+        <a class="support-link" href="https://paypal.me/jsilvacode" target="_blank" rel="noopener"><span>PayPal</span><span>↗</span></a>
+      </div>
+    </div>
+  </dialog>
 
   <div class="update-toast" id="updateToast" hidden>
     <span data-i18n="update.available">Hay una nueva versión disponible.</span>
