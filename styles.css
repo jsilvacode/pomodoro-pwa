@@ -3272,3 +3272,104 @@ body.standalone-app .hero {
   color: var(--text-primary);
   font: inherit;
 }
+
+
+/* ═══ FLOWMODORO SOUNDS ═══════════════════════════════════ */
+.ambient-settings {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.ambient-volume-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.ambient-volume {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.ambient-note {
+  margin-top: 0.55rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.ambient-audio-host {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ambient-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 36px;
+  margin: 0 auto 0.85rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-surface) 90%, transparent);
+  color: var(--text-secondary);
+  font-size: 0.76rem;
+  letter-spacing: 0.01em;
+}
+
+.ambient-pill[hidden] {
+  display: none;
+}
+
+.ambient-pill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.ambient-pill-icon {
+  color: var(--accent);
+}
+
+.ambient-pill-name {
+  max-width: 11rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ambient-pill-state {
+  min-width: 1rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+body.focus-mode .ambient-pill {
+  opacity: 0.72;
+  margin-top: 0.1rem;
+  margin-bottom: 0.75rem;
+  transition: opacity var(--motion-normal) var(--ease-premium),
+              border-color var(--transition),
+              color var(--transition);
+}
+
+body.focus-mode .ambient-pill:hover,
+body.focus-mode .ambient-pill:focus-visible {
+  opacity: 1;
+}
+
+@media (max-width: 480px) {
+  .ambient-pill {
+    max-width: 100%;
+  }
+
+  .ambient-pill-name {
+    max-width: 9.5rem;
+  }
+}
