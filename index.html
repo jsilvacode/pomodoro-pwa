@@ -112,10 +112,20 @@
 
         <!-- Mode tabs -->
         <div class="mode-tabs">
-          <button class="mode-tab active" id="tab-work" data-mode="work" data-i18n="timer.work">Trabajo</button>
-          <button class="mode-tab" id="tab-short" data-mode="short" data-i18n="timer.short">Descanso corto</button>
-          <button class="mode-tab" id="tab-long" data-mode="long" data-i18n="timer.long">Descanso largo</button>
+          <button class="mode-tab active" id="tab-work" data-mode="work">
+            <span data-i18n="timer.work">Trabajo</span>
+            <small id="tabWorkDuration">25 min</small>
+          </button>
+          <button class="mode-tab" id="tab-short" data-mode="short">
+            <span data-i18n="timer.short">Descanso corto</span>
+            <small id="tabShortDuration">5 min</small>
+          </button>
+          <button class="mode-tab" id="tab-long" data-mode="long">
+            <span data-i18n="timer.long">Descanso largo</span>
+            <small id="tabLongDuration">15 min</small>
+          </button>
         </div>
+        <button class="duration-quick-btn" id="durationQuickBtn" type="button" data-i18n="timer.adjustTimes">Ajustar tiempos</button>
 
         <div class="timer-display-container">
           <!-- View: Flip (Retro) -->
@@ -193,6 +203,9 @@
             <span class="ambient-pill-icon" aria-hidden="true">♫</span>
             <span class="ambient-pill-name" id="ambientPillName" data-i18n="ambient.sound">Sonido</span>
             <span class="ambient-pill-state" id="ambientPillState" aria-hidden="true">▾</span>
+          </button>
+          <button class="ambient-play-btn" id="ambientPlayBtn" type="button" hidden aria-label="Reproducir ambiente" title="Reproducir ambiente">
+            <span id="ambientPlayIcon" aria-hidden="true">▶</span>
           </button>
 
           <div class="sound-popover" id="soundPopover" hidden role="dialog" aria-label="Sonido de foco">
