@@ -4637,3 +4637,51 @@ body.focus-mode .focus-session-status,
 body.focus-mode .timer-session-label {
   display: none !important;
 }
+
+
+/* Deep Focus control identity: minimal but unambiguous. */
+.focus-control-unit {
+  display: contents;
+}
+
+.focus-control-label {
+  display: none;
+}
+
+body.focus-mode .focus-control-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.34rem;
+}
+
+body.focus-mode .focus-control-label {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.56rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+  opacity: 0.46;
+  transition:
+    opacity var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard);
+}
+
+body.focus-mode .focus-control-unit:hover .focus-control-label,
+body.focus-mode .focus-control-unit:focus-within .focus-control-label {
+  opacity: 0.92;
+  color: var(--text-secondary);
+}
+
+body.focus-mode .timer-action-zone,
+body.focus-mode .timer-controls {
+  align-items: flex-start;
+}
+
+/* No selected ambience: hide the Sound label together with its button. */
+body.focus-mode .ambient-play-btn[hidden] + .focus-control-label {
+  display: none;
+}
