@@ -1,1109 +1,1346 @@
 /* ═══════════════════════════════════════════════════════════
-   FLOWMODORO — App Logic
-   Timer · Tasks · i18n (es/en) · Dark mode · localStorage
+   FLOWMODORO — App Logic v3
+   Focus · Today · Progress · PWA · local-first persistence
 ═══════════════════════════════════════════════════════════ */
 
 'use strict';
 
-// ─── i18n Translations ───────────────────────────────────────
 const TRANSLATIONS = {
   es: {
-    'nav.timer':        'Timer',
-    'nav.tasks':        'Tareas',
-    'nav.guide':        'Guía',
-    'nav.install':      'Instalar App',
-    'nav.support':      'Apoyar',
-    'hero.badge':       '✨ Tu flujo de trabajo perfecto',
-    'hero.title1':      'Trabaja mejor,',
-    'hero.title2':      'descansa mejor.',
-    'hero.subtitle':    'Usa la técnica Pomodoro para potenciar tu productividad con intervalos de trabajo y descanso que respetan tu cerebro.',
-    'hero.cta':         'Empezar ahora',
-    'hero.learn':       '¿Qué es Pomodoro?',
-    'hero.stat1':       'min de enfoque',
-    'hero.stat2':       'min de descanso',
-    'hero.stat3':       'y descansas 15 min',
-    'timer.work':       'Trabajo',
-    'timer.short':      'Descanso corto',
-    'timer.long':       'Descanso largo',
-    'timer.start':      'Iniciar',
-    'timer.pause':      'Pausar',
-    'timer.focusTime':  'Tiempo de enfoque',
-    'timer.shortBreak': 'Descanso corto',
-    'timer.longBreak':  'Descanso largo',
-    'timer.done.work':  '¡Tiempo de descanso! 🎉',
-    'timer.done.short': '¡A trabajar de nuevo! 💪',
-    'timer.done.long':  '¡Recargado! Volvamos al foco 🚀',
-    'timer.done.work.task':         '¡Descanso! 🍅 {act}/{est} · {task}',
-    'timer.done.work.taskComplete': '¡Tarea completada! 🎉 {task}',
-    'timer.focusTitle':     'Enfocar en…',
-    'timer.focusChoose':    'Elegir tarea',
-    'timer.focusQuickAdd':  '+ Nueva tarea…',
-    'timer.focusCompleted': '¡Tarea completada! 🎉',
-    'focus.exit':       'Salir del modo foco',
-    'settings.title':   'Configuración',
-    'settings.work':    'Trabajo (min)',
-    'settings.short':   'Descanso corto (min)',
-    'settings.long':    'Descanso largo (min)',
-    'settings.sound':   'Sonido',
-    'settings.long':    'Descanso largo (min)',
-    'settings.sound':   'Sonido',
-    'settings.save':    'Guardar',
-    'tasks.badge':      '📋 Gestión de tareas',
-    'tasks.title':      '¿En qué vas a trabajar hoy?',
-    'tasks.subtitle':   'Agrega tus tareas y marca la activa para enfocar el timer en ella.',
-    'tasks.placeholder':'Agregar nueva tarea...',
-    'tasks.add':        '+ Agregar',
-    'tasks.empty':      'No hay tareas aún. ¡Agrega la primera!',
-    'tasks.empty.filter':'No hay tareas aquí.',
-    'tasks.noTask':      'Sin tarea',
-    'tasks.filter.all':   'Todas',
-    'tasks.filter.active':'Pendientes',
-    'tasks.filter.done':  'Completadas',
-    'tasks.clearDone':        'Limpiar completadas',
-    'tasks.clearDone.confirm':'¿Seguro?',
-    'tasks.estimation': 'Pomodoros estimados',
-    'tasks.delete':     'Eliminar tarea',
-    'tasks.focus':      'Enfocar timer en esta tarea',
-    'tasks.unfocus':    'Quitar foco',
-    'tasks.complete':   'Marcar como completada',
-    'tasks.reorder.up':   'Subir tarea',
-    'tasks.reorder.down': 'Bajar tarea',
-    'tasks.inc.pomos':  'Aumentar pomodoros estimados',
-    'tasks.dec.pomos':  'Reducir pomodoros estimados',
-    'guide.badge':      '📚 Técnica Pomodoro',
-    'guide.title':      '¿Cómo funciona?',
-    'guide.subtitle':   "Desarrollada por Francesco Cirillo a finales de los '80, la técnica Pomodoro es una de las metodologías de productividad más efectivas del mundo.",
-    'guide.cycle.work': 'Trabajo profundo',
-    'guide.cycle.short':'Descanso corto',
-    'guide.cycle.repeat':'Repetir',
-    'guide.cycle.long': 'Descanso largo',
-    'guide.card1.title':'¿Por qué funciona?',
-    'guide.card1.text': 'El cerebro humano no está diseñado para mantener foco profundo por horas. Los intervalos cortos e intensos aprovechan los picos naturales de atención y reducen la fatiga cognitiva.',
-    'guide.card2.title':'El origen del nombre',
-    'guide.card2.text': 'Francesco Cirillo usaba un timer de cocina con forma de tomate ("pomodoro" en italiano) cuando era universitario. De ahí el nombre y el ícono 🍅 que hoy conocemos.',
-    'guide.card3.title':'Tips para empezar',
-    'guide.card3.text': 'Antes de iniciar, define una sola tarea en la que vas a trabajar. Pon el teléfono en silencio. Si surge algo urgente, anótalo y vuelve tu foco. El pomodoro es sagrado.',
-    'guide.card4.title':'Adáptalo a ti',
-    'guide.card4.text': 'Aunque el estándar es 25/5, puedes ajustar los tiempos. Algunos prefieren 50/10 para trabajo creativo o 15/5 para tareas mecánicas. Experimenta hasta encontrar tu ritmo.',
-    'footer.tagline':   'Tu flujo de trabajo perfecto.',
-    'footer.developed': 'Desarrollado con ❤️ por Julio Silva',
-    'donation.badge':   'Apoya el proyecto',
-    'donation.text':    'Este proyecto es gratuito y sin anuncios. Tu donación ayuda a mantener los servidores y el desarrollo.',
+    'nav.focus':'Foco','nav.today':'Hoy','nav.progress':'Progreso','nav.more':'Más',
+    'nav.timer':'Timer','nav.tasks':'Tareas','nav.guide':'Guía Pomodoro','nav.install':'Instalar App','nav.support':'Apoyar proyecto',
+    'hero.badge':'✨ Tu flujo de trabajo perfecto','hero.title1':'Trabaja mejor,','hero.title2':'descansa mejor.',
+    'hero.subtitle':'Usa la técnica Pomodoro para potenciar tu productividad con intervalos de trabajo y descanso que respetan tu cerebro.',
+    'hero.cta':'Empezar ahora','hero.learn':'¿Qué es Pomodoro?','hero.stat1':'min de enfoque','hero.stat2':'min de descanso','hero.stat3':'y descansas 15 min',
+    'timer.work':'Trabajo','timer.short':'Descanso corto','timer.long':'Descanso largo','timer.start':'Iniciar','timer.pause':'Pausar',
+    'timer.focusTime':'Tiempo de enfoque','timer.shortBreak':'Descanso corto','timer.longBreak':'Descanso largo',
+    'timer.done.work':'Sesión de foco completada.','timer.done.short':'Descanso terminado.','timer.done.long':'Descanso largo terminado.',
+    'timer.done.work.task':'Foco completado · 🍅 {act}/{est} · {task}','timer.done.work.taskComplete':'Tarea completada · {task}',
+    'timer.focusTitle':'Enfocar en…','timer.focusChoose':'Elegir tarea','timer.focusQuickAdd':'+ Nueva tarea…','timer.focusCompleted':'Tarea completada',
+    'focus.exit':'Salir del modo foco','focus.session':'Sesión de foco','focus.of':'de',
+    'complete.kicker':'Sesión completada','complete.later':'Ahora no','complete.startBreak':'Iniciar descanso','complete.startFocus':'Iniciar foco',
+    'settings.title':'Preferencias','settings.timer':'Temporizador','settings.flow':'Flujo','settings.experience':'Experiencia',
+    'settings.work':'Trabajo (min)','settings.short':'Descanso corto (min)','settings.long':'Descanso largo (min)','settings.sound':'Sonido',
+    'settings.autoBreak':'Iniciar descansos automáticamente','settings.autoFocus':'Iniciar siguiente foco automáticamente',
+    'settings.wakeLock':'Mantener pantalla activa','settings.notifications':'Notificaciones','settings.enableNotifications':'Activar',
+    'settings.notificationsOn':'Activadas','settings.notificationsDenied':'Bloqueadas por el navegador',
+    'settings.appearance':'Apariencia','settings.theme.system':'Sistema','settings.theme.light':'Claro','settings.theme.dark':'Oscuro',
+    'settings.save':'Guardar cambios',
+    'today.sessions':'sesiones','today.focus':'en foco','today.tasks':'tareas','today.plan':'planificados','today.next':'Próxima tarea',
+    'tasks.badge':'📋 Plan de hoy','tasks.title':'¿En qué vas a trabajar hoy?','tasks.subtitle':'Define tu intención, estima el esfuerzo y trabaja una cosa a la vez.',
+    'tasks.placeholder':'Agregar nueva tarea...','tasks.add':'+ Agregar','tasks.empty':'No hay tareas aún. Agrega la primera.','tasks.empty.filter':'No hay tareas aquí.',
+    'tasks.noTask':'Sin tarea','tasks.filter.all':'Todas','tasks.filter.active':'Pendientes','tasks.filter.done':'Completadas',
+    'tasks.clearDone':'Limpiar completadas','tasks.clearDone.confirm':'¿Seguro?','tasks.estimation':'Real / estimado',
+    'tasks.delete':'Eliminar','tasks.focus':'Enfocar','tasks.unfocus':'Quitar foco','tasks.complete':'Marcar como completada',
+    'tasks.reorder.up':'Subir','tasks.reorder.down':'Bajar','tasks.inc.pomos':'Aumentar estimación','tasks.dec.pomos':'Reducir estimación','tasks.edit':'Editar',
+    'progress.badge':'Progreso','progress.title':'Tu trabajo deja huella.',
+    'progress.subtitle':'Compara lo que planeaste con lo que realmente tomó, sin convertir el foco en una competencia.',
+    'progress.weekSessions':'Sesiones esta semana','progress.weekMinutes':'Minutos de foco','progress.completedTasks':'Tareas completadas',
+    'progress.estimateRatio':'Real / estimado','progress.history':'Historial reciente','progress.localOnly':'Tus datos permanecen en este dispositivo.',
+    'progress.export':'Exportar','progress.empty':'Completa una sesión para empezar tu historial.',
+    'guide.badge':'📚 Técnica Pomodoro','guide.title':'¿Cómo funciona?',
+    'guide.subtitle':"Desarrollada por Francesco Cirillo a finales de los '80, la técnica Pomodoro alterna periodos de concentración y descanso.",
+    'guide.cycle.work':'Trabajo profundo','guide.cycle.short':'Descanso corto','guide.cycle.repeat':'Repetir','guide.cycle.long':'Descanso largo',
+    'guide.card1.title':'¿Por qué funciona?','guide.card1.text':'Los intervalos acotados ayudan a proteger la atención y reducen la fatiga de sostener foco continuo.',
+    'guide.card2.title':'El origen del nombre','guide.card2.text':'Francesco Cirillo usaba un temporizador de cocina con forma de tomate cuando era estudiante.',
+    'guide.card3.title':'Tips para empezar','guide.card3.text':'Antes de iniciar, define una sola tarea. Si surge algo, anótalo y vuelve a tu intención.',
+    'guide.card4.title':'Adáptalo a ti','guide.card4.text':'El estándar 25/5 es un punto de partida. Ajusta los tiempos hasta encontrar un ritmo sostenible.',
+    'footer.tagline':'Tu flujo de trabajo perfecto.','footer.developed':'Desarrollado con ❤️ por Julio Silva',
+    'donation.badge':'Apoya el proyecto','donation.text':'Flowmodoro es gratuito y sin anuncios. Tu aporte ayuda a mantener su desarrollo.',
+    'update.available':'Hay una nueva versión disponible.','update.action':'Actualizar',
+    'shortcuts.title':'Atajos de teclado','shortcuts.toggle':'Iniciar / pausar','shortcuts.reset':'Reiniciar','shortcuts.modes':'Cambiar modo',
+    'shortcuts.focus':'Entrar / salir de Focus','shortcuts.newTask':'Nueva tarea','shortcuts.help':'Ver atajos','shortcuts.escape':'Cerrar / salir',
+    'install.ios':'En iPhone o iPad: abre Compartir en Safari y elige “Añadir a pantalla de inicio”.',
+    'break.tip1':'Levántate un momento.','break.tip2':'Mira a distancia y descansa la vista.','break.tip3':'Toma agua.','break.tip4':'Respira y cambia de postura.'
   },
   en: {
-    'nav.timer':        'Timer',
-    'nav.tasks':        'Tasks',
-    'nav.guide':        'Guide',
-    'nav.install':      'Install App',
-    'nav.support':      'Support',
-    'hero.badge':       '✨ Your perfect workflow',
-    'hero.title1':      'Work smarter,',
-    'hero.title2':      'rest better.',
-    'hero.subtitle':    'Use the Pomodoro technique to boost your productivity with focused work and rest intervals that respect your brain.',
-    'hero.cta':         'Get started',
-    'hero.learn':       'What is Pomodoro?',
-    'hero.stat1':       'min of focus',
-    'hero.stat2':       'min of rest',
-    'hero.stat3':       'then 15 min break',
-    'timer.work':       'Work',
-    'timer.short':      'Short break',
-    'timer.long':       'Long break',
-    'timer.start':      'Start',
-    'timer.pause':      'Pause',
-    'timer.focusTime':  'Focus time',
-    'timer.shortBreak': 'Short break',
-    'timer.longBreak':  'Long break',
-    'timer.done.work':  'Break time! 🎉',
-    'timer.done.short': 'Back to work! 💪',
-    'timer.done.long':  'Recharged! Back to focus 🚀',
-    'timer.done.work.task':         'Break! 🍅 {act}/{est} · {task}',
-    'timer.done.work.taskComplete': 'Task completed! 🎉 {task}',
-    'timer.focusTitle':     'Focus on…',
-    'timer.focusChoose':    'Choose task',
-    'timer.focusQuickAdd':  '+ New task…',
-    'timer.focusCompleted': 'Task completed! 🎉',
-    'focus.exit':       'Exit focus mode',
-    'settings.title':   'Settings',
-    'settings.work':    'Work (min)',
-    'settings.short':   'Short break (min)',
-    'settings.long':    'Long break (min)',
-    'settings.sound':   'Sound',
-    'settings.long':    'Long break (min)',
-    'settings.sound':   'Sound',
-    'settings.save':    'Save',
-    'tasks.badge':      '📋 Task management',
-    'tasks.title':      "What are you working on today?",
-    'tasks.subtitle':   'Add your tasks and mark an active one to focus your timer on it.',
-    'tasks.placeholder':'Add a new task...',
-    'tasks.add':        '+ Add',
-    'tasks.empty':      'No tasks yet. Add your first one!',
-    'tasks.empty.filter':'No tasks here.',
-    'tasks.noTask':      'No task',
-    'tasks.filter.all':   'All',
-    'tasks.filter.active':'Active',
-    'tasks.filter.done':  'Completed',
-    'tasks.clearDone':        'Clear completed',
-    'tasks.clearDone.confirm':'Sure?',
-    'tasks.estimation': 'Estimated pomodoros',
-    'tasks.delete':     'Delete task',
-    'tasks.focus':      'Focus timer on this task',
-    'tasks.unfocus':    'Remove focus',
-    'tasks.complete':   'Mark as completed',
-    'tasks.reorder.up':   'Move task up',
-    'tasks.reorder.down': 'Move task down',
-    'tasks.inc.pomos':  'Increase estimated pomodoros',
-    'tasks.dec.pomos':  'Decrease estimated pomodoros',
-    'guide.badge':      '📚 Pomodoro Technique',
-    'guide.title':      'How does it work?',
-    'guide.subtitle':   "Developed by Francesco Cirillo in the late '80s, the Pomodoro Technique is one of the world's most effective productivity methods.",
-    'guide.cycle.work': 'Deep work',
-    'guide.cycle.short':'Short break',
-    'guide.cycle.repeat':'Repeat',
-    'guide.cycle.long': 'Long break',
-    'guide.card1.title':'Why does it work?',
-    'guide.card1.text': "The human brain isn't designed for hours of sustained focus. Short, intense intervals leverage natural attention peaks and reduce cognitive fatigue.",
-    'guide.card2.title':'The origin of the name',
-    'guide.card2.text': 'Francesco Cirillo used a tomato-shaped kitchen timer ("pomodoro" in Italian) when he was a student. That\'s where the name and the 🍅 icon come from.',
-    'guide.card3.title':'Tips to get started',
-    'guide.card3.text': 'Before starting, define just one task to work on. Put your phone on silent. If something urgent comes up, note it down and return your focus. The pomodoro is sacred.',
-    'guide.card4.title':'Adapt it to you',
-    'guide.card4.text': 'While the standard is 25/5, you can adjust the times. Some prefer 50/10 for creative work or 15/5 for mechanical tasks. Experiment until you find your rhythm.',
-    'footer.tagline':   'Your perfect workflow.',
-    'footer.developed': 'Developed with ❤️ by Julio Silva',
-    'donation.badge':   'Support the project',
-    'donation.text':    'This project is free and ad-free. Your donation helps maintain servers and development.',
+    'nav.focus':'Focus','nav.today':'Today','nav.progress':'Progress','nav.more':'More',
+    'nav.timer':'Timer','nav.tasks':'Tasks','nav.guide':'Pomodoro guide','nav.install':'Install App','nav.support':'Support project',
+    'hero.badge':'✨ Your perfect workflow','hero.title1':'Work smarter,','hero.title2':'rest better.',
+    'hero.subtitle':'Use the Pomodoro technique with focused work and recovery intervals that respect your attention.',
+    'hero.cta':'Get started','hero.learn':'What is Pomodoro?','hero.stat1':'min of focus','hero.stat2':'min of rest','hero.stat3':'then 15 min break',
+    'timer.work':'Work','timer.short':'Short break','timer.long':'Long break','timer.start':'Start','timer.pause':'Pause',
+    'timer.focusTime':'Focus time','timer.shortBreak':'Short break','timer.longBreak':'Long break',
+    'timer.done.work':'Focus session completed.','timer.done.short':'Break finished.','timer.done.long':'Long break finished.',
+    'timer.done.work.task':'Focus completed · 🍅 {act}/{est} · {task}','timer.done.work.taskComplete':'Task completed · {task}',
+    'timer.focusTitle':'Focus on…','timer.focusChoose':'Choose task','timer.focusQuickAdd':'+ New task…','timer.focusCompleted':'Task completed',
+    'focus.exit':'Exit focus mode','focus.session':'Focus session','focus.of':'of',
+    'complete.kicker':'Session completed','complete.later':'Not now','complete.startBreak':'Start break','complete.startFocus':'Start focus',
+    'settings.title':'Preferences','settings.timer':'Timer','settings.flow':'Flow','settings.experience':'Experience',
+    'settings.work':'Work (min)','settings.short':'Short break (min)','settings.long':'Long break (min)','settings.sound':'Sound',
+    'settings.autoBreak':'Start breaks automatically','settings.autoFocus':'Start next focus automatically',
+    'settings.wakeLock':'Keep screen awake','settings.notifications':'Notifications','settings.enableNotifications':'Enable',
+    'settings.notificationsOn':'Enabled','settings.notificationsDenied':'Blocked by browser',
+    'settings.appearance':'Appearance','settings.theme.system':'System','settings.theme.light':'Light','settings.theme.dark':'Dark',
+    'settings.save':'Save changes',
+    'today.sessions':'sessions','today.focus':'in focus','today.tasks':'tasks','today.plan':'planned','today.next':'Next task',
+    'tasks.badge':'📋 Today plan','tasks.title':'What are you working on today?','tasks.subtitle':'Set an intention, estimate the effort, and work on one thing at a time.',
+    'tasks.placeholder':'Add a new task...','tasks.add':'+ Add','tasks.empty':'No tasks yet. Add your first one.','tasks.empty.filter':'No tasks here.',
+    'tasks.noTask':'No task','tasks.filter.all':'All','tasks.filter.active':'Pending','tasks.filter.done':'Completed',
+    'tasks.clearDone':'Clear completed','tasks.clearDone.confirm':'Sure?','tasks.estimation':'Actual / estimated',
+    'tasks.delete':'Delete','tasks.focus':'Focus','tasks.unfocus':'Remove focus','tasks.complete':'Mark as completed',
+    'tasks.reorder.up':'Move up','tasks.reorder.down':'Move down','tasks.inc.pomos':'Increase estimate','tasks.dec.pomos':'Reduce estimate','tasks.edit':'Edit',
+    'progress.badge':'Progress','progress.title':'Your work leaves a trace.',
+    'progress.subtitle':'Compare what you planned with what it actually took, without turning focus into a competition.',
+    'progress.weekSessions':'Sessions this week','progress.weekMinutes':'Focus minutes','progress.completedTasks':'Completed tasks',
+    'progress.estimateRatio':'Actual / estimated','progress.history':'Recent history','progress.localOnly':'Your data stays on this device.',
+    'progress.export':'Export','progress.empty':'Complete a session to start your history.',
+    'guide.badge':'📚 Pomodoro Technique','guide.title':'How does it work?',
+    'guide.subtitle':'Developed by Francesco Cirillo in the late 1980s, Pomodoro alternates focused work and recovery.',
+    'guide.cycle.work':'Deep work','guide.cycle.short':'Short break','guide.cycle.repeat':'Repeat','guide.cycle.long':'Long break',
+    'guide.card1.title':'Why does it work?','guide.card1.text':'Bounded intervals help protect attention and reduce the fatigue of sustaining focus continuously.',
+    'guide.card2.title':'Where the name comes from','guide.card2.text':'Francesco Cirillo used a tomato-shaped kitchen timer while he was a student.',
+    'guide.card3.title':'Getting started','guide.card3.text':'Before starting, define one task. If something comes up, note it and return to your intention.',
+    'guide.card4.title':'Adapt it to you','guide.card4.text':'The 25/5 standard is a starting point. Adjust the times until you find a sustainable rhythm.',
+    'footer.tagline':'Your perfect workflow.','footer.developed':'Developed with ❤️ by Julio Silva',
+    'donation.badge':'Support the project','donation.text':'Flowmodoro is free and ad-free. Your contribution helps keep development moving.',
+    'update.available':'A new version is available.','update.action':'Update',
+    'shortcuts.title':'Keyboard shortcuts','shortcuts.toggle':'Start / pause','shortcuts.reset':'Reset','shortcuts.modes':'Change mode',
+    'shortcuts.focus':'Enter / exit Focus','shortcuts.newTask':'New task','shortcuts.help':'Show shortcuts','shortcuts.escape':'Close / exit',
+    'install.ios':'On iPhone or iPad: open Share in Safari and choose “Add to Home Screen”.',
+    'break.tip1':'Stand up for a moment.','break.tip2':'Look into the distance and rest your eyes.','break.tip3':'Drink some water.','break.tip4':'Breathe and change posture.'
   }
 };
 
-// ─── Safe localStorage helpers ──────────────────────────────
 function safeGetJSON(key, fallback) {
   try {
     const raw = localStorage.getItem(key);
     return raw ? JSON.parse(raw) : fallback;
-  } catch (e) {
-    console.warn(`[Flowmodoro] Could not parse localStorage key "${key}":`, e);
+  } catch (error) {
+    console.warn('[Flowmodoro] Invalid local data for', key, error);
     return fallback;
   }
 }
 
-// ─── State ────────────────────────────────────────────────────
-function normalizeTask(t) {
-  return {
-    id: String(t.id || generateId()),
-    text: String(t.text || ''),
-    done: !!t.done,
-    estPomos: Math.max(1, parseInt(t.estPomos) || 1),
-    actPomos: Math.max(0, parseInt(t.actPomos) || 0),
-  };
+function getBool(key, fallback) {
+  const raw = localStorage.getItem(key);
+  if (raw === null) return fallback;
+  return raw === 'true';
 }
 
-const state = {
-  lang: localStorage.getItem('fm_lang') || 'en',
-  theme: localStorage.getItem('fm_theme') || 'dark',
-  durations: safeGetJSON('fm_durations', null) || { work: 25, short: 5, long: 15 },
-  currentMode: 'work',    // 'work' | 'short' | 'long'
-  timeLeft: 0,
-  totalTime: 0,
-  isRunning: false,
-  intervalId: null,
-  endTime: null,
-  pomoCount: 0,           // 0-3 in current set
-  soundEnabled: true,
-  tasks: safeGetJSON('fm_tasks', []).map(normalizeTask),
-  activeTaskId: localStorage.getItem('fm_activeTask') || null,
-  taskFilter: 'all',      // 'all' | 'active' | 'done'
-  prevTime: null,
-};
-
-// Pre-fill timeLeft from durations
-state.timeLeft = state.durations.work * 60;
-state.totalTime = state.durations.work * 60;
-
-// ─── DOM refs ─────────────────────────────────────────────────
-const $ = id => document.getElementById(id);
-const dom = {
-  html:           document.documentElement,
-  body:           document.body,
-  timerSection:   $('timer-section'),
-  themeToggle:    $('themeToggle'),
-  sunIcon:        $('sunIcon'),
-  moonIcon:       $('moonIcon'),
-  langToggle:     $('langToggle'),
-  langLabel:      $('langLabel'),
-  installBtn:     $('installBtn'),
-  hamburger:      $('hamburger'),
-  mobileMenu:     $('mobileMenu'),
-  timerDisplay:   $('timerDisplay'),
-  sessionLabel:   $('sessionLabel'),
-  ringProgress:   $('ringProgress'),
-  startBtn:       $('startBtn'),
-  resetBtn:       $('resetBtn'),
-  settingsBtn:    $('settingsBtn'),
-  settingsPanel:  $('settingsPanel'),
-  focusPill:      $('focusPill'),
-  focusPillText:  $('focusPillText'),
-  focusPillProgress: $('focusPillProgress'),
-  focusPopover:   $('focusPopover'),
-  focusList:      $('focusList'),
-  focusQuickAdd:  $('focusQuickAdd'),
-  focusExitBtn:   $('focusExitBtn'),
-  tabWork:        $('tab-work'),
-  tabShort:       $('tab-short'),
-  tabLong:        $('tab-long'),
-  setWork:        $('setWork'),
-  setShort:       $('setShort'),
-  setLong:        $('setLong'),
-  soundToggle:    $('soundToggle'),
-  saveSettings:   $('saveSettings'),
-  taskInput:      $('taskInput'),
-  addTaskBtn:     $('addTaskBtn'),
-  taskList:       $('taskList'),
-  taskEmpty:      $('taskEmpty'),
-  taskEmptyText:  $('taskEmptyText'),
-  clearDoneBtn:   $('clearDoneBtn'),
-  pomoCount:      [0,1,2,3].map(i => $(`pomo${i}`)),
-  viewFlip:       $('viewFlip'),
-};
-
-// ─── i18n ─────────────────────────────────────────────────────
-function t(key, vars) {
-  let str = TRANSLATIONS[state.lang][key] || TRANSLATIONS['es'][key] || key;
-  if (vars) {
-    for (const [k, v] of Object.entries(vars)) {
-      str = str.replaceAll(`{${k}}`, v);
-    }
-  }
-  return str;
-}
-
-function applyTranslations() {
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    if (el.classList.contains('confirm')) return;
-    const key = el.getAttribute('data-i18n');
-    el.textContent = t(key);
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
-  });
-  document.querySelectorAll('[data-i18n-aria]').forEach(el => {
-    el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
-  });
-  dom.html.lang = state.lang;
-}
-
-function setLang(lang) {
-  state.lang = lang;
-  localStorage.setItem('fm_lang', lang);
-  dom.langLabel.textContent = lang === 'es' ? 'EN' : 'ES';
-  applyTranslations();
-  updateTimerUI(); // re-apply session label
-  renderTasks();
-  renderFocusUI();
-}
-
-dom.langToggle.addEventListener('click', () => {
-  setLang(state.lang === 'es' ? 'en' : 'es');
-});
-
-// ─── Theme ────────────────────────────────────────────────────
-function setThemeUI(theme) {
-  dom.html.setAttribute('data-theme', theme);
-  dom.sunIcon.style.display  = theme === 'dark'  ? 'block' : 'none';
-  dom.moonIcon.style.display = theme === 'light' ? 'block' : 'none';
-}
-
-function applyTheme(theme) {
-  state.theme = theme;
-  setThemeUI(theme);
-  localStorage.setItem('fm_theme', theme);
-}
-
-dom.themeToggle.addEventListener('click', () => {
-  applyTheme(state.theme === 'light' ? 'dark' : 'light');
-});
-
-// ─── Mobile menu ──────────────────────────────────────────────
-dom.hamburger.addEventListener('click', () => {
-  const isOpen = dom.mobileMenu.classList.toggle('open');
-  dom.hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-});
-
-dom.mobileMenu.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => dom.mobileMenu.classList.remove('open'));
-});
-
-// Navbar shrink on scroll
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 10) {
-    dom.navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
-  } else {
-    dom.navbar.style.boxShadow = '';
-  }
-}, { passive: true });
-
-// ─── Timer Logic ──────────────────────────────────────────────
-const RING_CIRCUMFERENCE = 2 * Math.PI * 100; // r=100
-
-function setRingProgress(remaining, total) {
-  const ratio = total > 0 ? (remaining / total) : 1;
-  const offset = RING_CIRCUMFERENCE * (1 - ratio);
-  dom.ringProgress.style.strokeDashoffset = offset;
-}
-
-function formatTime(secs) {
-  const m = Math.floor(secs / 60).toString().padStart(2, '0');
-  const s = (secs % 60).toString().padStart(2, '0');
-  return `${m}:${s}`;
-}
-
-const SESSION_LABELS = {
-  work:  () => t('timer.focusTime'),
-  short: () => t('timer.shortBreak'),
-  long:  () => t('timer.longBreak'),
-};
-
-function updateTimerUI(force = false) {
-  updateFlipClock(force);
-  dom.sessionLabel.textContent = SESSION_LABELS[state.currentMode]();
-  document.title = `${formatTime(state.timeLeft)} — Flowmodoro`;
-}
-
-function updateFlipClock(force = false) {
-  const m = Math.floor(state.timeLeft / 60).toString().padStart(2, '0');
-  const s = (state.timeLeft % 60).toString().padStart(2, '0');
-  
-  updateFlipCard('flip-m1', m[0], force);
-  updateFlipCard('flip-m2', m[1], force);
-  updateFlipCard('flip-s1', s[0], force);
-  updateFlipCard('flip-s2', s[1], force);
-}
-
-function updateFlipCard(id, value, force = false) {
-  const el = $(id);
-  if (!el) return;
-  const currentVal = el.getAttribute('data-value');
-  
-  if (force || currentVal !== value) {
-    // Si ya hay una animación en curso, la limpiamos
-    if (el.dataset.timeoutId) {
-      clearTimeout(parseInt(el.dataset.timeoutId));
-      el.classList.remove('flipping');
-      delete el.dataset.timeoutId;
-    }
-
-    const top = el.querySelector('.top span');
-    const bottom = el.querySelector('.bottom span');
-    const flapTop = el.querySelector('.flap-top span');
-    const flapBottom = el.querySelector('.flap-bottom span');
-    
-    const prev = currentVal || value; // Si no hay previo, usamos el actual para evitar saltos extraños
-
-    if (force) {
-      top.textContent = value;
-      bottom.textContent = value;
-      flapTop.textContent = value;
-      flapBottom.textContent = value;
-      el.setAttribute('data-value', value);
-      return;
-    }
-
-    // Preparar textos para la animación
-    top.textContent = value;
-    bottom.textContent = prev;
-    flapTop.textContent = prev;
-    flapBottom.textContent = value;
-    
-    // Forzar reinicio de animación
-    el.classList.remove('flipping');
-    void el.offsetWidth; 
-    el.classList.add('flipping');
-    
-    el.setAttribute('data-value', value);
-    
-    const timeoutId = setTimeout(() => {
-      el.classList.remove('flipping');
-      // Asentar valores finales
-      bottom.textContent = value;
-      flapTop.textContent = value;
-      delete el.dataset.timeoutId;
-    }, 850);
-    el.dataset.timeoutId = timeoutId;
-  }
-}
-
-function setMode(mode) {
-  pauseTimer();
-  exitFocusMode();
-  state.currentMode = mode;
-  state.timeLeft = state.durations[mode] * 60;
-  state.totalTime = state.timeLeft;
-  dom.body.setAttribute('data-mode', mode);
-
-  // Update tabs
-  dom.tabWork.classList.toggle('active', mode === 'work');
-  dom.tabShort.classList.toggle('active', mode === 'short');
-  dom.tabLong.classList.toggle('active', mode === 'long');
-
-  // Reset start button
-  dom.startBtn.textContent = t('timer.start');
-  updateTimerUI();
-}
-
-function startTimer() {
-  if (state.isRunning) return;
-  state.isRunning = true;
-  state.endTime = Date.now() + (state.timeLeft * 1000);
-  dom.startBtn.textContent = t('timer.pause');
-  state.intervalId = setInterval(tick, 200);
-  if (state.currentMode === 'work') enterFocusMode();
-}
-
-function pauseTimer() {
-  if (!state.isRunning) return;
-  state.isRunning = false;
-  dom.startBtn.textContent = t('timer.start');
-  clearInterval(state.intervalId);
-  if (state.endTime) {
-    state.timeLeft = Math.max(0, Math.round((state.endTime - Date.now()) / 1000));
-    state.endTime = null;
-  }
-  updateTimerUI();
-  exitFocusMode();
-}
-
-function resetTimer() {
-  pauseTimer();
-  state.timeLeft = state.durations[state.currentMode] * 60;
-  state.totalTime = state.timeLeft;
-  state.endTime = null;
-  updateTimerUI();
-}
-
-function tick() {
-  if (!state.isRunning || !state.endTime) return;
-  
-  const now = Date.now();
-  const remaining = Math.max(0, Math.round((state.endTime - now) / 1000));
-  
-  if (remaining !== state.timeLeft) {
-    state.timeLeft = remaining;
-    updateTimerUI();
-    
-    if (state.timeLeft <= 0) {
-      clearInterval(state.intervalId);
-      state.isRunning = false;
-      state.endTime = null;
-      dom.startBtn.textContent = t('timer.start');
-      handleSessionEnd();
-    }
-  }
-}
-
-function updatePomoDotsUI() {
-  dom.pomoCount.forEach((dot, i) => {
-    dot.classList.toggle('active', i < state.pomoCount);
-  });
-}
-
-function handleSessionEnd() {
-  playSound();
-
-  if (state.currentMode === 'work') {
-    // Add completed pomo to active task
-    let taskMsg = null;
-    const task = state.tasks.find(t => t.id === state.activeTaskId);
-    if (task && !task.done) {
-      task.actPomos = (task.actPomos || 0) + 1;
-      if (task.actPomos >= task.estPomos) {
-        task.done = true;
-        taskMsg = t('timer.done.work.taskComplete', { task: task.text });
-      } else {
-        taskMsg = t('timer.done.work.task', { act: task.actPomos, est: task.estPomos, task: task.text });
-      }
-      saveTasks();
-      if (task.done) {
-        setActiveTask(null);
-        flashFocusCompleted();
-      }
-    }
-
-    // Advance pomo counter (0-4)
-    state.pomoCount = Math.min(state.pomoCount + 1, 4);
-    updatePomoDotsUI();
-
-    // Notify
-    showNotification(taskMsg || t('timer.done.work'));
-
-    // After 4 pomodoros → long break (and reset counter), else short
-    if (state.pomoCount >= 4) {
-      state.pomoCount = 0;
-      setTimeout(() => { updatePomoDotsUI(); setMode('long'); }, 1000);
-    } else {
-      setTimeout(() => setMode('short'), 1000);
-    }
-  } else {
-    const msg = state.currentMode === 'short' ? t('timer.done.short') : t('timer.done.long');
-    showNotification(msg);
-    setTimeout(() => setMode('work'), 1000);
-  }
-}
-
-// ─── Focus mode (inmersivo: noche al reproducir trabajo) ─────
-let focusMode = false;
-let focusPrevTheme = null;
-
-// Aplica el estado focus-mode y, si el movimiento no está reducido,
-// anima el zoom espacial del reloj (transform, sin tocar layout)
-function prepareFocusZoom(focusOn) {
-  const flip = dom.viewFlip;
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const from = !reduced && flip ? flip.getBoundingClientRect().width : 0;
-
-  if (focusOn) document.body.classList.add('focus-mode');
-  else document.body.classList.remove('focus-mode');
-
-  if (reduced || !flip) return;
-  const to = flip.getBoundingClientRect().width;
-  if (!to || Math.abs(from - to) < 2) return;
-  const ratio = from / to;
-  flip.style.transition = 'none';
-  flip.style.transform = `scale(${ratio})`;
-  void flip.getBoundingClientRect();
-  requestAnimationFrame(() => {
-    flip.style.transition = '';
-    flip.style.transform = '';
-  });
-}
-
-function enterFocusMode() {
-  if (focusMode) return;
-  focusMode = true;
-  focusPrevTheme = state.theme;
-  // Alinear la sección del timer con el viewport para que el vidrio
-  // quede realmente centrado y ocupe el centro de la pantalla
-  if (dom.timerSection && typeof dom.timerSection.scrollIntoView === 'function') {
-    dom.timerSection.scrollIntoView({ behavior: 'auto', block: 'start' });
-  }
-  // Los tabs de modo son solo indicadores durante el foco
-  dom.tabWork.disabled = true;
-  dom.tabShort.disabled = true;
-  dom.tabLong.disabled = true;
-  prepareFocusZoom(true);
-  setThemeUI('dark');
-}
-
-function exitFocusMode() {
-  if (!focusMode) return;
-  focusMode = false;
-  dom.tabWork.disabled = false;
-  dom.tabShort.disabled = false;
-  dom.tabLong.disabled = false;
-  prepareFocusZoom(false);
-  setThemeUI(focusPrevTheme || 'dark');
-}
-
-// Salir del foco pausando: si el timer corre, se pausa (pauseTimer ya
-// sale del modo foco); si no corre, solo se sale del modo foco.
-function exitFocusAndPause() {
-  if (state.isRunning) pauseTimer();
-  else exitFocusMode();
-}
-
-if (dom.focusExitBtn) dom.focusExitBtn.addEventListener('click', exitFocusAndPause);
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && focusMode && dom.focusPopover.hidden) exitFocusAndPause();
-});
-
-// Start/pause toggle
-dom.startBtn.addEventListener('click', () => {
-  if (state.isRunning) pauseTimer();
-  else startTimer();
-});
-
-dom.resetBtn.addEventListener('click', resetTimer);
-
-// Mode tabs
-dom.tabWork.addEventListener('click',  () => setMode('work'));
-dom.tabShort.addEventListener('click', () => setMode('short'));
-dom.tabLong.addEventListener('click',  () => setMode('long'));
-
-// ─── Sound ────────────────────────────────────────────────────
-let audioCtx;
-function playSound() {
-  if (!state.soundEnabled) return;
-  try {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.4);
-    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
-    osc.start(audioCtx.currentTime);
-    osc.stop(audioCtx.currentTime + 0.6);
-  } catch(e) { /* ignore */ }
-}
-
-// ─── Notifications ────────────────────────────────────────────
-function showNotification(body) {
-  if ('Notification' in window) {
-    if (Notification.permission === 'granted') {
-      new Notification('Flowmodoro 🍅', { body, icon: 'icons/icon-192.png' });
-    } else if (Notification.permission !== 'denied') {
-      Notification.requestPermission().then(p => {
-        if (p === 'granted') new Notification('Flowmodoro 🍅', { body, icon: 'icons/icon-192.png' });
-      });
-    }
-  }
-}
-
-// ─── Settings ─────────────────────────────────────────────────
-dom.settingsBtn.addEventListener('click', () => {
-  const panel = dom.settingsPanel;
-  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-  if (panel.style.display === 'block') {
-    dom.setWork.value  = state.durations.work;
-    dom.setShort.value = state.durations.short;
-    dom.setLong.value  = state.durations.long;
-    dom.soundToggle.checked = state.soundEnabled;
-  }
-});
-
-dom.saveSettings.addEventListener('click', () => {
-  const work  = Math.min(60, Math.max(1, parseInt(dom.setWork.value)  || 25));
-  const short = Math.min(30, Math.max(1, parseInt(dom.setShort.value) || 5));
-  const long  = Math.min(60, Math.max(1, parseInt(dom.setLong.value)  || 15));
-  state.durations = { work, short, long };
-  state.soundEnabled = dom.soundToggle.checked;
-  localStorage.setItem('fm_durations', JSON.stringify(state.durations));
-  dom.settingsPanel.style.display = 'none';
-  resetTimer();
-});
-
-// ─── Tasks ────────────────────────────────────────────────────
-function saveTasks() {
-  localStorage.setItem('fm_tasks', JSON.stringify(state.tasks));
+function setBool(key, value) {
+  localStorage.setItem(key, value ? 'true' : 'false');
 }
 
 function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2);
 }
 
-function persistActiveTask() {
-  if (state.activeTaskId) {
-    localStorage.setItem('fm_activeTask', state.activeTaskId);
-  } else {
-    localStorage.removeItem('fm_activeTask');
-  }
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
 }
 
-// Validate the stored active task (missing or completed → clear)
-function validateActiveTask() {
-  const task = state.tasks.find(t => t.id === state.activeTaskId);
-  if (!task || task.done) {
-    state.activeTaskId = null;
-    persistActiveTask();
-  }
-}
-
-function setActiveTask(id) {
-  state.activeTaskId = id || null;
-  persistActiveTask();
-  renderTasks();
-  renderFocusUI();
-}
-
-// ─── Focus pill + popover (timer ↔ tasks integration) ────────
-let focusCompletedTimer = null;
-
-function renderFocusUI() {
-  const pill = dom.focusPill;
-  const task = state.tasks.find(t => t.id === state.activeTaskId && !t.done);
-
-  if (task) {
-    pill.classList.remove('ghost', 'complete');
-    pill.classList.add('active');
-    dom.focusPillText.textContent = task.text;
-    dom.focusPillProgress.textContent = `🍅 ${task.actPomos}/${task.estPomos}`;
-  } else {
-    pill.classList.add('ghost');
-    pill.classList.remove('active');
-    dom.focusPillText.textContent = t('timer.focusChoose');
-    dom.focusPillProgress.textContent = '';
-  }
-
-  renderFocusList();
-}
-
-function renderFocusList() {
-  const pending = state.tasks.filter(t => !t.done);
-  const items = pending.map(task => `
-    <div class="focus-option ${task.id === state.activeTaskId ? 'selected' : ''}"
-         data-id="${task.id}" role="option" aria-selected="${task.id === state.activeTaskId}">
-      <span class="focus-option-text">${escapeHtml(task.text)}</span>
-      <span class="focus-option-progress">🍅 ${task.actPomos}/${task.estPomos}</span>
-    </div>
-  `).join('');
-
-  const noneSelected = !state.activeTaskId;
-  dom.focusList.innerHTML = `
-    <div class="focus-option ${noneSelected ? 'selected' : ''}" data-id="" role="option" aria-selected="${noneSelected}">
-      <span class="focus-option-text">— ${t('tasks.noTask')} —</span>
-    </div>
-    ${items}
-  `;
-}
-
-function positionFocusPopover() {
-  const pop = dom.focusPopover;
-  const pillRect = dom.focusPill.getBoundingClientRect();
-  const popWidth = Math.min(300, window.innerWidth - 32);
-  const popHeight = pop.offsetHeight || 0;
-  let left = pillRect.left + pillRect.width / 2 - popWidth / 2;
-  left = Math.max(16, Math.min(left, window.innerWidth - popWidth - 16));
-  let top = pillRect.bottom + 10;
-  if (popHeight && top + popHeight > window.innerHeight - 8) {
-    top = Math.max(8, pillRect.top - popHeight - 10);
-  }
-  pop.style.width = popWidth + 'px';
-  pop.style.left = left + 'px';
-  pop.style.top = top + 'px';
-}
-
-function openFocusPopover() {
-  renderFocusList();
-  dom.focusPopover.hidden = false;
-  dom.focusPill.setAttribute('aria-expanded', 'true');
-  positionFocusPopover();
-}
-
-function closeFocusPopover() {
-  dom.focusPopover.hidden = true;
-  dom.focusPill.setAttribute('aria-expanded', 'false');
-}
-
-function toggleFocusPopover() {
-  if (dom.focusPopover.hidden) openFocusPopover();
-  else closeFocusPopover();
-}
-
-window.addEventListener('scroll', () => {
-  if (!dom.focusPopover.hidden) positionFocusPopover();
-}, { passive: true });
-
-window.addEventListener('resize', () => {
-  if (!dom.focusPopover.hidden) positionFocusPopover();
-});
-
-function flashFocusCompleted() {
-  clearTimeout(focusCompletedTimer);
-  dom.focusPill.classList.add('complete');
-  dom.focusPillText.textContent = t('timer.focusCompleted');
-  dom.focusPillProgress.textContent = '';
-  focusCompletedTimer = setTimeout(() => {
-    dom.focusPill.classList.remove('complete');
-    renderFocusUI();
-  }, 2500);
-}
-
-dom.focusPill.addEventListener('click', () => {
-  renderFocusList();
-  toggleFocusPopover();
-});
-
-dom.focusList.addEventListener('click', e => {
-  const option = e.target.closest('.focus-option');
-  if (!option) return;
-  setActiveTask(option.dataset.id || null);
-  closeFocusPopover();
-});
-
-function submitFocusQuickAdd() {
-  const text = dom.focusQuickAdd.value.trim();
-  if (!text) return;
-  const task = normalizeTask({ id: generateId(), text, done: false, estPomos: 1, actPomos: 0 });
-  state.tasks.unshift(task);
-  dom.focusQuickAdd.value = '';
-  saveTasks();
-  setActiveTask(task.id);
-  closeFocusPopover();
-}
-
-dom.focusQuickAdd.addEventListener('keydown', e => {
-  if (e.key === 'Enter') submitFocusQuickAdd();
-});
-
-document.addEventListener('click', e => {
-  if (dom.focusPopover.hidden) return;
-  if (dom.focusPopover.contains(e.target) || dom.focusPill.contains(e.target)) return;
-  closeFocusPopover();
-});
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && !dom.focusPopover.hidden) closeFocusPopover();
-});
-
-function renderTasks() {
-  const list = dom.taskList;
-  // Remove all task items (keep the empty state div)
-  list.querySelectorAll('.task-item').forEach(el => el.remove());
-
-  const visible = state.tasks.filter(task => {
-    if (state.taskFilter === 'active') return !task.done;
-    if (state.taskFilter === 'done') return task.done;
-    return true;
-  });
-
-  dom.taskEmpty.style.display = visible.length === 0 ? 'block' : 'none';
-  dom.taskEmptyText.textContent = state.tasks.length === 0
-    ? t('tasks.empty')
-    : t('tasks.empty.filter');
-
-  dom.clearDoneBtn.disabled = !state.tasks.some(t => t.done);
-
-  visible.forEach(task => {
-    const idx = state.tasks.indexOf(task);
-    const item = document.createElement('div');
-    item.className = 'task-item' +
-      (task.id === state.activeTaskId ? ' active-task' : '') +
-      (task.done ? ' done' : '');
-    item.dataset.id = task.id;
-
-    const isActive = state.activeTaskId === task.id;
-    item.innerHTML = `
-      <button class="task-check" data-action="toggle" aria-pressed="${task.done}" aria-label="${t('tasks.complete')}">
-        ${task.done ? '✓' : ''}
-      </button>
-      <span class="task-text">${escapeHtml(task.text)}</span>
-      <div class="pomo-badge" title="${t('tasks.estimation')}">
-        <button class="pomo-ctrl-btn" data-action="dec-pomo" aria-label="${t('tasks.dec.pomos')}" ${task.estPomos <= 1 ? 'disabled' : ''}>−</button>
-        <span class="pomo-count">🍅 ${task.actPomos}/${task.estPomos}</span>
-        <button class="pomo-ctrl-btn" data-action="inc-pomo" aria-label="${t('tasks.inc.pomos')}">+</button>
-      </div>
-      <div class="task-actions">
-        <button class="task-action-btn focus-btn ${isActive ? 'active' : ''}" data-action="focus"
-          title="${t(isActive ? 'tasks.unfocus' : 'tasks.focus')}" aria-label="${t(isActive ? 'tasks.unfocus' : 'tasks.focus')}"
-          ${task.done ? 'disabled' : ''}>📌</button>
-        <button class="task-action-btn reorder-btn" data-action="up" aria-label="${t('tasks.reorder.up')}" ${idx === 0 ? 'disabled' : ''}>↑</button>
-        <button class="task-action-btn reorder-btn" data-action="down" aria-label="${t('tasks.reorder.down')}" ${idx === state.tasks.length - 1 ? 'disabled' : ''}>↓</button>
-        <button class="task-action-btn delete-btn-icon" data-action="delete" aria-label="${t('tasks.delete')}">🗑️</button>
-      </div>
-    `;
-
-    list.appendChild(item);
-  });
-}
-
-function addTask() {
-  const text = dom.taskInput.value.trim();
-  if (!text) return;
-  const task = normalizeTask({ id: generateId(), text, done: false, estPomos: 1, actPomos: 0 });
-  state.tasks.unshift(task);
-  dom.taskInput.value = '';
-  saveTasks();
-  renderTasks();
-  renderFocusUI();
-}
-
-function moveTask(task, delta) {
-  const i = state.tasks.indexOf(task);
-  const j = i + delta;
-  if (i === -1 || j < 0 || j >= state.tasks.length) return;
-  [state.tasks[i], state.tasks[j]] = [state.tasks[j], state.tasks[i]];
-}
-
-// Delegate task list actions
-dom.taskList.addEventListener('click', e => {
-  const item = e.target.closest('.task-item');
-  if (!item) return;
-  const id = item.dataset.id;
-  const task = state.tasks.find(t => t.id === id);
-  if (!task) return;
-
-  const action = e.target.closest('[data-action]')?.dataset.action;
-
-  switch (action) {
-    case 'toggle':
-      task.done = !task.done;
-      saveTasks();
-      if (task.done && state.activeTaskId === id) setActiveTask(null);
-      else renderTasks();
-      break;
-    case 'focus':
-      setActiveTask(state.activeTaskId === id ? null : id);
-      break;
-    case 'delete':
-      state.tasks = state.tasks.filter(t => t.id !== id);
-      if (state.activeTaskId === id) state.activeTaskId = null;
-      persistActiveTask();
-      saveTasks();
-      renderTasks();
-      renderFocusUI();
-      break;
-    case 'inc-pomo':
-      task.estPomos++;
-      saveTasks();
-      renderTasks();
-      break;
-    case 'dec-pomo':
-      if (task.estPomos > 1) {
-        task.estPomos--;
-        saveTasks();
-        renderTasks();
-      }
-      break;
-    case 'up':
-      moveTask(task, -1);
-      saveTasks();
-      renderTasks();
-      break;
-    case 'down':
-      moveTask(task, 1);
-      saveTasks();
-      renderTasks();
-      break;
-  }
-});
-
-// Filters
-document.querySelectorAll('.task-filter').forEach(btn => {
-  btn.addEventListener('click', () => {
-    state.taskFilter = btn.dataset.filter;
-    document.querySelectorAll('.task-filter').forEach(b => b.classList.toggle('active', b === btn));
-    renderTasks();
-  });
-});
-
-// Clear completed (two-step confirm)
-let clearDoneArmed = false;
-let clearDoneTimer = null;
-
-function resetClearDone() {
-  clearDoneArmed = false;
-  clearTimeout(clearDoneTimer);
-  dom.clearDoneBtn.classList.remove('confirm');
-  dom.clearDoneBtn.textContent = t('tasks.clearDone');
-}
-
-dom.clearDoneBtn.addEventListener('click', () => {
-  if (!clearDoneArmed) {
-    clearDoneArmed = true;
-    dom.clearDoneBtn.classList.add('confirm');
-    dom.clearDoneBtn.textContent = t('tasks.clearDone.confirm');
-    clearDoneTimer = setTimeout(resetClearDone, 3000);
-  } else {
-    state.tasks = state.tasks.filter(t => !t.done);
-    saveTasks();
-    resetClearDone();
-    renderTasks();
-    renderFocusUI();
-  }
-});
-
-dom.addTaskBtn.addEventListener('click', addTask);
-dom.taskInput.addEventListener('keydown', e => {
-  if (e.key === 'Enter') addTask();
-});
-
-function escapeHtml(str) {
-  return str
+function escapeHtml(value) {
+  return String(value)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
 
-// ─── PWA Install ─────────────────────────────────────────────
-let deferredInstallPrompt;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredInstallPrompt = e;
-  dom.installBtn.style.display = 'flex';
+function normalizeTask(task) {
+  return {
+    id: String(task.id || generateId()),
+    text: String(task.text || '').trim(),
+    done: !!task.done,
+    estPomos: Math.max(1, parseInt(task.estPomos, 10) || 1),
+    actPomos: Math.max(0, parseInt(task.actPomos, 10) || 0)
+  };
+}
+
+function normalizeHistory(entry) {
+  if (!entry || !entry.completedAt) return null;
+  return {
+    id: String(entry.id || generateId()),
+    mode: ['work','short','long'].includes(entry.mode) ? entry.mode : 'work',
+    startedAt: Number(entry.startedAt) || Number(entry.completedAt),
+    completedAt: Number(entry.completedAt),
+    durationMin: Math.max(0, Number(entry.durationMin) || 0),
+    taskId: entry.taskId ? String(entry.taskId) : null,
+    taskText: entry.taskText ? String(entry.taskText) : ''
+  };
+}
+
+const storedDurations = safeGetJSON('fm_durations', { work:25, short:5, long:15 });
+const storedSession = safeGetJSON('fm_session', null);
+const initialMode = storedSession && ['work','short','long'].includes(storedSession.currentMode) ? storedSession.currentMode : 'work';
+const defaultSeconds = (Number(storedDurations[initialMode]) || 25) * 60;
+
+const state = {
+  lang: localStorage.getItem('fm_lang') || ((navigator.language || '').toLowerCase().startsWith('es') ? 'es' : 'en'),
+  themePreference: localStorage.getItem('fm_theme_preference') || localStorage.getItem('fm_theme') || 'system',
+  effectiveTheme: 'dark',
+  durations: {
+    work: clamp(parseInt(storedDurations.work, 10) || 25, 1, 60),
+    short: clamp(parseInt(storedDurations.short, 10) || 5, 1, 30),
+    long: clamp(parseInt(storedDurations.long, 10) || 15, 1, 60)
+  },
+  currentMode: initialMode,
+  timeLeft: storedSession ? Math.max(0, Number(storedSession.timeLeft) || defaultSeconds) : defaultSeconds,
+  totalTime: storedSession ? Math.max(1, Number(storedSession.totalTime) || defaultSeconds) : defaultSeconds,
+  isRunning: false,
+  intervalId: null,
+  endTime: storedSession ? Number(storedSession.endTime) || null : null,
+  sessionStartedAt: storedSession ? Number(storedSession.sessionStartedAt) || null : null,
+  restoreExpired: false,
+  pomoCount: clamp(parseInt(storedSession && storedSession.pomoCount, 10) || parseInt(localStorage.getItem('fm_pomoCount'), 10) || 0, 0, 3),
+  soundEnabled: getBool('fm_sound', true),
+  autoStartBreaks: getBool('fm_auto_breaks', false),
+  autoStartFocus: getBool('fm_auto_focus', false),
+  keepAwake: getBool('fm_wake_lock', false),
+  tasks: safeGetJSON('fm_tasks', []).map(normalizeTask).filter(function(t){ return t.text; }),
+  activeTaskId: localStorage.getItem('fm_activeTask') || null,
+  taskFilter: 'all',
+  history: safeGetJSON('fm_history', []).map(normalizeHistory).filter(Boolean),
+  pendingNextMode: null,
+  breakTipIndex: 0
+};
+
+if (storedSession && storedSession.isRunning && state.endTime) {
+  const remaining = Math.max(0, Math.round((state.endTime - Date.now()) / 1000));
+  if (remaining > 0) {
+    state.isRunning = true;
+    state.timeLeft = remaining;
+  } else {
+    state.timeLeft = 0;
+    state.endTime = null;
+    state.isRunning = false;
+    state.restoreExpired = true;
+  }
+}
+
+const $ = function(id) { return document.getElementById(id); };
+const dom = {
+  html: document.documentElement,
+  body: document.body,
+  navbar: $('navbar'),
+  timerSection: $('timer-section'),
+  themeToggle: $('themeToggle'), sunIcon: $('sunIcon'), moonIcon: $('moonIcon'),
+  langToggle: $('langToggle'), langLabel: $('langLabel'),
+  installBtn: $('installBtn'), installDrawerBtn: $('installDrawerBtn'),
+  hamburger: $('hamburger'), mobileMenu: $('mobileMenu'),
+  moreBtn: $('moreBtn'), mobileMoreBtn: $('mobileMoreBtn'), bottomMoreBtn: $('bottomMoreBtn'),
+  settingsBtn: $('settingsBtn'), settingsPanel: $('settingsPanel'), settingsBackdrop: $('settingsBackdrop'), settingsCloseBtn: $('settingsCloseBtn'),
+  setWork: $('setWork'), setShort: $('setShort'), setLong: $('setLong'), soundToggle: $('soundToggle'),
+  autoBreakToggle: $('autoBreakToggle'), autoFocusToggle: $('autoFocusToggle'), wakeLockToggle: $('wakeLockToggle'),
+  notificationBtn: $('notificationBtn'), themePreference: $('themePreference'), saveSettings: $('saveSettings'),
+  tabWork: $('tab-work'), tabShort: $('tab-short'), tabLong: $('tab-long'),
+  sessionLabel: $('sessionLabel'), breakTip: $('breakTip'), startBtn: $('startBtn'), resetBtn: $('resetBtn'),
+  focusSessionCycle: $('focusSessionCycle'), focusExitBtn: $('focusExitBtn'), viewFlip: $('viewFlip'),
+  focusPill: $('focusPill'), focusPillText: $('focusPillText'), focusPillProgress: $('focusPillProgress'),
+  focusPopover: $('focusPopover'), focusList: $('focusList'), focusQuickAdd: $('focusQuickAdd'),
+  pomoCount: [0,1,2,3].map(function(i){ return $('pomo' + i); }),
+  sessionCompleteCard: $('sessionCompleteCard'), sessionCompleteTitle: $('sessionCompleteTitle'),
+  sessionCompleteTask: $('sessionCompleteTask'), nextSessionBtn: $('nextSessionBtn'), dismissSessionBtn: $('dismissSessionBtn'),
+  taskInput: $('taskInput'), addTaskBtn: $('addTaskBtn'), taskList: $('taskList'), taskEmpty: $('taskEmpty'), taskEmptyText: $('taskEmptyText'),
+  clearDoneBtn: $('clearDoneBtn'),
+  todaySessions: $('todaySessions'), todayMinutes: $('todayMinutes'), todayTasks: $('todayTasks'), todayPlan: $('todayPlan'),
+  nextTaskCard: $('nextTaskCard'), nextTaskText: $('nextTaskText'), nextTaskMeta: $('nextTaskMeta'),
+  weekSessions: $('weekSessions'), weekMinutes: $('weekMinutes'), completedTasksCount: $('completedTasksCount'),
+  estimateRatio: $('estimateRatio'), weekChart: $('weekChart'), sessionHistory: $('sessionHistory'), exportHistoryBtn: $('exportHistoryBtn'),
+  shortcutsBtn: $('shortcutsBtn'), shortcutsDialog: $('shortcutsDialog'), shortcutsCloseBtn: $('shortcutsCloseBtn'),
+  updateToast: $('updateToast'), updateAppBtn: $('updateAppBtn')
+};
+
+function t(key, vars) {
+  let value = (TRANSLATIONS[state.lang] && TRANSLATIONS[state.lang][key]) || TRANSLATIONS.es[key] || key;
+  if (vars) {
+    Object.keys(vars).forEach(function(name) {
+      value = value.split('{' + name + '}').join(String(vars[name]));
+    });
+  }
+  return value;
+}
+
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    if (el.classList.contains('confirm')) return;
+    el.textContent = t(el.getAttribute('data-i18n'));
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+    el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+  });
+  document.querySelectorAll('[data-i18n-aria]').forEach(function(el) {
+    el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
+  });
+  dom.html.lang = state.lang;
+  updateNotificationButton();
+}
+
+function setLang(lang) {
+  state.lang = lang === 'en' ? 'en' : 'es';
+  localStorage.setItem('fm_lang', state.lang);
+  dom.langLabel.textContent = state.lang === 'es' ? 'EN' : 'ES';
+  applyTranslations();
+  updateTimerUI(true);
+  renderTasks();
+  renderFocusUI();
+  renderToday();
+  renderProgress();
+}
+
+function resolveTheme(preference) {
+  if (preference === 'system') {
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  return preference === 'light' ? 'light' : 'dark';
+}
+
+function setThemeUI(theme) {
+  state.effectiveTheme = theme;
+  dom.html.setAttribute('data-theme', theme);
+  if (dom.sunIcon) dom.sunIcon.style.display = theme === 'dark' ? 'block' : 'none';
+  if (dom.moonIcon) dom.moonIcon.style.display = theme === 'light' ? 'block' : 'none';
+}
+
+function applyThemePreference(preference, persist) {
+  const allowed = ['system','light','dark'];
+  state.themePreference = allowed.includes(preference) ? preference : 'system';
+  if (persist !== false) {
+    localStorage.setItem('fm_theme_preference', state.themePreference);
+    localStorage.removeItem('fm_theme');
+  }
+  setThemeUI(resolveTheme(state.themePreference));
+  if (dom.themePreference) dom.themePreference.value = state.themePreference;
+}
+
+window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function() {
+  if (state.themePreference === 'system' && !focusMode) setThemeUI(resolveTheme('system'));
 });
 
-dom.installBtn.addEventListener('click', async () => {
-  if (!deferredInstallPrompt) return;
-  deferredInstallPrompt.prompt();
-  const { outcome } = await deferredInstallPrompt.userChoice;
-  console.log('PWA install:', outcome);
-  deferredInstallPrompt = null;
-  dom.installBtn.style.display = 'none';
+function persistSession() {
+  localStorage.setItem('fm_session', JSON.stringify({
+    currentMode: state.currentMode,
+    timeLeft: state.timeLeft,
+    totalTime: state.totalTime,
+    isRunning: state.isRunning,
+    endTime: state.endTime,
+    sessionStartedAt: state.sessionStartedAt,
+    pomoCount: state.pomoCount
+  }));
+  localStorage.setItem('fm_pomoCount', String(state.pomoCount));
+}
+
+function markAsUsed() {
+  localStorage.setItem('fm_has_used_app', 'true');
+}
+
+function saveTasks() {
+  localStorage.setItem('fm_tasks', JSON.stringify(state.tasks));
+  renderToday();
+  renderProgress();
+}
+
+function saveHistory() {
+  state.history = state.history.slice(-500);
+  localStorage.setItem('fm_history', JSON.stringify(state.history));
+  renderToday();
+  renderProgress();
+}
+
+function persistActiveTask() {
+  if (state.activeTaskId) localStorage.setItem('fm_activeTask', state.activeTaskId);
+  else localStorage.removeItem('fm_activeTask');
+}
+
+function validateActiveTask() {
+  const task = state.tasks.find(function(item){ return item.id === state.activeTaskId && !item.done; });
+  if (!task) {
+    state.activeTaskId = null;
+    persistActiveTask();
+  }
+}
+
+dom.langToggle.addEventListener('click', function() {
+  setLang(state.lang === 'es' ? 'en' : 'es');
 });
 
-window.addEventListener('appinstalled', () => {
-  dom.installBtn.style.display = 'none';
+dom.themeToggle.addEventListener('click', function() {
+  applyThemePreference(state.effectiveTheme === 'light' ? 'dark' : 'light', true);
 });
 
-// ─── Parallax Controller ──────────────────────────────────────
+dom.hamburger.addEventListener('click', function() {
+  const open = dom.mobileMenu.classList.toggle('open');
+  dom.hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+});
+
+dom.mobileMenu.querySelectorAll('a').forEach(function(link) {
+  link.addEventListener('click', function() {
+    dom.mobileMenu.classList.remove('open');
+    dom.hamburger.setAttribute('aria-expanded','false');
+  });
+});
+
+window.addEventListener('scroll', function() {
+  if (!dom.navbar) return;
+  dom.navbar.style.boxShadow = window.scrollY > 10 ? '0 4px 20px rgba(0,0,0,0.08)' : '';
+}, { passive:true });
+
+function openSettings() {
+  dom.setWork.value = state.durations.work;
+  dom.setShort.value = state.durations.short;
+  dom.setLong.value = state.durations.long;
+  dom.soundToggle.checked = state.soundEnabled;
+  dom.autoBreakToggle.checked = state.autoStartBreaks;
+  dom.autoFocusToggle.checked = state.autoStartFocus;
+  dom.wakeLockToggle.checked = state.keepAwake;
+  dom.themePreference.value = state.themePreference;
+  dom.settingsPanel.classList.add('open');
+  dom.settingsPanel.setAttribute('aria-hidden','false');
+  dom.settingsBackdrop.hidden = false;
+  dom.body.style.overflow = 'hidden';
+  updateNotificationButton();
+}
+
+function closeSettings() {
+  dom.settingsPanel.classList.remove('open');
+  dom.settingsPanel.setAttribute('aria-hidden','true');
+  dom.settingsBackdrop.hidden = true;
+  if (!focusMode) dom.body.style.overflow = '';
+}
+
+[dom.settingsBtn,dom.moreBtn,dom.mobileMoreBtn,dom.bottomMoreBtn].filter(Boolean).forEach(function(btn) {
+  btn.addEventListener('click', openSettings);
+});
+dom.settingsCloseBtn.addEventListener('click', closeSettings);
+dom.settingsBackdrop.addEventListener('click', closeSettings);
+document.querySelectorAll('[data-drawer-close]').forEach(function(el){ el.addEventListener('click', closeSettings); });
+
+dom.saveSettings.addEventListener('click', function() {
+  state.durations = {
+    work: clamp(parseInt(dom.setWork.value,10) || 25,1,60),
+    short: clamp(parseInt(dom.setShort.value,10) || 5,1,30),
+    long: clamp(parseInt(dom.setLong.value,10) || 15,1,60)
+  };
+  state.soundEnabled = !!dom.soundToggle.checked;
+  state.autoStartBreaks = !!dom.autoBreakToggle.checked;
+  state.autoStartFocus = !!dom.autoFocusToggle.checked;
+  state.keepAwake = !!dom.wakeLockToggle.checked;
+  localStorage.setItem('fm_durations', JSON.stringify(state.durations));
+  setBool('fm_sound', state.soundEnabled);
+  setBool('fm_auto_breaks', state.autoStartBreaks);
+  setBool('fm_auto_focus', state.autoStartFocus);
+  setBool('fm_wake_lock', state.keepAwake);
+  applyThemePreference(dom.themePreference.value, true);
+  if (!state.isRunning) {
+    state.timeLeft = state.durations[state.currentMode] * 60;
+    state.totalTime = state.timeLeft;
+    state.sessionStartedAt = null;
+    updateTimerUI(true);
+    persistSession();
+  }
+  if (state.keepAwake && state.isRunning) acquireWakeLock();
+  else if (!state.keepAwake) releaseWakeLock();
+  closeSettings();
+});
+
+const SESSION_LABELS = {
+  work: function(){ return t('timer.focusTime'); },
+  short: function(){ return t('timer.shortBreak'); },
+  long: function(){ return t('timer.longBreak'); }
+};
+
+function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60).toString().padStart(2,'0');
+  const secs = Math.max(0, seconds % 60).toString().padStart(2,'0');
+  return mins + ':' + secs;
+}
+
+function updateTimerUI(force) {
+  updateFlipClock(!!force);
+  dom.sessionLabel.textContent = SESSION_LABELS[state.currentMode]();
+  dom.startBtn.textContent = state.isRunning ? t('timer.pause') : t('timer.start');
+  dom.focusSessionCycle.textContent = String(Math.min(state.pomoCount + 1, 4)) + ' ' + t('focus.of') + ' 4';
+  const isBreak = state.currentMode !== 'work';
+  dom.breakTip.hidden = !isBreak;
+  if (isBreak) dom.breakTip.textContent = t('break.tip' + (state.breakTipIndex + 1));
+  document.title = state.currentMode === 'work'
+    ? formatTime(state.timeLeft) + ' · Flowmodoro'
+    : formatTime(state.timeLeft) + ' · ' + SESSION_LABELS[state.currentMode]() + ' · Flowmodoro';
+}
+
+function updateFlipClock(force) {
+  const mins = Math.floor(state.timeLeft / 60).toString().padStart(2,'0');
+  const secs = (state.timeLeft % 60).toString().padStart(2,'0');
+  updateFlipCard('flip-m1', mins[0], force);
+  updateFlipCard('flip-m2', mins[1], force);
+  updateFlipCard('flip-s1', secs[0], force);
+  updateFlipCard('flip-s2', secs[1], force);
+}
+
+function updateFlipCard(id, value, force) {
+  const el = $(id);
+  if (!el) return;
+  const current = el.getAttribute('data-value');
+  const top = el.querySelector('.top span');
+  const bottom = el.querySelector('.bottom span');
+  const flapTop = el.querySelector('.flap-top span');
+  const flapBottom = el.querySelector('.flap-bottom span');
+  if (force || current === null) {
+    [top,bottom,flapTop,flapBottom].forEach(function(node){ node.textContent = value; });
+    el.setAttribute('data-value', value);
+    return;
+  }
+  if (current === value) return;
+  if (el.dataset.timeoutId) {
+    clearTimeout(Number(el.dataset.timeoutId));
+    el.classList.remove('flipping');
+  }
+  top.textContent = value;
+  bottom.textContent = current;
+  flapTop.textContent = current;
+  flapBottom.textContent = value;
+  el.classList.remove('flipping');
+  void el.offsetWidth;
+  el.classList.add('flipping');
+  el.setAttribute('data-value', value);
+  el.dataset.timeoutId = String(setTimeout(function() {
+    el.classList.remove('flipping');
+    bottom.textContent = value;
+    flapTop.textContent = value;
+    delete el.dataset.timeoutId;
+  },850));
+}
+
+function updateModeTabs() {
+  dom.body.setAttribute('data-mode', state.currentMode);
+  dom.tabWork.classList.toggle('active', state.currentMode === 'work');
+  dom.tabShort.classList.toggle('active', state.currentMode === 'short');
+  dom.tabLong.classList.toggle('active', state.currentMode === 'long');
+}
+
+function updatePomoDotsUI() {
+  dom.pomoCount.forEach(function(dot,index) {
+    dot.classList.toggle('active', index < state.pomoCount);
+  });
+}
+
+function hideCompletion() {
+  dom.sessionCompleteCard.hidden = true;
+  state.pendingNextMode = null;
+}
+
+function setMode(mode) {
+  if (!['work','short','long'].includes(mode)) return;
+  pauseTimer();
+  exitFocusMode();
+  hideCompletion();
+  state.currentMode = mode;
+  state.timeLeft = state.durations[mode] * 60;
+  state.totalTime = state.timeLeft;
+  state.endTime = null;
+  state.sessionStartedAt = null;
+  if (mode !== 'work') state.breakTipIndex = Math.floor(Math.random() * 4);
+  updateModeTabs();
+  updateTimerUI(true);
+  persistSession();
+}
+
+function startTimer() {
+  if (state.isRunning) return;
+  hideCompletion();
+  if (state.timeLeft <= 0) {
+    state.timeLeft = state.durations[state.currentMode] * 60;
+    state.totalTime = state.timeLeft;
+  }
+  state.isRunning = true;
+  state.sessionStartedAt = state.sessionStartedAt || Date.now();
+  state.endTime = Date.now() + state.timeLeft * 1000;
+  clearInterval(state.intervalId);
+  state.intervalId = setInterval(tick, 250);
+  markAsUsed();
+  if (state.currentMode === 'work') enterFocusMode();
+  acquireWakeLock();
+  persistSession();
+  updateTimerUI();
+}
+
+function pauseTimer() {
+  if (!state.isRunning) return;
+  state.isRunning = false;
+  clearInterval(state.intervalId);
+  state.intervalId = null;
+  if (state.endTime) state.timeLeft = Math.max(0, Math.round((state.endTime - Date.now()) / 1000));
+  state.endTime = null;
+  releaseWakeLock();
+  persistSession();
+  updateTimerUI();
+}
+
+function resetTimer() {
+  pauseTimer();
+  hideCompletion();
+  state.timeLeft = state.durations[state.currentMode] * 60;
+  state.totalTime = state.timeLeft;
+  state.endTime = null;
+  state.sessionStartedAt = null;
+  persistSession();
+  updateTimerUI(true);
+}
+
+function tick() {
+  if (!state.isRunning || !state.endTime) return;
+  const remaining = Math.max(0, Math.round((state.endTime - Date.now()) / 1000));
+  if (remaining === state.timeLeft) return;
+  state.timeLeft = remaining;
+  updateTimerUI();
+  persistSession();
+  if (remaining <= 0) {
+    state.isRunning = false;
+    clearInterval(state.intervalId);
+    state.intervalId = null;
+    state.endTime = null;
+    releaseWakeLock();
+    handleSessionEnd(false);
+  }
+}
+
+function recordSession() {
+  const active = state.tasks.find(function(task){ return task.id === state.activeTaskId; });
+  const entry = {
+    id: generateId(),
+    mode: state.currentMode,
+    startedAt: state.sessionStartedAt || (Date.now() - state.totalTime * 1000),
+    completedAt: Date.now(),
+    durationMin: Math.round((state.totalTime / 60) * 10) / 10,
+    taskId: active ? active.id : null,
+    taskText: active ? active.text : ''
+  };
+  state.history.push(entry);
+  saveHistory();
+  return entry;
+}
+
+function showCompletion(nextMode, entry) {
+  state.pendingNextMode = nextMode;
+  dom.sessionCompleteTitle.textContent = Math.round(entry.durationMin) + ' min · ' + SESSION_LABELS[entry.mode]();
+  dom.sessionCompleteTask.textContent = entry.taskText || '';
+  dom.nextSessionBtn.textContent = nextMode === 'work' ? t('complete.startFocus') : t('complete.startBreak');
+  dom.sessionCompleteCard.hidden = false;
+}
+
+function transitionToPending(startImmediately) {
+  const mode = state.pendingNextMode;
+  if (!mode) return;
+  setMode(mode);
+  if (startImmediately) setTimeout(startTimer, 120);
+}
+
+function handleSessionEnd(restored) {
+  playSound();
+  const entry = recordSession();
+  let nextMode = 'work';
+  let message;
+
+  if (state.currentMode === 'work') {
+    const task = state.tasks.find(function(item){ return item.id === state.activeTaskId && !item.done; });
+    if (task) {
+      task.actPomos += 1;
+      if (task.actPomos >= task.estPomos) {
+        task.done = true;
+        message = t('timer.done.work.taskComplete', { task:task.text });
+      } else {
+        message = t('timer.done.work.task', { act:task.actPomos, est:task.estPomos, task:task.text });
+      }
+      saveTasks();
+      if (task.done) {
+        state.activeTaskId = null;
+        persistActiveTask();
+        flashFocusCompleted();
+      }
+    }
+    state.pomoCount += 1;
+    if (state.pomoCount >= 4) {
+      state.pomoCount = 0;
+      nextMode = 'long';
+    } else {
+      nextMode = 'short';
+    }
+    message = message || t('timer.done.work');
+  } else {
+    nextMode = 'work';
+    message = state.currentMode === 'short' ? t('timer.done.short') : t('timer.done.long');
+  }
+
+  state.sessionStartedAt = null;
+  updatePomoDotsUI();
+  persistSession();
+  renderTasks();
+  renderFocusUI();
+  renderToday();
+  renderProgress();
+  showNotification(message);
+  showCompletion(nextMode, entry);
+
+  const auto = state.currentMode === 'work' ? state.autoStartBreaks : state.autoStartFocus;
+  if (auto && !restored) setTimeout(function(){ transitionToPending(true); }, 900);
+}
+
+dom.startBtn.addEventListener('click', function() {
+  if (state.isRunning) pauseTimer();
+  else startTimer();
+});
+dom.resetBtn.addEventListener('click', resetTimer);
+dom.tabWork.addEventListener('click', function(){ setMode('work'); });
+dom.tabShort.addEventListener('click', function(){ setMode('short'); });
+dom.tabLong.addEventListener('click', function(){ setMode('long'); });
+dom.nextSessionBtn.addEventListener('click', function(){ transitionToPending(true); });
+dom.dismissSessionBtn.addEventListener('click', function(){ transitionToPending(false); });
+
+let focusMode = false;
+
+function enterFocusMode() {
+  if (focusMode || state.currentMode !== 'work') return;
+  focusMode = true;
+  dom.body.classList.add('focus-mode');
+  dom.tabWork.disabled = true;
+  dom.tabShort.disabled = true;
+  dom.tabLong.disabled = true;
+  setThemeUI('dark');
+  if (dom.timerSection) dom.timerSection.scrollIntoView({ behavior:'auto', block:'start' });
+}
+
+function exitFocusMode() {
+  if (!focusMode) return;
+  focusMode = false;
+  dom.body.classList.remove('focus-mode');
+  dom.tabWork.disabled = false;
+  dom.tabShort.disabled = false;
+  dom.tabLong.disabled = false;
+  setThemeUI(resolveTheme(state.themePreference));
+  if (!dom.settingsPanel.classList.contains('open')) dom.body.style.overflow = '';
+}
+
+dom.focusExitBtn.addEventListener('click', exitFocusMode);
+
+let audioCtx = null;
+function playSound() {
+  if (!state.soundEnabled) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    oscillator.connect(gain);
+    gain.connect(audioCtx.destination);
+    oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.4);
+    gain.gain.setValueAtTime(0.24, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 0.6);
+  } catch (error) {
+    console.warn('[Flowmodoro] Sound unavailable', error);
+  }
+}
+
+async function showNotification(body) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  try {
+    if ('serviceWorker' in navigator) {
+      const registration = await navigator.serviceWorker.ready;
+      await registration.showNotification('Flowmodoro', { body:body, icon:'icons/icon-192.png', badge:'icons/icon-192.png' });
+    } else {
+      new Notification('Flowmodoro', { body:body, icon:'icons/icon-192.png' });
+    }
+  } catch (error) {
+    console.warn('[Flowmodoro] Notification unavailable', error);
+  }
+}
+
+function updateNotificationButton() {
+  if (!dom.notificationBtn || !('Notification' in window)) return;
+  if (Notification.permission === 'granted') {
+    dom.notificationBtn.textContent = t('settings.notificationsOn');
+    dom.notificationBtn.disabled = true;
+  } else if (Notification.permission === 'denied') {
+    dom.notificationBtn.textContent = t('settings.notificationsDenied');
+    dom.notificationBtn.disabled = true;
+  } else {
+    dom.notificationBtn.textContent = t('settings.enableNotifications');
+    dom.notificationBtn.disabled = false;
+  }
+}
+
+dom.notificationBtn.addEventListener('click', async function() {
+  if (!('Notification' in window)) return;
+  try { await Notification.requestPermission(); } catch (error) {}
+  updateNotificationButton();
+});
+
+let wakeLock = null;
+async function acquireWakeLock() {
+  if (!state.keepAwake || !state.isRunning || !('wakeLock' in navigator) || document.visibilityState !== 'visible') return;
+  try {
+    if (!wakeLock) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', function(){ wakeLock = null; });
+    }
+  } catch (error) {
+    console.warn('[Flowmodoro] Wake Lock unavailable', error);
+  }
+}
+
+async function releaseWakeLock() {
+  if (!wakeLock) return;
+  try { await wakeLock.release(); } catch (error) {}
+  wakeLock = null;
+}
+
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible' && state.isRunning) acquireWakeLock();
+});
+
+function setActiveTask(id) {
+  state.activeTaskId = id || null;
+  persistActiveTask();
+  markAsUsed();
+  renderTasks();
+  renderFocusUI();
+  renderToday();
+}
+
+function renderFocusUI() {
+  const task = state.tasks.find(function(item){ return item.id === state.activeTaskId && !item.done; });
+  if (task) {
+    dom.focusPill.classList.remove('ghost','complete');
+    dom.focusPill.classList.add('active');
+    dom.focusPillText.textContent = task.text;
+    dom.focusPillProgress.textContent = '🍅 ' + task.actPomos + '/' + task.estPomos;
+  } else {
+    dom.focusPill.classList.add('ghost');
+    dom.focusPill.classList.remove('active','complete');
+    dom.focusPillText.textContent = t('timer.focusChoose');
+    dom.focusPillProgress.textContent = '';
+  }
+  renderFocusList();
+}
+
+function renderFocusList() {
+  const pending = state.tasks.filter(function(task){ return !task.done; });
+  const rows = pending.map(function(task) {
+    return '<div class="focus-option ' + (task.id === state.activeTaskId ? 'selected' : '') + '" data-id="' + escapeHtml(task.id) + '" role="option" aria-selected="' + (task.id === state.activeTaskId) + '">' +
+      '<span class="focus-option-text">' + escapeHtml(task.text) + '</span>' +
+      '<span class="focus-option-progress">🍅 ' + task.actPomos + '/' + task.estPomos + '</span></div>';
+  }).join('');
+  dom.focusList.innerHTML =
+    '<div class="focus-option ' + (!state.activeTaskId ? 'selected' : '') + '" data-id="" role="option" aria-selected="' + (!state.activeTaskId) + '">' +
+    '<span class="focus-option-text">— ' + escapeHtml(t('tasks.noTask')) + ' —</span></div>' + rows;
+}
+
+function positionFocusPopover() {
+  const rect = dom.focusPill.getBoundingClientRect();
+  const width = Math.min(320, window.innerWidth - 24);
+  const height = dom.focusPopover.offsetHeight || 0;
+  let left = rect.left + rect.width / 2 - width / 2;
+  left = Math.max(12, Math.min(left, window.innerWidth - width - 12));
+  let top = rect.bottom + 10;
+  if (height && top + height > window.innerHeight - 8) top = Math.max(8, rect.top - height - 10);
+  dom.focusPopover.style.width = width + 'px';
+  dom.focusPopover.style.left = left + 'px';
+  dom.focusPopover.style.top = top + 'px';
+}
+
+function openFocusPopover() {
+  renderFocusList();
+  dom.focusPopover.hidden = false;
+  dom.focusPill.setAttribute('aria-expanded','true');
+  requestAnimationFrame(positionFocusPopover);
+}
+
+function closeFocusPopover() {
+  dom.focusPopover.hidden = true;
+  dom.focusPill.setAttribute('aria-expanded','false');
+}
+
+dom.focusPill.addEventListener('click', function() {
+  if (dom.focusPopover.hidden) openFocusPopover();
+  else closeFocusPopover();
+});
+
+dom.focusList.addEventListener('click', function(event) {
+  const option = event.target.closest('.focus-option');
+  if (!option) return;
+  setActiveTask(option.dataset.id || null);
+  closeFocusPopover();
+});
+
+dom.focusQuickAdd.addEventListener('keydown', function(event) {
+  if (event.key !== 'Enter') return;
+  const text = dom.focusQuickAdd.value.trim();
+  if (!text) return;
+  const task = normalizeTask({ id:generateId(), text:text, done:false, estPomos:1, actPomos:0 });
+  state.tasks.unshift(task);
+  dom.focusQuickAdd.value = '';
+  saveTasks();
+  setActiveTask(task.id);
+  closeFocusPopover();
+});
+
+window.addEventListener('resize', function(){ if (!dom.focusPopover.hidden) positionFocusPopover(); });
+window.addEventListener('scroll', function(){ if (!dom.focusPopover.hidden) positionFocusPopover(); }, { passive:true });
+
+let focusCompletedTimer = null;
+function flashFocusCompleted() {
+  clearTimeout(focusCompletedTimer);
+  dom.focusPill.classList.add('complete');
+  dom.focusPillText.textContent = t('timer.focusCompleted');
+  dom.focusPillProgress.textContent = '';
+  focusCompletedTimer = setTimeout(function(){
+    dom.focusPill.classList.remove('complete');
+    renderFocusUI();
+  },2200);
+}
+
+function renderTasks() {
+  dom.taskList.querySelectorAll('.task-item').forEach(function(el){ el.remove(); });
+  const visible = state.tasks.filter(function(task) {
+    if (state.taskFilter === 'active') return !task.done;
+    if (state.taskFilter === 'done') return task.done;
+    return true;
+  });
+  dom.taskEmpty.style.display = visible.length ? 'none' : 'block';
+  dom.taskEmptyText.textContent = state.tasks.length ? t('tasks.empty.filter') : t('tasks.empty');
+  dom.clearDoneBtn.disabled = !state.tasks.some(function(task){ return task.done; });
+
+  visible.forEach(function(task) {
+    const index = state.tasks.indexOf(task);
+    const item = document.createElement('div');
+    item.className = 'task-item' + (task.id === state.activeTaskId ? ' active-task' : '') + (task.done ? ' done' : '');
+    item.dataset.id = task.id;
+    const focusLabel = task.id === state.activeTaskId ? t('tasks.unfocus') : t('tasks.focus');
+    item.innerHTML =
+      '<button class="task-check" data-action="toggle" aria-pressed="' + task.done + '" aria-label="' + escapeHtml(t('tasks.complete')) + '">' + (task.done ? '✓' : '') + '</button>' +
+      '<span class="task-text" data-action="focus" role="button" tabindex="0">' + escapeHtml(task.text) + '</span>' +
+      '<div class="pomo-badge" title="' + escapeHtml(t('tasks.estimation')) + '"><span class="pomo-count">🍅 ' + task.actPomos + '/' + task.estPomos + '</span></div>' +
+      '<div class="task-actions">' +
+        '<button class="task-action-btn task-more-btn" data-action="more" aria-label="' + escapeHtml(t('nav.more')) + '">•••</button>' +
+        '<div class="task-menu" hidden>' +
+          '<button data-action="focus">' + escapeHtml(focusLabel) + '<span>◎</span></button>' +
+          '<button data-action="edit">' + escapeHtml(t('tasks.edit')) + '<span>✎</span></button>' +
+          '<button data-action="inc-pomo">' + escapeHtml(t('tasks.inc.pomos')) + '<span>+ 🍅</span></button>' +
+          '<button data-action="dec-pomo" ' + (task.estPomos <= 1 ? 'disabled' : '') + '>' + escapeHtml(t('tasks.dec.pomos')) + '<span>− 🍅</span></button>' +
+          '<button data-action="up" ' + (index === 0 ? 'disabled' : '') + '>' + escapeHtml(t('tasks.reorder.up')) + '<span>↑</span></button>' +
+          '<button data-action="down" ' + (index === state.tasks.length - 1 ? 'disabled' : '') + '>' + escapeHtml(t('tasks.reorder.down')) + '<span>↓</span></button>' +
+          '<button class="danger" data-action="delete">' + escapeHtml(t('tasks.delete')) + '<span>×</span></button>' +
+        '</div>' +
+      '</div>';
+    dom.taskList.appendChild(item);
+  });
+}
+
+function closeTaskMenus(except) {
+  document.querySelectorAll('.task-menu').forEach(function(menu) {
+    if (menu !== except) menu.hidden = true;
+  });
+}
+
+function beginTaskEdit(item, task) {
+  const textEl = item.querySelector('.task-text');
+  const input = document.createElement('input');
+  input.className = 'task-edit-input';
+  input.value = task.text;
+  input.maxLength = 120;
+  textEl.replaceWith(input);
+  input.focus();
+  input.select();
+  let finished = false;
+  function finish(save) {
+    if (finished) return;
+    finished = true;
+    if (save && input.value.trim()) {
+      task.text = input.value.trim();
+      saveTasks();
+      renderFocusUI();
+    }
+    renderTasks();
+  }
+  input.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') finish(true);
+    if (event.key === 'Escape') finish(false);
+  });
+  input.addEventListener('blur', function(){ finish(true); });
+}
+
+function moveTask(task, delta) {
+  const from = state.tasks.indexOf(task);
+  const to = from + delta;
+  if (from < 0 || to < 0 || to >= state.tasks.length) return;
+  const moved = state.tasks.splice(from,1)[0];
+  state.tasks.splice(to,0,moved);
+}
+
+dom.taskList.addEventListener('click', function(event) {
+  const item = event.target.closest('.task-item');
+  if (!item) return;
+  const task = state.tasks.find(function(row){ return row.id === item.dataset.id; });
+  if (!task) return;
+  const control = event.target.closest('[data-action]');
+  if (!control) return;
+  const action = control.dataset.action;
+
+  if (action === 'more') {
+    const menu = item.querySelector('.task-menu');
+    const wasHidden = menu.hidden;
+    closeTaskMenus();
+    menu.hidden = !wasHidden;
+    return;
+  }
+
+  closeTaskMenus();
+  if (action === 'toggle') {
+    task.done = !task.done;
+    if (task.done && state.activeTaskId === task.id) {
+      state.activeTaskId = null;
+      persistActiveTask();
+    }
+  } else if (action === 'focus') {
+    if (!task.done) state.activeTaskId = state.activeTaskId === task.id ? null : task.id;
+    persistActiveTask();
+  } else if (action === 'edit') {
+    beginTaskEdit(item, task);
+    return;
+  } else if (action === 'inc-pomo') {
+    task.estPomos += 1;
+  } else if (action === 'dec-pomo') {
+    task.estPomos = Math.max(1, task.estPomos - 1);
+  } else if (action === 'up') {
+    moveTask(task,-1);
+  } else if (action === 'down') {
+    moveTask(task,1);
+  } else if (action === 'delete') {
+    state.tasks = state.tasks.filter(function(row){ return row.id !== task.id; });
+    if (state.activeTaskId === task.id) {
+      state.activeTaskId = null;
+      persistActiveTask();
+    }
+  }
+  markAsUsed();
+  saveTasks();
+  renderTasks();
+  renderFocusUI();
+});
+
+dom.taskList.addEventListener('keydown', function(event) {
+  if ((event.key === 'Enter' || event.key === ' ') && event.target.classList.contains('task-text')) {
+    event.preventDefault();
+    event.target.click();
+  }
+});
+
+document.addEventListener('click', function(event) {
+  if (!event.target.closest('.task-actions')) closeTaskMenus();
+  if (!dom.focusPopover.hidden && !dom.focusPopover.contains(event.target) && !dom.focusPill.contains(event.target)) closeFocusPopover();
+});
+
+function addTask() {
+  const text = dom.taskInput.value.trim();
+  if (!text) return;
+  state.tasks.unshift(normalizeTask({ id:generateId(), text:text, done:false, estPomos:1, actPomos:0 }));
+  dom.taskInput.value = '';
+  markAsUsed();
+  saveTasks();
+  renderTasks();
+  renderFocusUI();
+}
+
+dom.addTaskBtn.addEventListener('click', addTask);
+dom.taskInput.addEventListener('keydown', function(event){ if (event.key === 'Enter') addTask(); });
+
+document.querySelectorAll('.task-filter').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    state.taskFilter = btn.dataset.filter;
+    document.querySelectorAll('.task-filter').forEach(function(other){ other.classList.toggle('active', other === btn); });
+    renderTasks();
+  });
+});
+
+let clearDoneArmed = false;
+let clearDoneTimer = null;
+function resetClearDone() {
+  clearDoneArmed = false;
+  clearTimeout(clearDoneTimer);
+  dom.clearDoneBtn.classList.remove('confirm');
+  dom.clearDoneBtn.textContent = t('tasks.clearDone');
+}
+dom.clearDoneBtn.addEventListener('click', function() {
+  if (!clearDoneArmed) {
+    clearDoneArmed = true;
+    dom.clearDoneBtn.classList.add('confirm');
+    dom.clearDoneBtn.textContent = t('tasks.clearDone.confirm');
+    clearDoneTimer = setTimeout(resetClearDone,3000);
+    return;
+  }
+  state.tasks = state.tasks.filter(function(task){ return !task.done; });
+  validateActiveTask();
+  saveTasks();
+  resetClearDone();
+  renderTasks();
+  renderFocusUI();
+});
+
+function isSameDay(timestamp, date) {
+  const value = new Date(timestamp);
+  return value.getFullYear() === date.getFullYear() && value.getMonth() === date.getMonth() && value.getDate() === date.getDate();
+}
+
+function renderToday() {
+  const today = new Date();
+  const workToday = state.history.filter(function(entry){ return entry.mode === 'work' && isSameDay(entry.completedAt, today); });
+  const minutes = Math.round(workToday.reduce(function(sum,entry){ return sum + entry.durationMin; },0));
+  const completed = state.tasks.filter(function(task){ return task.done; }).length;
+  const planned = state.tasks.reduce(function(sum,task){ return sum + task.estPomos; },0);
+  dom.todaySessions.textContent = String(workToday.length);
+  dom.todayMinutes.textContent = String(minutes) + ' min';
+  dom.todayTasks.textContent = completed + ' / ' + state.tasks.length;
+  dom.todayPlan.textContent = planned + ' 🍅';
+
+  const next = state.tasks.find(function(task){ return task.id === state.activeTaskId && !task.done; }) ||
+    state.tasks.find(function(task){ return !task.done; });
+  dom.nextTaskCard.hidden = !next;
+  if (next) {
+    dom.nextTaskText.textContent = next.text;
+    dom.nextTaskMeta.textContent = Math.max(0,next.estPomos - next.actPomos) + ' 🍅 · ' + next.actPomos + '/' + next.estPomos;
+  }
+}
+
+function startOfDay(date) {
+  const d = new Date(date);
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+function renderProgress() {
+  const now = new Date();
+  const sevenDaysAgo = startOfDay(now);
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+  const weekEntries = state.history.filter(function(entry){ return entry.mode === 'work' && entry.completedAt >= sevenDaysAgo.getTime(); });
+  dom.weekSessions.textContent = String(weekEntries.length);
+  dom.weekMinutes.textContent = String(Math.round(weekEntries.reduce(function(sum,entry){ return sum + entry.durationMin; },0)));
+  dom.completedTasksCount.textContent = String(state.tasks.filter(function(task){ return task.done; }).length);
+
+  const doneWithEstimate = state.tasks.filter(function(task){ return task.done && task.estPomos > 0; });
+  const est = doneWithEstimate.reduce(function(sum,task){ return sum + task.estPomos; },0);
+  const act = doneWithEstimate.reduce(function(sum,task){ return sum + task.actPomos; },0);
+  dom.estimateRatio.textContent = est ? (Math.round((act / est) * 100) + '%') : '—';
+
+  const days = [];
+  for (let i=6; i>=0; i--) {
+    const d = startOfDay(now);
+    d.setDate(d.getDate() - i);
+    const count = state.history.filter(function(entry){ return entry.mode === 'work' && isSameDay(entry.completedAt,d); }).length;
+    days.push({ date:d, count:count });
+  }
+  const max = Math.max(1, ...days.map(function(day){ return day.count; }));
+  dom.weekChart.innerHTML = days.map(function(day) {
+    const height = day.count ? Math.max(12, Math.round((day.count / max) * 100)) : 3;
+    const label = day.date.toLocaleDateString(state.lang === 'es' ? 'es-CL' : 'en-US', { weekday:'short' }).replace('.','');
+    return '<div class="week-bar-wrap"><div class="week-bar" style="--bar:' + height + '"></div><strong>' + day.count + '</strong><span>' + escapeHtml(label) + '</span></div>';
+  }).join('');
+
+  const recent = state.history.filter(function(entry){ return entry.mode === 'work'; }).slice(-12).reverse();
+  dom.sessionHistory.innerHTML = recent.length ? recent.map(function(entry) {
+    const when = new Date(entry.completedAt);
+    const dateText = when.toLocaleDateString(state.lang === 'es' ? 'es-CL' : 'en-US', { day:'2-digit', month:'short' });
+    const timeText = when.toLocaleTimeString(state.lang === 'es' ? 'es-CL' : 'en-US', { hour:'2-digit', minute:'2-digit' });
+    return '<div class="history-item"><span class="history-dot"></span><div class="history-main"><strong>' +
+      escapeHtml(entry.taskText || t('timer.focusTime')) + '</strong><span>' + Math.round(entry.durationMin) + ' min · ' + escapeHtml(dateText) +
+      '</span></div><span class="history-time">' + escapeHtml(timeText) + '</span></div>';
+  }).join('') : '<div class="history-empty">' + escapeHtml(t('progress.empty')) + '</div>';
+}
+
+dom.exportHistoryBtn.addEventListener('click', function() {
+  const payload = {
+    product:'Flowmodoro',
+    exportedAt:new Date().toISOString(),
+    durations:state.durations,
+    tasks:state.tasks,
+    history:state.history
+  };
+  const blob = new Blob([JSON.stringify(payload,null,2)], { type:'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'flowmodoro-' + new Date().toISOString().slice(0,10) + '.json';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+});
+
+function openShortcuts() {
+  closeSettings();
+  if (typeof dom.shortcutsDialog.showModal === 'function') dom.shortcutsDialog.showModal();
+  else dom.shortcutsDialog.setAttribute('open','');
+}
+function closeShortcuts() {
+  if (typeof dom.shortcutsDialog.close === 'function' && dom.shortcutsDialog.open) dom.shortcutsDialog.close();
+  else dom.shortcutsDialog.removeAttribute('open');
+}
+dom.shortcutsBtn.addEventListener('click', openShortcuts);
+dom.shortcutsCloseBtn.addEventListener('click', closeShortcuts);
+
+document.addEventListener('keydown', function(event) {
+  const target = event.target;
+  const typing = target && (target.matches('input,textarea,select') || target.isContentEditable);
+  if (typing) {
+    if (event.key === 'Escape') target.blur();
+    return;
+  }
+
+  if (event.key === 'Escape') {
+    if (dom.shortcutsDialog.open) { closeShortcuts(); return; }
+    if (dom.settingsPanel.classList.contains('open')) { closeSettings(); return; }
+    if (!dom.focusPopover.hidden) { closeFocusPopover(); return; }
+    if (focusMode) { exitFocusMode(); return; }
+  }
+
+  if (event.key === ' ') {
+    event.preventDefault();
+    state.isRunning ? pauseTimer() : startTimer();
+  } else if (event.key.toLowerCase() === 'r') {
+    resetTimer();
+  } else if (event.key === '1') {
+    setMode('work');
+  } else if (event.key === '2') {
+    setMode('short');
+  } else if (event.key === '3') {
+    setMode('long');
+  } else if (event.key.toLowerCase() === 'f') {
+    focusMode ? exitFocusMode() : enterFocusMode();
+  } else if (event.key.toLowerCase() === 'n') {
+    document.getElementById('tasks-section').scrollIntoView({ behavior:'smooth', block:'start' });
+    setTimeout(function(){ dom.taskInput.focus(); },350);
+  } else if (event.key === '?') {
+    openShortcuts();
+  }
+});
+
+let deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', function(event) {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  if (dom.installBtn) dom.installBtn.style.display = 'flex';
+});
+
+async function triggerInstall() {
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    try { await deferredInstallPrompt.userChoice; } catch (error) {}
+    deferredInstallPrompt = null;
+    if (dom.installBtn) dom.installBtn.style.display = 'none';
+    return;
+  }
+  const isiOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  if (isiOS) window.alert(t('install.ios'));
+}
+
+[dom.installBtn,dom.installDrawerBtn].filter(Boolean).forEach(function(btn){ btn.addEventListener('click', triggerInstall); });
+window.addEventListener('appinstalled', function(){ deferredInstallPrompt = null; if (dom.installBtn) dom.installBtn.style.display = 'none'; });
+
+let refreshing = false;
+async function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
+  try {
+    const registration = await navigator.serviceWorker.register('service-worker.js');
+    function offerUpdate(worker) {
+      if (!worker || !navigator.serviceWorker.controller) return;
+      dom.updateToast.hidden = false;
+      dom.updateAppBtn.onclick = function() { worker.postMessage({ type:'SKIP_WAITING' }); };
+    }
+    if (registration.waiting) offerUpdate(registration.waiting);
+    registration.addEventListener('updatefound', function() {
+      const worker = registration.installing;
+      if (!worker) return;
+      worker.addEventListener('statechange', function() {
+        if (worker.state === 'installed') offerUpdate(worker);
+      });
+    });
+    navigator.serviceWorker.addEventListener('controllerchange', function() {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+  } catch (error) {
+    console.warn('[Flowmodoro] Service worker registration failed', error);
+  }
+}
+
 class ParallaxController {
   constructor() {
     this.sections = [];
     this.ticking = false;
-    this.prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
-    if (this.prefersReduced) return;
-    this.init();
+    this.reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!this.reduced) this.init();
   }
-
   init() {
-    document.querySelectorAll('[data-parallax]').forEach(el => {
-      this.sections.push({
-        el,
-        speed: parseFloat(el.dataset.parallax) || 0.15,
-        bg: el.querySelector('.section-parallax__bg') || null,
-      });
+    document.querySelectorAll('[data-parallax]').forEach((el) => {
+      this.sections.push({ el:el, speed:parseFloat(el.dataset.parallax) || 0.15, bg:el.querySelector('.section-parallax__bg') });
     });
-
-    window.addEventListener('scroll', () => this.onScroll(), { passive: true });
-    this.update(); 
+    window.addEventListener('scroll', () => this.onScroll(), { passive:true });
+    this.update();
   }
-
   onScroll() {
-    if (!this.ticking) {
-      requestAnimationFrame(() => {
-        this.update();
-        this.ticking = false;
-      });
-      this.ticking = true;
-    }
+    if (this.ticking) return;
+    this.ticking = true;
+    requestAnimationFrame(() => { this.update(); this.ticking = false; });
   }
-
   update() {
-    const scrollY = window.scrollY;
-
-    this.sections.forEach(({ el, speed, bg }) => {
+    this.sections.forEach(({el,speed,bg}) => {
+      if (!bg) return;
       const rect = el.getBoundingClientRect();
-      const centerY = rect.top + rect.height / 2;
-      const viewCenter = window.innerHeight / 2;
-      const distance = centerY - viewCenter;
-
-      const offset = distance * speed;
-
-      if (bg) {
-        bg.style.transform = `translateY(${offset}px)`;
-      }
+      const distance = rect.top + rect.height / 2 - window.innerHeight / 2;
+      bg.style.transform = 'translateY(' + (distance * speed) + 'px)';
     });
   }
 }
 
-// ─── Init ─────────────────────────────────────────────────────
+function setupNavigationState() {
+  const sections = ['timer-section','tasks-section','progress-section'];
+  const links = document.querySelectorAll('.mobile-bottom-link[href]');
+  if (!('IntersectionObserver' in window)) return;
+  const observer = new IntersectionObserver(function(entries) {
+    const visible = entries.filter(function(entry){ return entry.isIntersecting; }).sort(function(a,b){ return b.intersectionRatio - a.intersectionRatio; })[0];
+    if (!visible) return;
+    links.forEach(function(link){ link.classList.toggle('active', link.getAttribute('href') === '#' + visible.target.id); });
+  }, { rootMargin:'-30% 0px -55% 0px', threshold:[0,0.15,0.5] });
+  sections.forEach(function(id){ const el=$(id); if (el) observer.observe(el); });
+}
+
 function init() {
-  applyTheme(state.theme);
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  if (standalone) dom.body.classList.add('standalone-app');
+
+  applyThemePreference(state.themePreference, false);
   setLang(state.lang);
-  dom.body.setAttribute('data-mode', 'work');
-  updateTimerUI(true); // Force initial render
-  updatePomoDotsUI();
+  updateModeTabs();
   validateActiveTask();
   renderTasks();
   renderFocusUI();
-  // Move popover to body so section transforms/overflow can never clip it
+  updatePomoDotsUI();
+  renderToday();
+  renderProgress();
+  updateTimerUI(true);
   document.body.appendChild(dom.focusPopover);
+
+  if (state.isRunning) {
+    clearInterval(state.intervalId);
+    state.intervalId = setInterval(tick,250);
+    if (state.currentMode === 'work') enterFocusMode();
+    acquireWakeLock();
+  } else if (state.restoreExpired) {
+    state.restoreExpired = false;
+    handleSessionEnd(true);
+  }
+
+  const usedBefore = localStorage.getItem('fm_has_used_app') === 'true';
+  if ((standalone || usedBefore) && !window.location.hash) {
+    requestAnimationFrame(function(){ dom.timerSection.scrollIntoView({ behavior:'auto', block:'start' }); });
+  }
+
+  setupNavigationState();
+  registerServiceWorker();
   new ParallaxController();
+  persistSession();
 }
 
 init();
-
-
