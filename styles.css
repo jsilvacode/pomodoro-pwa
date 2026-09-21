@@ -5382,3 +5382,56 @@ body.focus-mode .mobile-bottom-nav {
     filter: none !important;
   }
 }
+
+
+/* ═══ APP SHELL SPECIFICITY GUARD ═════════════════════════
+   Neutralizes legacy #timer-section responsive rules.
+═══════════════════════════════════════════════════════════ */
+#timer-section.app-view-focus {
+  display: grid;
+  place-items: center;
+  min-height: 0 !important;
+  height: auto;
+  padding: clamp(1rem, 2.6vw, 2.5rem);
+}
+
+#timer-section.app-view-focus > .container {
+  width: min(100%, 1080px);
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+body.focus-mode #timer-section.app-view-focus {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh !important;
+  height: 100dvh;
+  padding: clamp(1rem, 3vw, 3rem);
+}
+
+/* Immersive break remains as quiet as immersive work. */
+body.focus-mode .break-tip,
+body.focus-mode .timer-active-task {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  #timer-section.app-view-focus {
+    display: grid;
+    flex-direction: initial;
+    align-items: initial;
+    justify-content: initial;
+    min-height: 0 !important;
+    padding: 0.75rem;
+  }
+
+  body.focus-mode #timer-section.app-view-focus {
+    min-height: 100dvh !important;
+    padding:
+      max(0.75rem, env(safe-area-inset-top))
+      max(0.75rem, env(safe-area-inset-right))
+      max(0.75rem, env(safe-area-inset-bottom))
+      max(0.75rem, env(safe-area-inset-left));
+  }
+}
