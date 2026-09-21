@@ -3,7 +3,7 @@
   "name": "Flowmodoro",
   "short_name": "Flowmodoro",
   "description": "Planifica tu intención, enfócate, descansa y aprende cuánto tiempo toma realmente tu trabajo.",
-  "start_url": "./index.html#timer-section",
+  "start_url": "./index.html#focus",
   "scope": "./",
   "display": "standalone",
   "display_override": [
@@ -32,7 +32,7 @@
       "name": "Iniciar foco",
       "short_name": "Foco",
       "description": "Abrir directamente el temporizador",
-      "url": "./index.html#timer-section",
+      "url": "./index.html#focus",
       "icons": [
         {
           "src": "icons/icon-192.png",
@@ -45,7 +45,7 @@
       "name": "Nueva tarea",
       "short_name": "Nueva tarea",
       "description": "Abrir el plan de hoy",
-      "url": "./index.html#tasks-section",
+      "url": "./index.html#today",
       "icons": [
         {
           "src": "icons/icon-192.png",
