@@ -4703,7 +4703,8 @@ body.focus-mode .timer-controls {
   justify-content: center;
   gap: 0;
   margin: 0;
-  opacity: 0.82;
+  opacity: 0.58;
+  transition: opacity var(--motion-normal) var(--ease-premium);
 }
 
 body.focus-mode .timer-controls:hover,
@@ -4716,30 +4717,36 @@ body.focus-mode .timer-controls .timer-settings-btn {
   display: none !important;
 }
 
-/* Restore the normal Flowmodoro timer action — no generic round playback icon. */
+/* In Deep Focus the same timer action becomes quiet instead of disappearing. */
 body.focus-mode .ctrl-btn-primary,
 [data-theme="dark"] body.focus-mode .ctrl-btn-primary {
   width: auto;
   height: auto;
-  min-width: 130px;
-  min-height: var(--control-h);
-  padding: 0.72rem 1.4rem;
-  border: 1px solid var(--accent);
+  min-width: 104px;
+  min-height: 38px;
+  padding: 0.58rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border));
   border-radius: var(--radius-control);
-  background: var(--accent);
-  color: var(--obsidian-800);
+  background: transparent;
+  color: color-mix(in srgb, var(--text-secondary) 72%, transparent);
   box-shadow: none;
-  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.07em;
 }
 
 body.focus-mode .ctrl-btn-primary:hover,
 body.focus-mode .ctrl-btn-primary:focus-visible,
 [data-theme="dark"] body.focus-mode .ctrl-btn-primary:hover {
-  border-color: color-mix(in srgb, var(--accent) 82%, var(--text-primary));
-  background: color-mix(in srgb, var(--accent) 88%, var(--text-primary));
-  color: var(--obsidian-800);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
+  border-color: color-mix(in srgb, var(--accent) 46%, var(--border));
+  background: color-mix(in srgb, var(--accent-subtle) 62%, transparent);
+  color: var(--accent);
+  transform: none;
+  box-shadow: none;
+}
+
+body.focus-mode .ctrl-btn-primary:active {
+  transform: scale(0.985);
 }
 
 body.focus-mode .timer-play-icon {
@@ -4758,7 +4765,9 @@ body.focus-mode .focus-control-unit {
 
 @media (max-width: 480px) {
   body.focus-mode .ctrl-btn-primary {
-    min-width: 118px;
-    padding-inline: 1.15rem;
+    min-width: 96px;
+    min-height: 36px;
+    padding-inline: 0.9rem;
+    font-size: 0.68rem;
   }
 }
