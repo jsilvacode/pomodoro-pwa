@@ -49,7 +49,7 @@
       <div class="nav-links">
         <a href="#timer-section" class="nav-link" data-i18n="nav.focus">Foco</a>
         <a href="#tasks-section" class="nav-link" data-i18n="nav.today">Hoy</a>
-        <button class="nav-link nav-more-btn" id="moreBtn" type="button" data-i18n="nav.more">Más</button>
+        <button class="nav-link nav-more-btn" id="moreBtn" type="button" data-i18n="nav.settings">Ajustes</button>
       </div>
     </div>
   </nav>
@@ -253,12 +253,6 @@
           <button class="ctrl-btn ctrl-btn-primary" id="startBtn" data-i18n="timer.start">
             Iniciar
           </button>
-          <button class="ctrl-btn ctrl-btn-ghost" id="settingsBtn" aria-label="Settings">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="3"/>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-            </svg>
-          </button>
         </div>
 
         <div class="session-complete-card" id="sessionCompleteCard" hidden aria-live="polite">
@@ -277,13 +271,13 @@
     </div>
   </section>
 
-  <!-- Settings / More drawer -->
+  <!-- Settings drawer -->
   <div class="drawer-backdrop" id="settingsBackdrop" hidden></div>
   <aside class="settings-drawer" id="settingsPanel" aria-hidden="true" aria-labelledby="settingsTitle">
     <div class="drawer-header">
       <div>
-        <span class="drawer-eyebrow" data-i18n="nav.more">Más</span>
-        <h2 class="settings-title" id="settingsTitle" data-i18n="settings.title">Preferencias</h2>
+        <span class="drawer-eyebrow">Flowmodoro</span>
+        <h2 class="settings-title" id="settingsTitle" data-i18n="settings.title">Ajustes</h2>
       </div>
       <button class="drawer-close" id="settingsCloseBtn" type="button" aria-label="Cerrar">✕</button>
     </div>
@@ -523,7 +517,7 @@
   <nav class="mobile-bottom-nav" aria-label="Navegación principal">
     <a href="#timer-section" class="mobile-bottom-link"><span>◎</span><small data-i18n="nav.focus">Foco</small></a>
     <a href="#tasks-section" class="mobile-bottom-link"><span>✓</span><small data-i18n="nav.today">Hoy</small></a>
-    <button class="mobile-bottom-link" id="bottomMoreBtn" type="button"><span>•••</span><small data-i18n="nav.more">Más</small></button>
+    <button class="mobile-bottom-link" id="bottomMoreBtn" type="button"><span>⚙</span><small data-i18n="nav.settings">Ajustes</small></button>
   </nav>
 
   <div class="update-toast" id="updateToast" hidden>
