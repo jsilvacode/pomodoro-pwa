@@ -20,20 +20,21 @@ const TRANSLATIONS = {
     'focus.exit':'Salir del modo foco','focus.session':'Sesión de foco','focus.of':'de',
     'complete.kicker':'Sesión completada','complete.later':'Ahora no','complete.startBreak':'Iniciar descanso','complete.startFocus':'Iniciar foco',
     'settings.title':'Preferencias','settings.timer':'Temporizador','settings.flow':'Flujo','settings.experience':'Experiencia',
-    'settings.work':'Trabajo (min)','settings.short':'Descanso corto (min)','settings.long':'Descanso largo (min)','settings.sound':'Sonido',
+    'settings.work':'Foco','settings.short':'Descanso corto','settings.long':'Descanso largo','settings.sound':'Aviso al terminar',
     'settings.autoBreak':'Iniciar descansos automáticamente','settings.autoFocus':'Iniciar siguiente foco automáticamente',
     'settings.wakeLock':'Mantener pantalla activa','settings.notifications':'Notificaciones','settings.enableNotifications':'Activar',
     'settings.notificationsOn':'Activadas','settings.notificationsDenied':'Bloqueadas por el navegador',
-    'settings.appearance':'Apariencia','settings.theme.system':'Sistema','settings.theme.light':'Claro','settings.theme.dark':'Oscuro',
+    'settings.appearance':'Apariencia','settings.themeLabel':'Tema','settings.language':'Idioma','settings.advanced':'Avanzado',
+    'settings.theme.system':'Sistema','settings.theme.light':'Claro','settings.theme.dark':'Oscuro',
     'settings.save':'Guardar cambios',
     'today.sessions':'sesiones','today.focus':'en foco','today.tasks':'tareas','today.plan':'planificados','today.next':'Próxima tarea',
-    'tasks.badge':'📋 Plan de hoy','tasks.title':'¿En qué vas a trabajar hoy?','tasks.subtitle':'Define tu intención, estima el esfuerzo y trabaja una cosa a la vez.',
+    'tasks.badge':'Hoy','tasks.title':'¿Qué vas a hacer ahora?','tasks.subtitle':'Elige una tarea y vuelve al foco.',
     'tasks.placeholder':'Agregar nueva tarea...','tasks.add':'+ Agregar','tasks.empty':'No hay tareas aún. Agrega la primera.','tasks.empty.filter':'No hay tareas aquí.',
     'tasks.noTask':'Sin tarea','tasks.filter.all':'Todas','tasks.filter.active':'Pendientes','tasks.filter.done':'Completadas',
     'tasks.clearDone':'Limpiar completadas','tasks.clearDone.confirm':'¿Seguro?','tasks.estimation':'Real / estimado',
     'tasks.delete':'Eliminar','tasks.focus':'Enfocar','tasks.unfocus':'Quitar foco','tasks.complete':'Marcar como completada',
     'tasks.reorder.up':'Subir','tasks.reorder.down':'Bajar','tasks.inc.pomos':'Aumentar estimación','tasks.dec.pomos':'Reducir estimación','tasks.edit':'Editar',
-    'progress.badge':'Progreso','progress.title':'Tu trabajo deja huella.',
+    'progress.badge':'Progreso','progress.week':'Esta semana','progress.details':'Ver actividad','progress.title':'Tu trabajo deja huella.',
     'progress.subtitle':'Compara lo que planeaste con lo que realmente tomó, sin convertir el foco en una competencia.',
     'progress.weekSessions':'Sesiones esta semana','progress.weekMinutes':'Minutos de foco','progress.completedTasks':'Tareas completadas',
     'progress.estimateRatio':'Real / estimado','progress.history':'Historial reciente','progress.localOnly':'Tus datos permanecen en este dispositivo.',
@@ -73,20 +74,21 @@ const TRANSLATIONS = {
     'focus.exit':'Exit focus mode','focus.session':'Focus session','focus.of':'of',
     'complete.kicker':'Session completed','complete.later':'Not now','complete.startBreak':'Start break','complete.startFocus':'Start focus',
     'settings.title':'Preferences','settings.timer':'Timer','settings.flow':'Flow','settings.experience':'Experience',
-    'settings.work':'Work (min)','settings.short':'Short break (min)','settings.long':'Long break (min)','settings.sound':'Sound',
+    'settings.work':'Focus','settings.short':'Short break','settings.long':'Long break','settings.sound':'Completion sound',
     'settings.autoBreak':'Start breaks automatically','settings.autoFocus':'Start next focus automatically',
     'settings.wakeLock':'Keep screen awake','settings.notifications':'Notifications','settings.enableNotifications':'Enable',
     'settings.notificationsOn':'Enabled','settings.notificationsDenied':'Blocked by browser',
-    'settings.appearance':'Appearance','settings.theme.system':'System','settings.theme.light':'Light','settings.theme.dark':'Dark',
+    'settings.appearance':'Appearance','settings.themeLabel':'Theme','settings.language':'Language','settings.advanced':'Advanced',
+    'settings.theme.system':'System','settings.theme.light':'Light','settings.theme.dark':'Dark',
     'settings.save':'Save changes',
     'today.sessions':'sessions','today.focus':'in focus','today.tasks':'tasks','today.plan':'planned','today.next':'Next task',
-    'tasks.badge':'📋 Today plan','tasks.title':'What are you working on today?','tasks.subtitle':'Set an intention, estimate the effort, and work on one thing at a time.',
+    'tasks.badge':'Today','tasks.title':'What will you do now?','tasks.subtitle':'Choose one task and return to focus.',
     'tasks.placeholder':'Add a new task...','tasks.add':'+ Add','tasks.empty':'No tasks yet. Add your first one.','tasks.empty.filter':'No tasks here.',
     'tasks.noTask':'No task','tasks.filter.all':'All','tasks.filter.active':'Pending','tasks.filter.done':'Completed',
     'tasks.clearDone':'Clear completed','tasks.clearDone.confirm':'Sure?','tasks.estimation':'Actual / estimated',
     'tasks.delete':'Delete','tasks.focus':'Focus','tasks.unfocus':'Remove focus','tasks.complete':'Mark as completed',
     'tasks.reorder.up':'Move up','tasks.reorder.down':'Move down','tasks.inc.pomos':'Increase estimate','tasks.dec.pomos':'Reduce estimate','tasks.edit':'Edit',
-    'progress.badge':'Progress','progress.title':'Your work leaves a trace.',
+    'progress.badge':'Progress','progress.week':'This week','progress.details':'View activity','progress.title':'Your work leaves a trace.',
     'progress.subtitle':'Compare what you planned with what it actually took, without turning focus into a competition.',
     'progress.weekSessions':'Sessions this week','progress.weekMinutes':'Focus minutes','progress.completedTasks':'Completed tasks',
     'progress.estimateRatio':'Actual / estimated','progress.history':'Recent history','progress.localOnly':'Your data stays on this device.',
@@ -232,7 +234,7 @@ const dom = {
   navbar: $('navbar'),
   timerSection: $('timer-section'),
   themeToggle: $('themeToggle'), sunIcon: $('sunIcon'), moonIcon: $('moonIcon'),
-  langToggle: $('langToggle'), langLabel: $('langLabel'),
+  langToggle: $('langToggle'), langLabel: $('langLabel'), languagePreference: $('languagePreference'),
   installBtn: $('installBtn'), installDrawerBtn: $('installDrawerBtn'),
   hamburger: $('hamburger'), mobileMenu: $('mobileMenu'),
   moreBtn: $('moreBtn'), mobileMoreBtn: $('mobileMoreBtn'), bottomMoreBtn: $('bottomMoreBtn'),
@@ -256,10 +258,9 @@ const dom = {
   sessionCompleteTask: $('sessionCompleteTask'), nextSessionBtn: $('nextSessionBtn'), dismissSessionBtn: $('dismissSessionBtn'),
   taskInput: $('taskInput'), addTaskBtn: $('addTaskBtn'), taskList: $('taskList'), taskEmpty: $('taskEmpty'), taskEmptyText: $('taskEmptyText'),
   clearDoneBtn: $('clearDoneBtn'),
-  todaySessions: $('todaySessions'), todayMinutes: $('todayMinutes'), todayTasks: $('todayTasks'), todayPlan: $('todayPlan'),
-  nextTaskCard: $('nextTaskCard'), nextTaskText: $('nextTaskText'), nextTaskMeta: $('nextTaskMeta'),
-  weekSessions: $('weekSessions'), weekMinutes: $('weekMinutes'), completedTasksCount: $('completedTasksCount'),
-  estimateRatio: $('estimateRatio'), weekChart: $('weekChart'), sessionHistory: $('sessionHistory'), exportHistoryBtn: $('exportHistoryBtn'),
+  todaySessions: $('todaySessions'), todayMinutes: $('todayMinutes'), todayTasks: $('todayTasks'),
+  weekSessions: $('weekSessions'), weekMinutes: $('weekMinutes'), weekChart: $('weekChart'),
+  sessionHistory: $('sessionHistory'), exportHistoryBtn: $('exportHistoryBtn'),
   shortcutsBtn: $('shortcutsBtn'), shortcutsDialog: $('shortcutsDialog'), shortcutsCloseBtn: $('shortcutsCloseBtn'),
   updateToast: $('updateToast'), updateAppBtn: $('updateAppBtn')
 };
@@ -295,7 +296,8 @@ function applyTranslations() {
 function setLang(lang) {
   state.lang = lang === 'en' ? 'en' : 'es';
   localStorage.setItem('fm_lang', state.lang);
-  dom.langLabel.textContent = state.lang === 'es' ? 'EN' : 'ES';
+  if (dom.langLabel) dom.langLabel.textContent = state.lang === 'es' ? 'EN' : 'ES';
+  if (dom.languagePreference) dom.languagePreference.value = state.lang;
   applyTranslations();
   updateTimerUI(true);
   renderTasks();
@@ -377,25 +379,23 @@ function validateActiveTask() {
   }
 }
 
-dom.langToggle.addEventListener('click', function() {
-  setLang(state.lang === 'es' ? 'en' : 'es');
-});
-
-dom.themeToggle.addEventListener('click', function() {
-  applyThemePreference(state.effectiveTheme === 'light' ? 'dark' : 'light', true);
-});
-
-dom.hamburger.addEventListener('click', function() {
-  const open = dom.mobileMenu.classList.toggle('open');
-  dom.hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
-});
-
-dom.mobileMenu.querySelectorAll('a').forEach(function(link) {
-  link.addEventListener('click', function() {
-    dom.mobileMenu.classList.remove('open');
-    dom.hamburger.setAttribute('aria-expanded','false');
+if (dom.langToggle) {
+  dom.langToggle.addEventListener('click', function() {
+    setLang(state.lang === 'es' ? 'en' : 'es');
   });
-});
+}
+
+if (dom.themeToggle) {
+  dom.themeToggle.addEventListener('click', function() {
+    applyThemePreference(state.effectiveTheme === 'light' ? 'dark' : 'light', true);
+  });
+}
+
+if (dom.languagePreference) {
+  dom.languagePreference.addEventListener('change', function() {
+    setLang(dom.languagePreference.value);
+  });
+}
 
 window.addEventListener('scroll', function() {
   if (!dom.navbar) return;
@@ -411,6 +411,7 @@ function openSettings() {
   dom.autoFocusToggle.checked = state.autoStartFocus;
   dom.wakeLockToggle.checked = state.keepAwake;
   dom.themePreference.value = state.themePreference;
+  dom.languagePreference.value = state.lang;
   dom.settingsPanel.classList.add('open');
   dom.settingsPanel.setAttribute('aria-hidden','false');
   dom.settingsBackdrop.hidden = false;
@@ -1183,14 +1184,12 @@ function flashFocusCompleted() {
 
 function renderTasks() {
   dom.taskList.querySelectorAll('.task-item').forEach(function(el){ el.remove(); });
-  const visible = state.tasks.filter(function(task) {
-    if (state.taskFilter === 'active') return !task.done;
-    if (state.taskFilter === 'done') return task.done;
-    return true;
-  });
+  const visible = state.tasks;
   dom.taskEmpty.style.display = visible.length ? 'none' : 'block';
-  dom.taskEmptyText.textContent = state.tasks.length ? t('tasks.empty.filter') : t('tasks.empty');
-  dom.clearDoneBtn.disabled = !state.tasks.some(function(task){ return task.done; });
+  dom.taskEmptyText.textContent = t('tasks.empty');
+  const hasDone = state.tasks.some(function(task){ return task.done; });
+  dom.clearDoneBtn.hidden = !hasDone;
+  dom.clearDoneBtn.disabled = !hasDone;
 
   visible.forEach(function(task) {
     const index = state.tasks.indexOf(task);
@@ -1337,14 +1336,6 @@ function addTask() {
 dom.addTaskBtn.addEventListener('click', addTask);
 dom.taskInput.addEventListener('keydown', function(event){ if (event.key === 'Enter') addTask(); });
 
-document.querySelectorAll('.task-filter').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    state.taskFilter = btn.dataset.filter;
-    document.querySelectorAll('.task-filter').forEach(function(other){ other.classList.toggle('active', other === btn); });
-    renderTasks();
-  });
-});
-
 let clearDoneArmed = false;
 let clearDoneTimer = null;
 function resetClearDone() {
@@ -1379,19 +1370,9 @@ function renderToday() {
   const workToday = state.history.filter(function(entry){ return entry.mode === 'work' && isSameDay(entry.completedAt, today); });
   const minutes = Math.round(workToday.reduce(function(sum,entry){ return sum + entry.durationMin; },0));
   const completed = state.tasks.filter(function(task){ return task.done; }).length;
-  const planned = state.tasks.reduce(function(sum,task){ return sum + task.estPomos; },0);
   dom.todaySessions.textContent = String(workToday.length);
   dom.todayMinutes.textContent = String(minutes) + ' min';
   dom.todayTasks.textContent = completed + ' / ' + state.tasks.length;
-  dom.todayPlan.textContent = planned + ' 🍅';
-
-  const next = state.tasks.find(function(task){ return task.id === state.activeTaskId && !task.done; }) ||
-    state.tasks.find(function(task){ return !task.done; });
-  dom.nextTaskCard.hidden = !next;
-  if (next) {
-    dom.nextTaskText.textContent = next.text;
-    dom.nextTaskMeta.textContent = Math.max(0,next.estPomos - next.actPomos) + ' 🍅 · ' + next.actPomos + '/' + next.estPomos;
-  }
 }
 
 function startOfDay(date) {
@@ -1407,13 +1388,6 @@ function renderProgress() {
   const weekEntries = state.history.filter(function(entry){ return entry.mode === 'work' && entry.completedAt >= sevenDaysAgo.getTime(); });
   dom.weekSessions.textContent = String(weekEntries.length);
   dom.weekMinutes.textContent = String(Math.round(weekEntries.reduce(function(sum,entry){ return sum + entry.durationMin; },0)));
-  dom.completedTasksCount.textContent = String(state.tasks.filter(function(task){ return task.done; }).length);
-
-  const doneWithEstimate = state.tasks.filter(function(task){ return task.done && task.estPomos > 0; });
-  const est = doneWithEstimate.reduce(function(sum,task){ return sum + task.estPomos; },0);
-  const act = doneWithEstimate.reduce(function(sum,task){ return sum + task.actPomos; },0);
-  dom.estimateRatio.textContent = est ? (Math.round((act / est) * 100) + '%') : '—';
-
   const days = [];
   for (let i=6; i>=0; i--) {
     const d = startOfDay(now);
@@ -1587,7 +1561,7 @@ class ParallaxController {
 }
 
 function setupNavigationState() {
-  const sections = ['timer-section','tasks-section','progress-section'];
+  const sections = ['timer-section','tasks-section'];
   const links = document.querySelectorAll('.mobile-bottom-link[href]');
   if (!('IntersectionObserver' in window)) return;
   const observer = new IntersectionObserver(function(entries) {
