@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flowmodoro-v35';
+const CACHE_NAME = 'flowmodoro-v36';
 const AUDIO_CACHE_NAME = 'flowmodoro-audio-v1';
 const ASSETS = [
   './',
@@ -37,14 +37,25 @@ self.addEventListener('fetch', event => {
   // after first playback when the response is cacheable. This keeps the
   // repository light while allowing repeat sessions to avoid re-downloading.
   if (url.hostname === 'cdn.freesound.org' && event.request.destination === 'audio') {
+    // Media elements commonly request byte ranges. CacheStorage cannot reliably
+    // store 206 responses, so range requests go straight to the network.
+    if (event.request.headers.has('range')) {
+      event.respondWith(fetch(event.request));
+      return;
+    }
+
     event.respondWith(
       caches.open(AUDIO_CACHE_NAME).then(async cache => {
         const cached = await cache.match(event.request);
         if (cached) return cached;
         try {
           const response = await fetch(event.request);
-          if (response && (response.ok || response.type === 'opaque')) {
-            await cache.put(event.request, response.clone());
+          if (response && (response.status === 200 || response.type === 'opaque')) {
+            try {
+              await cache.put(event.request, response.clone());
+            } catch (cacheError) {
+              // Playback must still succeed even if the browser refuses to cache media.
+            }
           }
           return response;
         } catch (error) {
