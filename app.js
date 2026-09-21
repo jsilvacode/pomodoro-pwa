@@ -51,6 +51,10 @@ const TRANSLATIONS = {
     'shortcuts.title':'Atajos de teclado','shortcuts.toggle':'Iniciar / pausar','shortcuts.reset':'Reiniciar','shortcuts.modes':'Cambiar modo',
     'shortcuts.focus':'Entrar / salir de Focus','shortcuts.newTask':'Nueva tarea','shortcuts.help':'Ver atajos','shortcuts.escape':'Cerrar / salir',
     'install.ios':'En iPhone o iPad: abre Compartir en Safari y elige “Añadir a pantalla de inicio”.',
+    'ambient.label':'Ambiente','ambient.off':'Sin audio','ambient.rain':'Lluvia suave','ambient.nightForest':'Bosque nocturno','ambient.cafe':'Café','ambient.campfire':'Fogata',
+    'ambient.volume':'Volumen','ambient.attenuate':'Atenuar durante descansos',
+    'ambient.note':'Los ambientes usan grabaciones CC0 y pueden quedar disponibles en caché después de reproducirse.',
+    'ambient.paused':'Pausado','ambient.playing':'Reproduciendo',
     'break.tip1':'Levántate un momento.','break.tip2':'Mira a distancia y descansa la vista.','break.tip3':'Toma agua.','break.tip4':'Respira y cambia de postura.'
   },
   en: {
@@ -98,6 +102,10 @@ const TRANSLATIONS = {
     'shortcuts.title':'Keyboard shortcuts','shortcuts.toggle':'Start / pause','shortcuts.reset':'Reset','shortcuts.modes':'Change mode',
     'shortcuts.focus':'Enter / exit Focus','shortcuts.newTask':'New task','shortcuts.help':'Show shortcuts','shortcuts.escape':'Close / exit',
     'install.ios':'On iPhone or iPad: open Share in Safari and choose “Add to Home Screen”.',
+    'ambient.label':'Ambience','ambient.off':'No audio','ambient.rain':'Gentle rain','ambient.nightForest':'Night forest','ambient.cafe':'Café','ambient.campfire':'Campfire',
+    'ambient.volume':'Volume','ambient.attenuate':'Lower during breaks',
+    'ambient.note':'Ambient presets use CC0 recordings and may remain cached after first playback.',
+    'ambient.paused':'Paused','ambient.playing':'Playing',
     'break.tip1':'Stand up for a moment.','break.tip2':'Look into the distance and rest your eyes.','break.tip3':'Drink some water.','break.tip4':'Breathe and change posture.'
   }
 };
@@ -188,6 +196,10 @@ const state = {
   autoStartBreaks: getBool('fm_auto_breaks', false),
   autoStartFocus: getBool('fm_auto_focus', false),
   keepAwake: getBool('fm_wake_lock', false),
+  ambientPreset: localStorage.getItem('fm_ambient') || 'off',
+  ambientVolume: clamp(parseInt(localStorage.getItem('fm_ambient_volume'), 10) || 35, 0, 100),
+  ambientAttenuate: getBool('fm_ambient_attenuate', true),
+  ambientPlaying: false,
   tasks: safeGetJSON('fm_tasks', []).map(normalizeTask).filter(function(t){ return t.text; }),
   activeTaskId: localStorage.getItem('fm_activeTask') || null,
   taskFilter: 'all',
@@ -224,6 +236,10 @@ const dom = {
   setWork: $('setWork'), setShort: $('setShort'), setLong: $('setLong'), soundToggle: $('soundToggle'),
   autoBreakToggle: $('autoBreakToggle'), autoFocusToggle: $('autoFocusToggle'), wakeLockToggle: $('wakeLockToggle'),
   notificationBtn: $('notificationBtn'), themePreference: $('themePreference'), saveSettings: $('saveSettings'),
+  ambientSelect: $('ambientSelect'), ambientVolume: $('ambientVolume'), ambientVolumeValue: $('ambientVolumeValue'),
+  ambientAttenuateToggle: $('ambientAttenuateToggle'), ambientPill: $('ambientPill'),
+  ambientPillName: $('ambientPillName'), ambientPillState: $('ambientPillState'),
+  ambientAudioPrimary: $('ambientAudioPrimary'), ambientAudioSecondary: $('ambientAudioSecondary'),
   tabWork: $('tab-work'), tabShort: $('tab-short'), tabLong: $('tab-long'),
   sessionLabel: $('sessionLabel'), breakTip: $('breakTip'), startBtn: $('startBtn'), resetBtn: $('resetBtn'),
   focusSessionCycle: $('focusSessionCycle'), focusExitBtn: $('focusExitBtn'), viewFlip: $('viewFlip'),
@@ -385,6 +401,10 @@ function openSettings() {
   dom.autoFocusToggle.checked = state.autoStartFocus;
   dom.wakeLockToggle.checked = state.keepAwake;
   dom.themePreference.value = state.themePreference;
+  dom.ambientSelect.value = state.ambientPreset;
+  dom.ambientVolume.value = String(state.ambientVolume);
+  dom.ambientVolumeValue.textContent = state.ambientVolume + '%';
+  dom.ambientAttenuateToggle.checked = state.ambientAttenuate;
   dom.settingsPanel.classList.add('open');
   dom.settingsPanel.setAttribute('aria-hidden','false');
   dom.settingsBackdrop.hidden = false;
@@ -416,12 +436,15 @@ dom.saveSettings.addEventListener('click', function() {
   state.autoStartBreaks = !!dom.autoBreakToggle.checked;
   state.autoStartFocus = !!dom.autoFocusToggle.checked;
   state.keepAwake = !!dom.wakeLockToggle.checked;
+  state.ambientAttenuate = !!dom.ambientAttenuateToggle.checked;
   localStorage.setItem('fm_durations', JSON.stringify(state.durations));
   setBool('fm_sound', state.soundEnabled);
   setBool('fm_auto_breaks', state.autoStartBreaks);
   setBool('fm_auto_focus', state.autoStartFocus);
   setBool('fm_wake_lock', state.keepAwake);
+  setBool('fm_ambient_attenuate', state.ambientAttenuate);
   applyThemePreference(dom.themePreference.value, true);
+  syncAmbientVolume();
   if (!state.isRunning) {
     state.timeLeft = state.durations[state.currentMode] * 60;
     state.totalTime = state.timeLeft;
@@ -433,6 +456,190 @@ dom.saveSettings.addEventListener('click', function() {
   else if (!state.keepAwake) releaseWakeLock();
   closeSettings();
 });
+
+
+const AMBIENT_PRESETS = {
+  off: { labelKey:'ambient.off', layers:[] },
+  rain: {
+    labelKey:'ambient.rain',
+    layers:[
+      { src:'https://cdn.freesound.org/previews/523/523405_8448725-hq.mp3', gain:1 }
+    ]
+  },
+  nightForest: {
+    labelKey:'ambient.nightForest',
+    layers:[
+      { src:'https://cdn.freesound.org/previews/181/181801_3153523-hq.mp3', gain:0.42 },
+      { src:'https://cdn.freesound.org/previews/580/580353_989468-hq.mp3', gain:0.72 }
+    ]
+  },
+  cafe: {
+    labelKey:'ambient.cafe',
+    layers:[
+      { src:'https://cdn.freesound.org/previews/370/370973_5835751-hq.mp3', gain:0.88 }
+    ]
+  },
+  campfire: {
+    labelKey:'ambient.campfire',
+    layers:[
+      { src:'https://cdn.freesound.org/previews/681/681366_5752443-hq.mp3', gain:0.92 }
+    ]
+  }
+};
+
+const ambientPlayers = [dom.ambientAudioPrimary, dom.ambientAudioSecondary].filter(Boolean);
+let ambientFadeFrame = null;
+
+function ambientPresetConfig() {
+  return AMBIENT_PRESETS[state.ambientPreset] || AMBIENT_PRESETS.off;
+}
+
+function ambientModeFactor() {
+  return state.currentMode === 'work' || !state.ambientAttenuate ? 1 : 0.28;
+}
+
+function ambientTargetVolumes() {
+  const config = ambientPresetConfig();
+  const master = state.ambientVolume / 100;
+  const factor = ambientModeFactor();
+  return ambientPlayers.map(function(player,index) {
+    const layer = config.layers[index];
+    return layer ? clamp(master * factor * layer.gain, 0, 1) : 0;
+  });
+}
+
+function updateAmbientUI() {
+  const config = ambientPresetConfig();
+  const active = state.ambientPreset !== 'off';
+  dom.ambientPill.hidden = !active;
+  dom.ambientPillName.textContent = active ? t(config.labelKey) : t('ambient.off');
+  dom.ambientPillState.textContent = state.ambientPlaying ? 'Ⅱ' : '▶';
+  dom.ambientPill.setAttribute('aria-pressed', state.ambientPlaying ? 'true' : 'false');
+  dom.ambientPill.setAttribute('aria-label',
+    (state.ambientPlaying ? t('ambient.playing') : t('ambient.paused')) + ' · ' + t(config.labelKey)
+  );
+  dom.ambientVolumeValue.textContent = state.ambientVolume + '%';
+}
+
+function fadeAmbientTo(targets, duration) {
+  if (ambientFadeFrame) cancelAnimationFrame(ambientFadeFrame);
+  const start = performance.now();
+  const from = ambientPlayers.map(function(player){ return player.volume; });
+  const ms = Math.max(80, duration || 420);
+
+  function step(now) {
+    const p = Math.min(1, (now - start) / ms);
+    const eased = 1 - Math.pow(1 - p, 3);
+    ambientPlayers.forEach(function(player,index) {
+      player.volume = clamp(from[index] + ((targets[index] || 0) - from[index]) * eased, 0, 1);
+    });
+    if (p < 1) ambientFadeFrame = requestAnimationFrame(step);
+    else ambientFadeFrame = null;
+  }
+  ambientFadeFrame = requestAnimationFrame(step);
+}
+
+function syncAmbientVolume() {
+  if (!state.ambientPlaying) {
+    fadeAmbientTo(ambientPlayers.map(function(){ return 0; }), 260);
+  } else {
+    fadeAmbientTo(ambientTargetVolumes(), 520);
+  }
+  updateAmbientUI();
+}
+
+async function startAmbient() {
+  const config = ambientPresetConfig();
+  if (!config.layers.length) {
+    stopAmbient();
+    return;
+  }
+
+  ambientPlayers.forEach(function(player,index) {
+    const layer = config.layers[index];
+    if (!layer) {
+      player.pause();
+      player.removeAttribute('src');
+      player.load();
+      player.volume = 0;
+      return;
+    }
+    if (player.src !== layer.src) {
+      player.src = layer.src;
+      player.loop = true;
+      player.preload = 'auto';
+      player.volume = 0;
+    }
+  });
+
+  const results = await Promise.allSettled(ambientPlayers.map(function(player,index) {
+    if (!config.layers[index]) return Promise.resolve();
+    return player.play();
+  }));
+  const playable = results.some(function(result){ return result.status === 'fulfilled'; });
+  state.ambientPlaying = playable;
+  syncAmbientVolume();
+}
+
+function pauseAmbient() {
+  state.ambientPlaying = false;
+  fadeAmbientTo(ambientPlayers.map(function(){ return 0; }), 360);
+  setTimeout(function(){
+    if (!state.ambientPlaying) ambientPlayers.forEach(function(player){ player.pause(); });
+  }, 400);
+  updateAmbientUI();
+}
+
+function stopAmbient() {
+  state.ambientPlaying = false;
+  if (ambientFadeFrame) cancelAnimationFrame(ambientFadeFrame);
+  ambientPlayers.forEach(function(player) {
+    player.pause();
+    player.currentTime = 0;
+    player.volume = 0;
+  });
+  updateAmbientUI();
+}
+
+async function setAmbientPreset(preset, autoplay) {
+  state.ambientPreset = AMBIENT_PRESETS[preset] ? preset : 'off';
+  localStorage.setItem('fm_ambient', state.ambientPreset);
+  if (dom.ambientSelect) dom.ambientSelect.value = state.ambientPreset;
+  if (state.ambientPreset === 'off') {
+    stopAmbient();
+    return;
+  }
+  updateAmbientUI();
+  if (autoplay) await startAmbient();
+}
+
+dom.ambientSelect.addEventListener('change', function() {
+  setAmbientPreset(dom.ambientSelect.value, true);
+});
+
+dom.ambientVolume.addEventListener('input', function() {
+  state.ambientVolume = clamp(parseInt(dom.ambientVolume.value,10) || 0, 0, 100);
+  localStorage.setItem('fm_ambient_volume', String(state.ambientVolume));
+  syncAmbientVolume();
+});
+
+dom.ambientAttenuateToggle.addEventListener('change', function() {
+  state.ambientAttenuate = !!dom.ambientAttenuateToggle.checked;
+  setBool('fm_ambient_attenuate', state.ambientAttenuate);
+  syncAmbientVolume();
+});
+
+dom.ambientPill.addEventListener('click', function() {
+  if (state.ambientPlaying) pauseAmbient();
+  else startAmbient();
+});
+
+ambientPlayers.forEach(function(player) {
+  player.addEventListener('error', function() {
+    console.warn('[Flowmodoro] Ambient audio source unavailable:', player.currentSrc || player.src);
+  });
+});
+
 
 const SESSION_LABELS = {
   work: function(){ return t('timer.focusTime'); },
@@ -533,6 +740,7 @@ function setMode(mode) {
   if (mode !== 'work') state.breakTipIndex = Math.floor(Math.random() * 4);
   updateModeTabs();
   updateTimerUI(true);
+  syncAmbientVolume();
   persistSession();
 }
 
@@ -550,6 +758,8 @@ function startTimer() {
   state.intervalId = setInterval(tick, 250);
   markAsUsed();
   if (state.currentMode === 'work') enterFocusMode();
+  if (state.ambientPreset !== 'off' && !state.ambientPlaying) startAmbient();
+  else syncAmbientVolume();
   acquireWakeLock();
   persistSession();
   updateTimerUI();
@@ -591,6 +801,7 @@ function tick() {
     state.intervalId = null;
     state.endTime = null;
     releaseWakeLock();
+    if (state.ambientPlaying) fadeAmbientTo(ambientTargetVolumes().map(function(v){ return v * 0.22; }), 700);
     handleSessionEnd(false);
   }
 }
@@ -1320,6 +1531,11 @@ function init() {
   renderToday();
   renderProgress();
   updateTimerUI(true);
+  dom.ambientSelect.value = state.ambientPreset;
+  dom.ambientVolume.value = String(state.ambientVolume);
+  dom.ambientVolumeValue.textContent = state.ambientVolume + '%';
+  dom.ambientAttenuateToggle.checked = state.ambientAttenuate;
+  updateAmbientUI();
   document.body.appendChild(dom.focusPopover);
 
   if (state.isRunning) {
