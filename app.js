@@ -248,7 +248,7 @@ const dom = {
   spotifyLink1Label: $('spotifyLink1Label'), spotifyLink2Label: $('spotifyLink2Label'), spotifyLink3Label: $('spotifyLink3Label'),
   tabWork: $('tab-work'), tabShort: $('tab-short'), tabLong: $('tab-long'),
   tabWorkDuration: $('tabWorkDuration'), tabShortDuration: $('tabShortDuration'), tabLongDuration: $('tabLongDuration'),
-  durationQuickBtn: $('durationQuickBtn'),
+  timerSettingsBtn: $('timerSettingsBtn'), timerSettingsSection: $('timerSettingsSection'),
   sessionLabel: $('sessionLabel'), breakTip: $('breakTip'), startBtn: $('startBtn'), resetBtn: $('resetBtn'),
   focusSessionCycle: $('focusSessionCycle'), focusExitBtn: $('focusExitBtn'), viewFlip: $('viewFlip'),
   focusPill: $('focusPill'), focusPillText: $('focusPillText'), focusPillProgress: $('focusPillProgress'),
@@ -287,7 +287,9 @@ function applyTranslations() {
     el.label = t(el.getAttribute('data-i18n-label'));
   });
   document.querySelectorAll('[data-i18n-aria]').forEach(function(el) {
-    el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
+    const value = t(el.getAttribute('data-i18n-aria'));
+    el.setAttribute('aria-label', value);
+    if (el.hasAttribute('title')) el.setAttribute('title', value);
   });
   dom.html.lang = state.lang;
   updateNotificationButton();
@@ -414,10 +416,11 @@ function closeSettings() {
 [dom.moreBtn,dom.bottomMoreBtn].filter(Boolean).forEach(function(btn) {
   btn.addEventListener('click', openSettings);
 });
-dom.durationQuickBtn.addEventListener('click', function() {
+dom.timerSettingsBtn.addEventListener('click', function() {
   openSettings();
   requestAnimationFrame(function() {
-    dom.setWork.focus();
+    if (dom.timerSettingsSection) dom.timerSettingsSection.scrollIntoView({ block:'start', behavior:'smooth' });
+    dom.setWork.focus({ preventScroll:true });
     dom.setWork.select();
   });
 });
