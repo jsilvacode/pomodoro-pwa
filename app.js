@@ -208,7 +208,6 @@ const state = {
   ambientPlaying: false,
   tasks: safeGetJSON('fm_tasks', []).map(normalizeTask).filter(function(t){ return t.text; }),
   activeTaskId: localStorage.getItem('fm_activeTask') || null,
-  taskFilter: 'all',
   history: safeGetJSON('fm_history', []).map(normalizeHistory).filter(Boolean),
   pendingNextMode: null,
   breakTipIndex: 0
@@ -233,11 +232,9 @@ const dom = {
   body: document.body,
   navbar: $('navbar'),
   timerSection: $('timer-section'),
-  themeToggle: $('themeToggle'), sunIcon: $('sunIcon'), moonIcon: $('moonIcon'),
-  langToggle: $('langToggle'), langLabel: $('langLabel'), languagePreference: $('languagePreference'),
-  installBtn: $('installBtn'), installDrawerBtn: $('installDrawerBtn'),
-  hamburger: $('hamburger'), mobileMenu: $('mobileMenu'),
-  moreBtn: $('moreBtn'), mobileMoreBtn: $('mobileMoreBtn'), bottomMoreBtn: $('bottomMoreBtn'),
+  languagePreference: $('languagePreference'),
+  installDrawerBtn: $('installDrawerBtn'),
+  moreBtn: $('moreBtn'), bottomMoreBtn: $('bottomMoreBtn'),
   settingsBtn: $('settingsBtn'), settingsPanel: $('settingsPanel'), settingsBackdrop: $('settingsBackdrop'), settingsCloseBtn: $('settingsCloseBtn'),
   setWork: $('setWork'), setShort: $('setShort'), setLong: $('setLong'), soundToggle: $('soundToggle'),
   autoBreakToggle: $('autoBreakToggle'), autoFocusToggle: $('autoFocusToggle'), wakeLockToggle: $('wakeLockToggle'),
@@ -296,7 +293,6 @@ function applyTranslations() {
 function setLang(lang) {
   state.lang = lang === 'en' ? 'en' : 'es';
   localStorage.setItem('fm_lang', state.lang);
-  if (dom.langLabel) dom.langLabel.textContent = state.lang === 'es' ? 'EN' : 'ES';
   if (dom.languagePreference) dom.languagePreference.value = state.lang;
   applyTranslations();
   updateTimerUI(true);
@@ -317,8 +313,6 @@ function resolveTheme(preference) {
 function setThemeUI(theme) {
   state.effectiveTheme = theme;
   dom.html.setAttribute('data-theme', theme);
-  if (dom.sunIcon) dom.sunIcon.style.display = theme === 'dark' ? 'block' : 'none';
-  if (dom.moonIcon) dom.moonIcon.style.display = theme === 'light' ? 'block' : 'none';
 }
 
 function applyThemePreference(preference, persist) {
@@ -379,18 +373,6 @@ function validateActiveTask() {
   }
 }
 
-if (dom.langToggle) {
-  dom.langToggle.addEventListener('click', function() {
-    setLang(state.lang === 'es' ? 'en' : 'es');
-  });
-}
-
-if (dom.themeToggle) {
-  dom.themeToggle.addEventListener('click', function() {
-    applyThemePreference(state.effectiveTheme === 'light' ? 'dark' : 'light', true);
-  });
-}
-
 if (dom.languagePreference) {
   dom.languagePreference.addEventListener('change', function() {
     setLang(dom.languagePreference.value);
@@ -426,7 +408,7 @@ function closeSettings() {
   if (!focusMode) dom.body.style.overflow = '';
 }
 
-[dom.settingsBtn,dom.moreBtn,dom.mobileMoreBtn,dom.bottomMoreBtn].filter(Boolean).forEach(function(btn) {
+[dom.settingsBtn,dom.moreBtn,dom.bottomMoreBtn].filter(Boolean).forEach(function(btn) {
   btn.addEventListener('click', openSettings);
 });
 dom.settingsCloseBtn.addEventListener('click', closeSettings);
@@ -1482,10 +1464,16 @@ document.addEventListener('keydown', function(event) {
 });
 
 let deferredInstallPrompt = null;
+const isiOSDevice = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+if (isiOSDevice && dom.installDrawerBtn) {
+  dom.installDrawerBtn.hidden = false;
+}
+
 window.addEventListener('beforeinstallprompt', function(event) {
   event.preventDefault();
   deferredInstallPrompt = event;
-  if (dom.installBtn) dom.installBtn.style.display = 'flex';
+  if (dom.installDrawerBtn) dom.installDrawerBtn.hidden = false;
 });
 
 async function triggerInstall() {
@@ -1493,15 +1481,17 @@ async function triggerInstall() {
     deferredInstallPrompt.prompt();
     try { await deferredInstallPrompt.userChoice; } catch (error) {}
     deferredInstallPrompt = null;
-    if (dom.installBtn) dom.installBtn.style.display = 'none';
+    if (dom.installDrawerBtn) dom.installDrawerBtn.hidden = true;
     return;
   }
-  const isiOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  if (isiOS) window.alert(t('install.ios'));
+  if (isiOSDevice) window.alert(t('install.ios'));
 }
 
-[dom.installBtn,dom.installDrawerBtn].filter(Boolean).forEach(function(btn){ btn.addEventListener('click', triggerInstall); });
-window.addEventListener('appinstalled', function(){ deferredInstallPrompt = null; if (dom.installBtn) dom.installBtn.style.display = 'none'; });
+if (dom.installDrawerBtn) dom.installDrawerBtn.addEventListener('click', triggerInstall);
+window.addEventListener('appinstalled', function(){
+  deferredInstallPrompt = null;
+  if (dom.installDrawerBtn) dom.installDrawerBtn.hidden = true;
+});
 
 let refreshing = false;
 async function registerServiceWorker() {
@@ -1574,7 +1564,10 @@ function setupNavigationState() {
 
 function init() {
   const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-  if (standalone) dom.body.classList.add('standalone-app');
+  if (standalone) {
+    dom.body.classList.add('standalone-app');
+    if (dom.installDrawerBtn) dom.installDrawerBtn.hidden = true;
+  }
 
   applyThemePreference(state.themePreference, false);
   setLang(state.lang);
