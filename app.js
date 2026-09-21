@@ -12,7 +12,7 @@ const TRANSLATIONS = {
     'hero.badge':'✨ Tu flujo de trabajo perfecto','hero.title1':'Trabaja mejor,','hero.title2':'descansa mejor.',
     'hero.subtitle':'Usa la técnica Pomodoro para potenciar tu productividad con intervalos de trabajo y descanso que respetan tu cerebro.',
     'hero.cta':'Empezar ahora','hero.learn':'¿Qué es Pomodoro?','hero.stat1':'min de enfoque','hero.stat2':'min de descanso','hero.stat3':'y descansas 15 min',
-    'timer.work':'Trabajo','timer.short':'Descanso corto','timer.long':'Descanso largo','timer.start':'Iniciar','timer.pause':'Pausar',
+    'timer.work':'Trabajo','timer.short':'Descanso corto','timer.long':'Descanso largo','timer.start':'Iniciar','timer.pause':'Pausar','timer.adjustTimes':'Ajustar tiempos',
     'timer.focusTime':'Tiempo de enfoque','timer.shortBreak':'Descanso corto','timer.longBreak':'Descanso largo',
     'timer.done.work':'Sesión de foco completada.','timer.done.short':'Descanso terminado.','timer.done.long':'Descanso largo terminado.',
     'timer.done.work.task':'Foco completado · 🍅 {act}/{est} · {task}','timer.done.work.taskComplete':'Tarea completada · {task}',
@@ -57,7 +57,7 @@ const TRANSLATIONS = {
     'ambient.spotifySection':'Playlists en Spotify','ambient.spotifyExternal':'Se abren en Spotify',
     'ambient.volume':'Volumen','ambient.attenuate':'Atenuar durante descansos',
     'ambient.note':'Los ambientes usan grabaciones CC0 y pueden quedar disponibles en caché después de reproducirse.',
-    'ambient.paused':'Pausado','ambient.playing':'Reproduciendo',
+    'ambient.paused':'Pausado','ambient.playing':'Reproduciendo','ambient.play':'Reproducir ambiente','ambient.pause':'Pausar ambiente',
     'break.tip1':'Levántate un momento.','break.tip2':'Mira a distancia y descansa la vista.','break.tip3':'Toma agua.','break.tip4':'Respira y cambia de postura.'
   },
   en: {
@@ -66,7 +66,7 @@ const TRANSLATIONS = {
     'hero.badge':'✨ Your perfect workflow','hero.title1':'Work smarter,','hero.title2':'rest better.',
     'hero.subtitle':'Use the Pomodoro technique with focused work and recovery intervals that respect your attention.',
     'hero.cta':'Get started','hero.learn':'What is Pomodoro?','hero.stat1':'min of focus','hero.stat2':'min of rest','hero.stat3':'then 15 min break',
-    'timer.work':'Work','timer.short':'Short break','timer.long':'Long break','timer.start':'Start','timer.pause':'Pause',
+    'timer.work':'Work','timer.short':'Short break','timer.long':'Long break','timer.start':'Start','timer.pause':'Pause','timer.adjustTimes':'Adjust times',
     'timer.focusTime':'Focus time','timer.shortBreak':'Short break','timer.longBreak':'Long break',
     'timer.done.work':'Focus session completed.','timer.done.short':'Break finished.','timer.done.long':'Long break finished.',
     'timer.done.work.task':'Focus completed · 🍅 {act}/{est} · {task}','timer.done.work.taskComplete':'Task completed · {task}',
@@ -111,7 +111,7 @@ const TRANSLATIONS = {
     'ambient.spotifySection':'Spotify playlists','ambient.spotifyExternal':'Opens in Spotify',
     'ambient.volume':'Volume','ambient.attenuate':'Lower during breaks',
     'ambient.note':'Ambient presets use CC0 recordings and may remain cached after first playback.',
-    'ambient.paused':'Paused','ambient.playing':'Playing',
+    'ambient.paused':'Paused','ambient.playing':'Playing','ambient.play':'Play ambience','ambient.pause':'Pause ambience',
     'break.tip1':'Stand up for a moment.','break.tip2':'Look into the distance and rest your eyes.','break.tip3':'Drink some water.','break.tip4':'Breathe and change posture.'
   }
 };
@@ -242,10 +242,13 @@ const dom = {
   ambientVolume: $('ambientVolume'), ambientVolumeValue: $('ambientVolumeValue'),
   ambientAttenuateToggle: $('ambientAttenuateToggle'), ambientPill: $('ambientPill'),
   ambientPillName: $('ambientPillName'), ambientPillState: $('ambientPillState'),
+  ambientPlayBtn: $('ambientPlayBtn'), ambientPlayIcon: $('ambientPlayIcon'),
   ambientAudioPrimary: $('ambientAudioPrimary'), ambientAudioSecondary: $('ambientAudioSecondary'),
   soundPopover: $('soundPopover'), soundPopoverClose: $('soundPopoverClose'),
   spotifyLink1Label: $('spotifyLink1Label'), spotifyLink2Label: $('spotifyLink2Label'), spotifyLink3Label: $('spotifyLink3Label'),
   tabWork: $('tab-work'), tabShort: $('tab-short'), tabLong: $('tab-long'),
+  tabWorkDuration: $('tabWorkDuration'), tabShortDuration: $('tabShortDuration'), tabLongDuration: $('tabLongDuration'),
+  durationQuickBtn: $('durationQuickBtn'),
   sessionLabel: $('sessionLabel'), breakTip: $('breakTip'), startBtn: $('startBtn'), resetBtn: $('resetBtn'),
   focusSessionCycle: $('focusSessionCycle'), focusExitBtn: $('focusExitBtn'), viewFlip: $('viewFlip'),
   focusPill: $('focusPill'), focusPillText: $('focusPillText'), focusPillProgress: $('focusPillProgress'),
@@ -411,6 +414,13 @@ function closeSettings() {
 [dom.moreBtn,dom.bottomMoreBtn].filter(Boolean).forEach(function(btn) {
   btn.addEventListener('click', openSettings);
 });
+dom.durationQuickBtn.addEventListener('click', function() {
+  openSettings();
+  requestAnimationFrame(function() {
+    dom.setWork.focus();
+    dom.setWork.select();
+  });
+});
 dom.settingsCloseBtn.addEventListener('click', closeSettings);
 dom.settingsBackdrop.addEventListener('click', closeSettings);
 document.querySelectorAll('[data-drawer-close]').forEach(function(el){ el.addEventListener('click', closeSettings); });
@@ -431,6 +441,7 @@ dom.saveSettings.addEventListener('click', function() {
   setBool('fm_auto_focus', state.autoStartFocus);
   setBool('fm_wake_lock', state.keepAwake);
   applyThemePreference(dom.themePreference.value, true);
+  updateModeTabs();
   if (!state.isRunning) {
     state.timeLeft = state.durations[state.currentMode] * 60;
     state.totalTime = state.timeLeft;
@@ -512,11 +523,14 @@ function updateAmbientUI() {
   const active = state.ambientPreset !== 'off';
 
   dom.ambientPillName.textContent = active ? t(config.labelKey) : t('ambient.sound');
-  dom.ambientPillState.textContent = dom.soundPopover && !dom.soundPopover.hidden
-    ? '⌃'
-    : (active && state.ambientPlaying ? 'Ⅱ' : '▾');
+  dom.ambientPillState.textContent = dom.soundPopover && !dom.soundPopover.hidden ? '⌃' : '▾';
   dom.ambientPill.classList.toggle('sound-active', active);
   dom.ambientPill.setAttribute('aria-expanded', dom.soundPopover && !dom.soundPopover.hidden ? 'true' : 'false');
+  dom.ambientPlayBtn.hidden = !active;
+  dom.ambientPlayIcon.textContent = state.ambientPlaying ? 'Ⅱ' : '▶';
+  dom.ambientPlayBtn.classList.toggle('playing', state.ambientPlaying);
+  dom.ambientPlayBtn.setAttribute('aria-label', state.ambientPlaying ? t('ambient.pause') : t('ambient.play'));
+  dom.ambientPlayBtn.title = state.ambientPlaying ? t('ambient.pause') : t('ambient.play');
   dom.ambientPill.setAttribute('aria-label',
     active
       ? (state.ambientPlaying ? t('ambient.playing') : t('ambient.paused')) + ' · ' + t(config.labelKey)
@@ -588,6 +602,9 @@ async function startAmbient() {
     return player.play();
   }));
   state.ambientPlaying = results.some(function(result){ return result.status === 'fulfilled'; });
+  if (!state.ambientPlaying) {
+    console.warn('[Flowmodoro] Ambient playback could not start. A user gesture may be required.', results);
+  }
   syncAmbientVolume();
   return state.ambientPlaying;
 }
@@ -653,6 +670,15 @@ function closeSoundPopover() {
 dom.ambientPill.addEventListener('click', function() {
   if (dom.soundPopover.hidden) openSoundPopover();
   else closeSoundPopover();
+});
+
+dom.ambientPlayBtn.addEventListener('click', async function() {
+  if (state.ambientPreset === 'off') {
+    openSoundPopover();
+    return;
+  }
+  if (state.ambientPlaying) pauseAmbient();
+  else await startAmbient();
 });
 
 dom.soundPopoverClose.addEventListener('click', closeSoundPopover);
@@ -772,6 +798,9 @@ function updateModeTabs() {
   dom.tabWork.classList.toggle('active', state.currentMode === 'work');
   dom.tabShort.classList.toggle('active', state.currentMode === 'short');
   dom.tabLong.classList.toggle('active', state.currentMode === 'long');
+  dom.tabWorkDuration.textContent = state.durations.work + ' min';
+  dom.tabShortDuration.textContent = state.durations.short + ' min';
+  dom.tabLongDuration.textContent = state.durations.long + ' min';
 }
 
 function updatePomoDotsUI() {
@@ -970,7 +999,8 @@ function enterFocusMode() {
   dom.tabShort.disabled = true;
   dom.tabLong.disabled = true;
   setThemeUI('dark');
-  if (dom.timerSection) dom.timerSection.scrollIntoView({ behavior:'auto', block:'start' });
+  closeFocusPopover();
+  closeSoundPopover();
 }
 
 function exitFocusMode() {
@@ -1456,7 +1486,7 @@ document.addEventListener('keydown', function(event) {
   } else if (event.key.toLowerCase() === 'f') {
     focusMode ? exitFocusMode() : enterFocusMode();
   } else if (event.key.toLowerCase() === 'n') {
-    document.getElementById('tasks-section').scrollIntoView({ behavior:'smooth', block:'start' });
+    scrollToAnchorTarget(document.getElementById('tasks-section'));
     setTimeout(function(){ dom.taskInput.focus(); },350);
   } else if (event.key === '?') {
     openShortcuts();
