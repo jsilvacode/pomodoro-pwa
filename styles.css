@@ -4771,3 +4771,614 @@ body.focus-mode .focus-control-unit {
     font-size: 0.68rem;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   FLOWMODORO v4 — APP SHELL
+   One viewport · state transitions · calm spatial continuity
+═══════════════════════════════════════════════════════════ */
+
+:root {
+  --shell-top: var(--nav-height);
+  --shell-bottom: 0px;
+}
+
+.app-shell-body {
+  width: 100%;
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.legacy-landing,
+.legacy-section {
+  display: none !important;
+}
+
+/* Navbar belongs to the shell, not to document scroll. */
+.app-shell-body .navbar {
+  box-shadow: none;
+}
+
+.app-home-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.nav-link.active {
+  color: var(--accent);
+  background: var(--accent-subtle);
+}
+
+/* Views overlap and transform rather than causing document scroll. */
+.app-view {
+  position: fixed;
+  z-index: 10;
+  top: var(--shell-top);
+  right: 0;
+  bottom: var(--shell-bottom);
+  left: 0;
+  width: 100%;
+  min-height: 0 !important;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(8px) scale(0.995);
+  filter: blur(3px);
+  transition:
+    opacity 360ms var(--ease-premium),
+    transform 560ms var(--ease-premium),
+    filter 480ms var(--ease-premium),
+    visibility 0s linear 560ms,
+    background-color 650ms var(--ease-premium);
+}
+
+.app-view.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+  transition-delay: 0s;
+}
+
+/* FOCUS: mathematically centered in the viewport, not in document flow. */
+.app-view-focus {
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 2.6vw, 2.5rem);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 48%, color-mix(in srgb, var(--accent) 5%, transparent), transparent 42%),
+    var(--bg-primary);
+}
+
+.app-view-focus > .section-parallax__bg {
+  display: none;
+}
+
+.app-view-focus > .container {
+  width: min(100%, 1080px);
+  height: 100%;
+  max-width: 1080px;
+  display: grid;
+  place-items: center;
+  transform: translateY(calc((var(--shell-bottom) - var(--shell-top)) / 2));
+}
+
+.app-view-focus .timer-card {
+  width: min(100%, 820px);
+  max-width: 820px;
+  min-width: 0;
+  margin: 0;
+  padding: clamp(1rem, 2.4vh, 1.6rem) clamp(1rem, 2vw, 1.4rem);
+}
+
+/* Reduce clutter around the clock in the normal Focus view. */
+.app-shell-body .timer-task-focus,
+.app-shell-body .pomo-counter {
+  display: none;
+}
+
+.timer-active-task {
+  max-width: min(90%, 460px);
+  margin: 0.7rem auto 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.timer-active-task[hidden] {
+  display: none;
+}
+
+.app-view-focus .mode-tabs {
+  margin-bottom: clamp(1rem, 2.2vh, 1.45rem);
+}
+
+.app-view-focus .timer-session-label {
+  margin-top: clamp(0.8rem, 1.8vh, 1.2rem);
+}
+
+.app-view-focus .timer-action-zone {
+  margin-top: clamp(0.9rem, 2vh, 1.35rem);
+}
+
+.app-view-focus .sound-dock {
+  margin-bottom: 0.65rem;
+}
+
+/* Session preparation is the same central surface changing state. */
+.focus-prep {
+  position: absolute;
+  z-index: 24;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--bg-primary) 97%, transparent);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: scale(0.985);
+  filter: blur(4px);
+  transition:
+    opacity 420ms var(--ease-premium),
+    transform 650ms var(--ease-premium),
+    filter 560ms var(--ease-premium),
+    visibility 0s linear 650ms,
+    background-color 650ms var(--ease-premium);
+}
+
+.focus-prep.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: scale(1);
+  filter: blur(0);
+  transition-delay: 70ms, 30ms, 30ms, 0s, 0s;
+}
+
+.focus-prep-inner {
+  width: min(100%, 510px);
+  text-align: center;
+}
+
+.focus-prep-kicker,
+.flow-dialog-kicker {
+  display: block;
+  margin-bottom: 0.55rem;
+  color: var(--accent);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.focus-prep h2,
+.flow-dialog-header h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+
+.focus-prep p,
+.flow-dialog-intro {
+  max-width: 42rem;
+  margin: 0.8rem auto 0;
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  line-height: 1.7;
+}
+
+.focus-prep-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.5rem;
+}
+
+/* TODAY is the only content view allowed to scroll. */
+.app-view-today {
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(2rem, 5vh, 3.5rem) 1.25rem 4rem;
+  background: var(--bg-primary);
+  scrollbar-gutter: stable;
+}
+
+.app-view-today > .section-parallax__bg {
+  display: none;
+}
+
+.app-view-today > .container {
+  max-width: 760px;
+}
+
+.app-view-today .section-header {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.app-view-today .section-badge {
+  display: none;
+}
+
+.app-view-today .section-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+}
+
+.app-view-today .section-subtitle {
+  margin-left: 0;
+}
+
+/* Dialog system: same surface, transformed rather than hard-swapped. */
+.flow-dialog {
+  width: min(720px, calc(100vw - 2rem));
+  max-height: min(82dvh, 760px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--border-interactive);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--bg-surface) 98%, transparent);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-xl);
+  opacity: 0;
+  transform: translateY(8px) scale(0.985);
+  filter: blur(3px);
+  transition:
+    opacity 320ms var(--ease-premium),
+    transform 520ms var(--ease-premium),
+    filter 420ms var(--ease-premium),
+    overlay 320ms allow-discrete,
+    display 320ms allow-discrete;
+}
+
+.flow-dialog[open] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+@starting-style {
+  .flow-dialog[open] {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+    filter: blur(3px);
+  }
+}
+
+.flow-dialog::backdrop {
+  background: rgba(10,9,8,0.38);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 360ms var(--ease-premium), backdrop-filter 420ms var(--ease-premium);
+}
+
+.flow-dialog[open]::backdrop {
+  opacity: 1;
+}
+
+.flow-dialog-shell {
+  padding: clamp(1.2rem, 3vw, 2rem);
+  overflow-y: auto;
+  max-height: inherit;
+}
+
+.flow-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.flow-dialog-close {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--surface-interactive);
+  color: var(--text-muted);
+}
+
+.flow-dialog-close:hover {
+  border-color: var(--border-interactive);
+  color: var(--accent);
+  background: var(--accent-subtle);
+}
+
+/* Planner */
+.planner-add {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: 0.55rem;
+  margin-top: 1.35rem;
+}
+
+.planner-task-list {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 1rem;
+}
+
+.planner-empty {
+  padding: 2rem 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  font-size: 0.82rem;
+}
+
+.planner-task-row {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 54px;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  transition:
+    background-color var(--motion-fast) var(--ease-standard),
+    border-color var(--motion-fast) var(--ease-standard);
+}
+
+.planner-task-row:hover {
+  background: var(--surface-hover);
+}
+
+.planner-task-row.selected {
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border));
+  background: var(--accent-subtle);
+}
+
+.planner-task-select {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.planner-radio {
+  color: var(--accent);
+  font-size: 0.75rem;
+}
+
+.planner-task-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.planner-estimate {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.planner-estimate button {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-control);
+  color: var(--text-secondary);
+}
+
+.planner-estimate button:hover:not(:disabled) {
+  background: var(--accent-subtle);
+  color: var(--accent);
+}
+
+.flow-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  margin-top: 1.35rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Guide modal: one-read comprehension. */
+.guide-dialog {
+  width: min(820px, calc(100vw - 2rem));
+}
+
+.guide-modal-sequence {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  margin-top: 1.6rem;
+  padding-block: 1rem;
+  border-block: 1px solid var(--border);
+}
+
+.guide-modal-sequence > div {
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.guide-modal-sequence span {
+  color: var(--text-muted);
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+}
+
+.guide-modal-sequence strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 4vw, 2.4rem);
+  font-weight: 400;
+}
+
+.guide-modal-sequence small {
+  color: var(--text-muted);
+  font-size: 0.64rem;
+}
+
+.guide-modal-notes {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.guide-modal-notes p {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
+.guide-modal-notes strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.support-dialog {
+  width: min(620px, calc(100vw - 2rem));
+}
+
+.support-dialog-actions {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 1.35rem;
+}
+
+/* More retains settings but is no longer mislabeled as only Settings. */
+.settings-drawer .drawer-header .settings-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Deep Focus remains full-screen and isolated from App Shell view switching. */
+body.focus-mode .app-view-focus {
+  top: 0;
+  bottom: 0;
+  z-index: 190;
+  padding: clamp(1rem, 3vw, 3rem);
+}
+
+body.focus-mode .app-view-focus > .container {
+  transform: none;
+}
+
+/* Choreography: environment retreats before the central timer settles. */
+body.focus-mode .mobile-bottom-nav {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition:
+    opacity 280ms var(--ease-premium) 80ms,
+    transform 420ms var(--ease-premium) 80ms,
+    visibility 0s linear 500ms;
+}
+
+.mobile-bottom-nav {
+  transition:
+    opacity 280ms var(--ease-premium),
+    transform 420ms var(--ease-premium),
+    background-color 320ms var(--ease-standard);
+}
+
+@media (max-width: 768px) {
+  :root {
+    --shell-bottom: calc(68px + env(safe-area-inset-bottom));
+  }
+
+  .app-view-today {
+    padding-bottom: 2rem;
+  }
+
+  .app-view-focus {
+    padding: 0.75rem;
+  }
+
+  .app-view-focus > .container {
+    transform: translateY(calc((var(--shell-bottom) - var(--shell-top)) / 2));
+  }
+
+  .app-view-focus .timer-card {
+    width: 100%;
+    padding-inline: 0.75rem;
+  }
+
+  .planner-add {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-dialog-actions {
+    flex-direction: column-reverse;
+  }
+
+  .flow-dialog-actions .btn-primary,
+  .flow-dialog-actions .btn-ghost {
+    width: 100%;
+  }
+
+  .guide-modal-sequence {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+
+  .guide-modal-notes {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .flow-dialog {
+    width: calc(100vw - 1rem);
+    max-height: calc(100dvh - 1rem);
+    border-radius: var(--radius-lg);
+  }
+
+  .flow-dialog-shell {
+    padding: 1rem;
+  }
+
+  .focus-prep-actions {
+    flex-direction: column;
+  }
+
+  .focus-prep-actions .btn-primary,
+  .focus-prep-actions .btn-ghost {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-view,
+  .focus-prep,
+  .flow-dialog,
+  .flow-dialog::backdrop {
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
