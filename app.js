@@ -52,6 +52,9 @@ const TRANSLATIONS = {
     'shortcuts.focus':'Entrar / salir de Focus','shortcuts.newTask':'Nueva tarea','shortcuts.help':'Ver atajos','shortcuts.escape':'Cerrar / salir',
     'install.ios':'En iPhone o iPad: abre Compartir en Safari y elige “Añadir a pantalla de inicio”.',
     'ambient.label':'Ambiente','ambient.off':'Sin audio','ambient.rain':'Lluvia suave','ambient.nightForest':'Bosque nocturno','ambient.cafe':'Café','ambient.campfire':'Fogata',
+    'ambient.spotifyGroup':'Spotify','ambient.localGroup':'Ambientes',
+    'ambient.spotify1':'Spotify · Playlist 1','ambient.spotify2':'Spotify · Playlist 2','ambient.spotify3':'Spotify · Playlist 3',
+    'ambient.spotifyNote':'Spotify gestiona el volumen desde su reproductor o desde tu dispositivo.',
     'ambient.volume':'Volumen','ambient.attenuate':'Atenuar durante descansos',
     'ambient.note':'Los ambientes usan grabaciones CC0 y pueden quedar disponibles en caché después de reproducirse.',
     'ambient.paused':'Pausado','ambient.playing':'Reproduciendo',
@@ -103,6 +106,9 @@ const TRANSLATIONS = {
     'shortcuts.focus':'Enter / exit Focus','shortcuts.newTask':'New task','shortcuts.help':'Show shortcuts','shortcuts.escape':'Close / exit',
     'install.ios':'On iPhone or iPad: open Share in Safari and choose “Add to Home Screen”.',
     'ambient.label':'Ambience','ambient.off':'No audio','ambient.rain':'Gentle rain','ambient.nightForest':'Night forest','ambient.cafe':'Café','ambient.campfire':'Campfire',
+    'ambient.spotifyGroup':'Spotify','ambient.localGroup':'Ambiences',
+    'ambient.spotify1':'Spotify · Playlist 1','ambient.spotify2':'Spotify · Playlist 2','ambient.spotify3':'Spotify · Playlist 3',
+    'ambient.spotifyNote':'Spotify volume is controlled from its player or from your device.',
     'ambient.volume':'Volume','ambient.attenuate':'Lower during breaks',
     'ambient.note':'Ambient presets use CC0 recordings and may remain cached after first playback.',
     'ambient.paused':'Paused','ambient.playing':'Playing',
@@ -240,6 +246,7 @@ const dom = {
   ambientAttenuateToggle: $('ambientAttenuateToggle'), ambientPill: $('ambientPill'),
   ambientPillName: $('ambientPillName'), ambientPillState: $('ambientPillState'),
   ambientAudioPrimary: $('ambientAudioPrimary'), ambientAudioSecondary: $('ambientAudioSecondary'),
+  ambientLocalControls: $('ambientLocalControls'), spotifyEmbedShell: $('spotifyEmbedShell'), spotifyEmbed: $('spotifyEmbed'),
   tabWork: $('tab-work'), tabShort: $('tab-short'), tabLong: $('tab-long'),
   sessionLabel: $('sessionLabel'), breakTip: $('breakTip'), startBtn: $('startBtn'), resetBtn: $('resetBtn'),
   focusSessionCycle: $('focusSessionCycle'), focusExitBtn: $('focusExitBtn'), viewFlip: $('viewFlip'),
@@ -275,6 +282,9 @@ function applyTranslations() {
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
     el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+  });
+  document.querySelectorAll('[data-i18n-label]').forEach(function(el) {
+    el.label = t(el.getAttribute('data-i18n-label'));
   });
   document.querySelectorAll('[data-i18n-aria]').forEach(function(el) {
     el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
@@ -458,15 +468,24 @@ dom.saveSettings.addEventListener('click', function() {
 });
 
 
+const SPOTIFY_PLAYLISTS = {
+  spotify1: 'https://open.spotify.com/playlist/0oZy1DMRofAqvOO9P4Z8qr',
+  spotify2: 'https://open.spotify.com/playlist/1YGk1NFAw8l9zPwHReImrY',
+  spotify3: 'https://open.spotify.com/playlist/1c62qIWEuYaRGAEYpFcZTs'
+};
+
 const AMBIENT_PRESETS = {
-  off: { labelKey:'ambient.off', layers:[] },
+  off: { type:'off', labelKey:'ambient.off', layers:[] },
+  spotify1: { type:'spotify', labelKey:'ambient.spotify1', url:SPOTIFY_PLAYLISTS.spotify1 },
+  spotify2: { type:'spotify', labelKey:'ambient.spotify2', url:SPOTIFY_PLAYLISTS.spotify2 },
+  spotify3: { type:'spotify', labelKey:'ambient.spotify3', url:SPOTIFY_PLAYLISTS.spotify3 },
   rain: {
+    type:'local',
     labelKey:'ambient.rain',
-    layers:[
-      { src:'https://cdn.freesound.org/previews/523/523405_8448725-hq.mp3', gain:1 }
-    ]
+    layers:[{ src:'https://cdn.freesound.org/previews/523/523405_8448725-hq.mp3', gain:1 }]
   },
   nightForest: {
+    type:'local',
     labelKey:'ambient.nightForest',
     layers:[
       { src:'https://cdn.freesound.org/previews/181/181801_3153523-hq.mp3', gain:0.42 },
@@ -474,24 +493,36 @@ const AMBIENT_PRESETS = {
     ]
   },
   cafe: {
+    type:'local',
     labelKey:'ambient.cafe',
-    layers:[
-      { src:'https://cdn.freesound.org/previews/370/370973_5835751-hq.mp3', gain:0.88 }
-    ]
+    layers:[{ src:'https://cdn.freesound.org/previews/370/370973_5835751-hq.mp3', gain:0.88 }]
   },
   campfire: {
+    type:'local',
     labelKey:'ambient.campfire',
-    layers:[
-      { src:'https://cdn.freesound.org/previews/681/681366_5752443-hq.mp3', gain:0.92 }
-    ]
+    layers:[{ src:'https://cdn.freesound.org/previews/681/681366_5752443-hq.mp3', gain:0.92 }]
   }
 };
 
 const ambientPlayers = [dom.ambientAudioPrimary, dom.ambientAudioSecondary].filter(Boolean);
 let ambientFadeFrame = null;
+let spotifyIframeAPI = null;
+let spotifyController = null;
+let spotifyControllerPromise = null;
+let spotifyLoadedPreset = null;
 
 function ambientPresetConfig() {
   return AMBIENT_PRESETS[state.ambientPreset] || AMBIENT_PRESETS.off;
+}
+
+function isSpotifyPreset(preset) {
+  const config = AMBIENT_PRESETS[preset || state.ambientPreset];
+  return !!config && config.type === 'spotify';
+}
+
+function isLocalAmbientPreset(preset) {
+  const config = AMBIENT_PRESETS[preset || state.ambientPreset];
+  return !!config && config.type === 'local';
 }
 
 function ambientModeFactor() {
@@ -500,6 +531,7 @@ function ambientModeFactor() {
 
 function ambientTargetVolumes() {
   const config = ambientPresetConfig();
+  if (config.type !== 'local') return ambientPlayers.map(function(){ return 0; });
   const master = state.ambientVolume / 100;
   const factor = ambientModeFactor();
   return ambientPlayers.map(function(player,index) {
@@ -508,17 +540,32 @@ function ambientTargetVolumes() {
   });
 }
 
+function getSpotifyDisplayName(preset) {
+  const option = document.querySelector('#ambientSelect option[value="' + preset + '"]');
+  return option ? option.textContent : t(AMBIENT_PRESETS[preset].labelKey);
+}
+
+function updateAmbientControlsVisibility() {
+  const spotify = isSpotifyPreset();
+  dom.spotifyEmbedShell.hidden = !spotify;
+  dom.ambientLocalControls.hidden = spotify || state.ambientPreset === 'off';
+}
+
 function updateAmbientUI() {
   const config = ambientPresetConfig();
   const active = state.ambientPreset !== 'off';
   dom.ambientPill.hidden = !active;
-  dom.ambientPillName.textContent = active ? t(config.labelKey) : t('ambient.off');
+  dom.ambientPillName.textContent = active
+    ? (config.type === 'spotify' ? getSpotifyDisplayName(state.ambientPreset) : t(config.labelKey))
+    : t('ambient.off');
   dom.ambientPillState.textContent = state.ambientPlaying ? 'Ⅱ' : '▶';
   dom.ambientPill.setAttribute('aria-pressed', state.ambientPlaying ? 'true' : 'false');
-  dom.ambientPill.setAttribute('aria-label',
-    (state.ambientPlaying ? t('ambient.playing') : t('ambient.paused')) + ' · ' + t(config.labelKey)
+  dom.ambientPill.setAttribute(
+    'aria-label',
+    (state.ambientPlaying ? t('ambient.playing') : t('ambient.paused')) + ' · ' + dom.ambientPillName.textContent
   );
   dom.ambientVolumeValue.textContent = state.ambientVolume + '%';
+  updateAmbientControlsVisibility();
 }
 
 function fadeAmbientTo(targets, duration) {
@@ -540,20 +587,27 @@ function fadeAmbientTo(targets, duration) {
 }
 
 function syncAmbientVolume() {
-  if (!state.ambientPlaying) {
-    fadeAmbientTo(ambientPlayers.map(function(){ return 0; }), 260);
-  } else {
-    fadeAmbientTo(ambientTargetVolumes(), 520);
+  if (!isLocalAmbientPreset()) {
+    updateAmbientUI();
+    return;
   }
+  if (!state.ambientPlaying) fadeAmbientTo(ambientPlayers.map(function(){ return 0; }), 260);
+  else fadeAmbientTo(ambientTargetVolumes(), 520);
   updateAmbientUI();
 }
 
-async function startAmbient() {
+function stopLocalAmbient(reset) {
+  if (ambientFadeFrame) cancelAnimationFrame(ambientFadeFrame);
+  ambientPlayers.forEach(function(player) {
+    player.pause();
+    if (reset !== false) player.currentTime = 0;
+    player.volume = 0;
+  });
+}
+
+async function startLocalAmbient() {
   const config = ambientPresetConfig();
-  if (!config.layers.length) {
-    stopAmbient();
-    return;
-  }
+  if (config.type !== 'local') return false;
 
   ambientPlayers.forEach(function(player,index) {
     const layer = config.layers[index];
@@ -576,42 +630,172 @@ async function startAmbient() {
     if (!config.layers[index]) return Promise.resolve();
     return player.play();
   }));
-  const playable = results.some(function(result){ return result.status === 'fulfilled'; });
-  state.ambientPlaying = playable;
+  state.ambientPlaying = results.some(function(result){ return result.status === 'fulfilled'; });
   syncAmbientVolume();
+  return state.ambientPlaying;
+}
+
+function ensureSpotifyController() {
+  if (spotifyController) return Promise.resolve(spotifyController);
+  if (spotifyControllerPromise) return spotifyControllerPromise;
+  if (!spotifyIframeAPI || !dom.spotifyEmbed) return Promise.resolve(null);
+
+  spotifyControllerPromise = new Promise(function(resolve) {
+    const initialUrl = isSpotifyPreset() ? ambientPresetConfig().url : SPOTIFY_PLAYLISTS.spotify1;
+    spotifyIframeAPI.createController(
+      dom.spotifyEmbed,
+      { width:'100%', height:'152', url:initialUrl },
+      function(controller) {
+        spotifyController = controller;
+        spotifyLoadedPreset = isSpotifyPreset() ? state.ambientPreset : 'spotify1';
+
+        controller.addListener('playback_started', function() {
+          if (isSpotifyPreset()) {
+            state.ambientPlaying = true;
+            updateAmbientUI();
+          }
+        });
+
+        controller.addListener('playback_update', function(event) {
+          if (!isSpotifyPreset() || !event || !event.data) return;
+          state.ambientPlaying = !event.data.isPaused;
+          updateAmbientUI();
+        });
+
+        resolve(controller);
+      }
+    );
+  });
+
+  return spotifyControllerPromise;
+}
+
+async function loadSpotifyPreset(preset) {
+  const config = AMBIENT_PRESETS[preset];
+  if (!config || config.type !== 'spotify') return null;
+  dom.spotifyEmbedShell.hidden = false;
+  const controller = await ensureSpotifyController();
+  if (!controller) return null;
+  if (spotifyLoadedPreset !== preset) {
+    controller.loadEntity(config.url);
+    spotifyLoadedPreset = preset;
+  }
+  return controller;
+}
+
+async function startSpotify() {
+  const controller = await loadSpotifyPreset(state.ambientPreset);
+  if (!controller) {
+    state.ambientPlaying = false;
+    updateAmbientUI();
+    return false;
+  }
+  try {
+    controller.resume();
+    return true;
+  } catch (error) {
+    console.warn('[Flowmodoro] Spotify playback requires user interaction in this browser.', error);
+    state.ambientPlaying = false;
+    updateAmbientUI();
+    return false;
+  }
+}
+
+function pauseSpotify() {
+  if (spotifyController) {
+    try { spotifyController.pause(); } catch (error) {}
+  }
+  state.ambientPlaying = false;
+  updateAmbientUI();
+}
+
+async function startAmbient() {
+  if (state.ambientPreset === 'off') {
+    stopAmbient();
+    return false;
+  }
+  if (isSpotifyPreset()) {
+    stopLocalAmbient(false);
+    return startSpotify();
+  }
+  if (spotifyController) {
+    try { spotifyController.pause(); } catch (error) {}
+  }
+  return startLocalAmbient();
 }
 
 function pauseAmbient() {
+  if (isSpotifyPreset()) {
+    pauseSpotify();
+    return;
+  }
   state.ambientPlaying = false;
   fadeAmbientTo(ambientPlayers.map(function(){ return 0; }), 360);
   setTimeout(function(){
-    if (!state.ambientPlaying) ambientPlayers.forEach(function(player){ player.pause(); });
+    if (!state.ambientPlaying && isLocalAmbientPreset()) {
+      ambientPlayers.forEach(function(player){ player.pause(); });
+    }
   }, 400);
   updateAmbientUI();
 }
 
 function stopAmbient() {
   state.ambientPlaying = false;
-  if (ambientFadeFrame) cancelAnimationFrame(ambientFadeFrame);
-  ambientPlayers.forEach(function(player) {
-    player.pause();
-    player.currentTime = 0;
-    player.volume = 0;
-  });
+  stopLocalAmbient(true);
+  if (spotifyController) {
+    try { spotifyController.pause(); } catch (error) {}
+  }
   updateAmbientUI();
 }
 
 async function setAmbientPreset(preset, autoplay) {
-  state.ambientPreset = AMBIENT_PRESETS[preset] ? preset : 'off';
+  const next = AMBIENT_PRESETS[preset] ? preset : 'off';
+  const previousWasSpotify = isSpotifyPreset(state.ambientPreset);
+
+  if (previousWasSpotify && spotifyController) {
+    try { spotifyController.pause(); } catch (error) {}
+  }
+  stopLocalAmbient(false);
+  state.ambientPlaying = false;
+  state.ambientPreset = next;
   localStorage.setItem('fm_ambient', state.ambientPreset);
   if (dom.ambientSelect) dom.ambientSelect.value = state.ambientPreset;
-  if (state.ambientPreset === 'off') {
-    stopAmbient();
-    return;
-  }
+
   updateAmbientUI();
+
+  if (state.ambientPreset === 'off') return;
+  if (isSpotifyPreset()) await loadSpotifyPreset(state.ambientPreset);
   if (autoplay) await startAmbient();
 }
+
+async function hydrateSpotifyLabels() {
+  const entries = Object.entries(SPOTIFY_PLAYLISTS);
+  await Promise.all(entries.map(async function(entry) {
+    const preset = entry[0];
+    const url = entry[1];
+    const option = document.querySelector('#ambientSelect option[value="' + preset + '"]');
+    if (!option) return;
+    try {
+      const response = await fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(url));
+      if (!response.ok) return;
+      const data = await response.json();
+      if (!data || !data.title) return;
+      option.textContent = data.title;
+      if (state.ambientPreset === preset) updateAmbientUI();
+    } catch (error) {
+      // Fallback labels remain usable when oEmbed is blocked or offline.
+    }
+  }));
+}
+
+window.onSpotifyIframeApiReady = function(IFrameAPI) {
+  spotifyIframeAPI = IFrameAPI;
+  if (isSpotifyPreset()) {
+    ensureSpotifyController().then(function(){
+      if (state.ambientPlaying) startSpotify();
+    });
+  }
+};
 
 dom.ambientSelect.addEventListener('change', function() {
   setAmbientPreset(dom.ambientSelect.value, true);
@@ -639,7 +823,6 @@ ambientPlayers.forEach(function(player) {
     console.warn('[Flowmodoro] Ambient audio source unavailable:', player.currentSrc || player.src);
   });
 });
-
 
 const SESSION_LABELS = {
   work: function(){ return t('timer.focusTime'); },
@@ -758,8 +941,15 @@ function startTimer() {
   state.intervalId = setInterval(tick, 250);
   markAsUsed();
   if (state.currentMode === 'work') enterFocusMode();
-  if (state.ambientPreset !== 'off' && !state.ambientPlaying) startAmbient();
-  else syncAmbientVolume();
+  if (state.ambientPreset !== 'off') {
+    if (isSpotifyPreset()) {
+      if (state.currentMode === 'work' && !state.ambientPlaying) startAmbient();
+    } else if (!state.ambientPlaying) {
+      startAmbient();
+    } else {
+      syncAmbientVolume();
+    }
+  }
   acquireWakeLock();
   persistSession();
   updateTimerUI();
@@ -801,7 +991,10 @@ function tick() {
     state.intervalId = null;
     state.endTime = null;
     releaseWakeLock();
-    if (state.ambientPlaying) fadeAmbientTo(ambientTargetVolumes().map(function(v){ return v * 0.22; }), 700);
+    if (state.ambientPlaying) {
+      if (isSpotifyPreset()) pauseAmbient();
+      else fadeAmbientTo(ambientTargetVolumes().map(function(v){ return v * 0.22; }), 700);
+    }
     handleSessionEnd(false);
   }
 }
@@ -1536,6 +1729,7 @@ function init() {
   dom.ambientVolumeValue.textContent = state.ambientVolume + '%';
   dom.ambientAttenuateToggle.checked = state.ambientAttenuate;
   updateAmbientUI();
+  hydrateSpotifyLabels();
   document.body.appendChild(dom.focusPopover);
 
   if (state.isRunning) {
