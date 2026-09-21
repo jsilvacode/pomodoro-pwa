@@ -3258,3 +3258,17 @@ body.standalone-app .hero {
     font-size: 0.86rem;
   }
 }
+
+
+/* Inline task editing keeps administrative actions out of the main row. */
+.task-edit-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.4rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--accent);
+  outline: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+}
