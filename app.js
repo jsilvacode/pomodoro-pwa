@@ -39,15 +39,15 @@ const TRANSLATIONS = {
     'progress.weekSessions':'Sesiones esta semana','progress.weekMinutes':'Minutos de foco','progress.completedTasks':'Tareas completadas',
     'progress.estimateRatio':'Real / estimado','progress.history':'Historial reciente','progress.localOnly':'Tus datos permanecen en este dispositivo.',
     'progress.export':'Exportar','progress.empty':'Completa una sesión para empezar tu historial.',
-    'guide.badge':'📚 Técnica Pomodoro','guide.title':'¿Cómo funciona?',
-    'guide.subtitle':"Desarrollada por Francesco Cirillo a finales de los '80, la técnica Pomodoro alterna periodos de concentración y descanso.",
+    'guide.badge':'Técnica Pomodoro','guide.title':'Una cosa a la vez.',
+    'guide.subtitle':'Trabaja con intención, descansa antes de agotarte y vuelve con claridad.',
     'guide.cycle.work':'Trabajo profundo','guide.cycle.short':'Descanso corto','guide.cycle.repeat':'Repetir','guide.cycle.long':'Descanso largo',
     'guide.card1.title':'¿Por qué funciona?','guide.card1.text':'Los intervalos acotados ayudan a proteger la atención y reducen la fatiga de sostener foco continuo.',
     'guide.card2.title':'El origen del nombre','guide.card2.text':'Francesco Cirillo usaba un temporizador de cocina con forma de tomate cuando era estudiante.',
-    'guide.card3.title':'Tips para empezar','guide.card3.text':'Antes de iniciar, define una sola tarea. Si surge algo, anótalo y vuelve a tu intención.',
+    'guide.card3.title':'Para empezar','guide.card3.text':'Antes de iniciar, define una sola tarea. Si surge algo, anótalo y vuelve a tu intención.',
     'guide.card4.title':'Adáptalo a ti','guide.card4.text':'El estándar 25/5 es un punto de partida. Ajusta los tiempos hasta encontrar un ritmo sostenible.',
     'footer.tagline':'Tu flujo de trabajo perfecto.','footer.developed':'Desarrollado con ❤️ por Julio Silva',
-    'donation.badge':'Apoya el proyecto','donation.text':'Flowmodoro es gratuito y sin anuncios. Tu aporte ayuda a mantener su desarrollo.',
+    'donation.badge':'Apoya Flowmodoro','donation.title':'Si te sirve, puedes ayudar a que siga mejorando.','donation.text':'Tu aporte ayuda a sostener el desarrollo, probar nuevas ideas y cuidar cada detalle del producto.',
     'update.available':'Hay una nueva versión disponible.','update.action':'Actualizar',
     'shortcuts.title':'Atajos de teclado','shortcuts.toggle':'Iniciar / pausar','shortcuts.reset':'Reiniciar','shortcuts.modes':'Cambiar modo',
     'shortcuts.focus':'Entrar / salir de Focus','shortcuts.newTask':'Nueva tarea','shortcuts.help':'Ver atajos','shortcuts.escape':'Cerrar / salir',
@@ -93,15 +93,15 @@ const TRANSLATIONS = {
     'progress.weekSessions':'Sessions this week','progress.weekMinutes':'Focus minutes','progress.completedTasks':'Completed tasks',
     'progress.estimateRatio':'Actual / estimated','progress.history':'Recent history','progress.localOnly':'Your data stays on this device.',
     'progress.export':'Export','progress.empty':'Complete a session to start your history.',
-    'guide.badge':'📚 Pomodoro Technique','guide.title':'How does it work?',
-    'guide.subtitle':'Developed by Francesco Cirillo in the late 1980s, Pomodoro alternates focused work and recovery.',
+    'guide.badge':'Pomodoro Technique','guide.title':'One thing at a time.',
+    'guide.subtitle':'Work with intention, rest before fatigue, and return with clarity.',
     'guide.cycle.work':'Deep work','guide.cycle.short':'Short break','guide.cycle.repeat':'Repeat','guide.cycle.long':'Long break',
     'guide.card1.title':'Why does it work?','guide.card1.text':'Bounded intervals help protect attention and reduce the fatigue of sustaining focus continuously.',
     'guide.card2.title':'Where the name comes from','guide.card2.text':'Francesco Cirillo used a tomato-shaped kitchen timer while he was a student.',
-    'guide.card3.title':'Getting started','guide.card3.text':'Before starting, define one task. If something comes up, note it and return to your intention.',
+    'guide.card3.title':'Start here','guide.card3.text':'Before starting, define one task. If something comes up, note it and return to your intention.',
     'guide.card4.title':'Adapt it to you','guide.card4.text':'The 25/5 standard is a starting point. Adjust the times until you find a sustainable rhythm.',
     'footer.tagline':'Your perfect workflow.','footer.developed':'Developed with ❤️ by Julio Silva',
-    'donation.badge':'Support the project','donation.text':'Flowmodoro is free and ad-free. Your contribution helps keep development moving.',
+    'donation.badge':'Support Flowmodoro','donation.title':'If it helps you, you can help it keep improving.','donation.text':'Your support helps sustain development, test new ideas, and care for every detail of the product.',
     'update.available':'A new version is available.','update.action':'Update',
     'shortcuts.title':'Keyboard shortcuts','shortcuts.toggle':'Start / pause','shortcuts.reset':'Reset','shortcuts.modes':'Change mode',
     'shortcuts.focus':'Enter / exit Focus','shortcuts.newTask':'New task','shortcuts.help':'Show shortcuts','shortcuts.escape':'Close / exit',
@@ -1550,6 +1550,45 @@ class ParallaxController {
   }
 }
 
+
+function getAnchorOffset() {
+  const raw = getComputedStyle(dom.html).getPropertyValue('--nav-height');
+  const navHeight = parseFloat(raw) || 52;
+  return navHeight + 16;
+}
+
+function scrollToAnchorTarget(target, behavior) {
+  if (!target) return;
+  const top = target.getBoundingClientRect().top + window.scrollY - getAnchorOffset();
+  window.scrollTo({
+    top: Math.max(0, Math.round(top)),
+    behavior: behavior || (window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth')
+  });
+}
+
+document.addEventListener('click', function(event) {
+  const link = event.target.closest('a[href^="#"]');
+  if (!link) return;
+  const href = link.getAttribute('href');
+  if (!href || href === '#') return;
+  const target = document.getElementById(href.slice(1));
+  if (!target) return;
+
+  event.preventDefault();
+  if (dom.settingsPanel.classList.contains('open')) closeSettings();
+  closeFocusPopover();
+  closeSoundPopover();
+
+  scrollToAnchorTarget(target);
+  if (window.location.hash !== href) history.pushState(null, '', href);
+});
+
+window.addEventListener('popstate', function() {
+  if (!window.location.hash) return;
+  const target = document.getElementById(window.location.hash.slice(1));
+  if (target) requestAnimationFrame(function(){ scrollToAnchorTarget(target, 'auto'); });
+});
+
 function setupNavigationState() {
   const sections = ['timer-section','tasks-section'];
   const links = document.querySelectorAll('.mobile-bottom-link[href]');
@@ -1598,8 +1637,11 @@ function init() {
   }
 
   const usedBefore = localStorage.getItem('fm_has_used_app') === 'true';
-  if ((standalone || usedBefore) && !window.location.hash) {
-    requestAnimationFrame(function(){ dom.timerSection.scrollIntoView({ behavior:'auto', block:'start' }); });
+  if (window.location.hash) {
+    const target = document.getElementById(window.location.hash.slice(1));
+    if (target) requestAnimationFrame(function(){ scrollToAnchorTarget(target, 'auto'); });
+  } else if (standalone || usedBefore) {
+    requestAnimationFrame(function(){ scrollToAnchorTarget(dom.timerSection, 'auto'); });
   }
 
   setupNavigationState();
