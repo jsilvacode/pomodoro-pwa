@@ -7,7 +7,7 @@
 
 const TRANSLATIONS = {
   es: {
-    'nav.focus':'Foco','nav.today':'Hoy','nav.progress':'Progreso','nav.more':'Más',
+    'nav.focus':'Foco','nav.today':'Hoy','nav.progress':'Progreso','nav.more':'Más','nav.settings':'Ajustes',
     'nav.timer':'Timer','nav.tasks':'Tareas','nav.guide':'Guía Pomodoro','nav.install':'Instalar App','nav.support':'Apoyar proyecto',
     'hero.badge':'✨ Tu flujo de trabajo perfecto','hero.title1':'Trabaja mejor,','hero.title2':'descansa mejor.',
     'hero.subtitle':'Usa la técnica Pomodoro para potenciar tu productividad con intervalos de trabajo y descanso que respetan tu cerebro.',
@@ -19,7 +19,7 @@ const TRANSLATIONS = {
     'timer.focusTitle':'Enfocar en…','timer.focusChoose':'Elegir tarea','timer.focusQuickAdd':'+ Nueva tarea…','timer.focusCompleted':'Tarea completada',
     'focus.exit':'Salir del modo foco','focus.session':'Sesión de foco','focus.of':'de',
     'complete.kicker':'Sesión completada','complete.later':'Ahora no','complete.startBreak':'Iniciar descanso','complete.startFocus':'Iniciar foco',
-    'settings.title':'Preferencias','settings.timer':'Temporizador','settings.flow':'Flujo','settings.experience':'Experiencia',
+    'settings.title':'Ajustes','settings.timer':'Temporizador','settings.flow':'Flujo','settings.experience':'Experiencia',
     'settings.work':'Foco','settings.short':'Descanso corto','settings.long':'Descanso largo','settings.sound':'Aviso al terminar',
     'settings.autoBreak':'Iniciar descansos automáticamente','settings.autoFocus':'Iniciar siguiente foco automáticamente',
     'settings.wakeLock':'Mantener pantalla activa','settings.notifications':'Notificaciones','settings.enableNotifications':'Activar',
@@ -61,7 +61,7 @@ const TRANSLATIONS = {
     'break.tip1':'Levántate un momento.','break.tip2':'Mira a distancia y descansa la vista.','break.tip3':'Toma agua.','break.tip4':'Respira y cambia de postura.'
   },
   en: {
-    'nav.focus':'Focus','nav.today':'Today','nav.progress':'Progress','nav.more':'More',
+    'nav.focus':'Focus','nav.today':'Today','nav.progress':'Progress','nav.more':'More','nav.settings':'Settings',
     'nav.timer':'Timer','nav.tasks':'Tasks','nav.guide':'Pomodoro guide','nav.install':'Install App','nav.support':'Support project',
     'hero.badge':'✨ Your perfect workflow','hero.title1':'Work smarter,','hero.title2':'rest better.',
     'hero.subtitle':'Use the Pomodoro technique with focused work and recovery intervals that respect your attention.',
@@ -73,7 +73,7 @@ const TRANSLATIONS = {
     'timer.focusTitle':'Focus on…','timer.focusChoose':'Choose task','timer.focusQuickAdd':'+ New task…','timer.focusCompleted':'Task completed',
     'focus.exit':'Exit focus mode','focus.session':'Focus session','focus.of':'of',
     'complete.kicker':'Session completed','complete.later':'Not now','complete.startBreak':'Start break','complete.startFocus':'Start focus',
-    'settings.title':'Preferences','settings.timer':'Timer','settings.flow':'Flow','settings.experience':'Experience',
+    'settings.title':'Settings','settings.timer':'Timer','settings.flow':'Flow','settings.experience':'Experience',
     'settings.work':'Focus','settings.short':'Short break','settings.long':'Long break','settings.sound':'Completion sound',
     'settings.autoBreak':'Start breaks automatically','settings.autoFocus':'Start next focus automatically',
     'settings.wakeLock':'Keep screen awake','settings.notifications':'Notifications','settings.enableNotifications':'Enable',
@@ -235,7 +235,7 @@ const dom = {
   languagePreference: $('languagePreference'),
   installDrawerBtn: $('installDrawerBtn'),
   moreBtn: $('moreBtn'), bottomMoreBtn: $('bottomMoreBtn'),
-  settingsBtn: $('settingsBtn'), settingsPanel: $('settingsPanel'), settingsBackdrop: $('settingsBackdrop'), settingsCloseBtn: $('settingsCloseBtn'),
+  settingsPanel: $('settingsPanel'), settingsBackdrop: $('settingsBackdrop'), settingsCloseBtn: $('settingsCloseBtn'),
   setWork: $('setWork'), setShort: $('setShort'), setLong: $('setLong'), soundToggle: $('soundToggle'),
   autoBreakToggle: $('autoBreakToggle'), autoFocusToggle: $('autoFocusToggle'), wakeLockToggle: $('wakeLockToggle'),
   notificationBtn: $('notificationBtn'), themePreference: $('themePreference'), saveSettings: $('saveSettings'),
@@ -408,7 +408,7 @@ function closeSettings() {
   if (!focusMode) dom.body.style.overflow = '';
 }
 
-[dom.settingsBtn,dom.moreBtn,dom.bottomMoreBtn].filter(Boolean).forEach(function(btn) {
+[dom.moreBtn,dom.bottomMoreBtn].filter(Boolean).forEach(function(btn) {
   btn.addEventListener('click', openSettings);
 });
 dom.settingsCloseBtn.addEventListener('click', closeSettings);
