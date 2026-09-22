@@ -1,0 +1,24 @@
+{
+  "name": "pomodoro-pwa",
+  "version": "1.0.0",
+  "description": "Una aplicación web progresiva (PWA) premium basada en la técnica Pomodoro, con modo oscuro, soporte multiidioma y un gestor de tareas integrado con el timer (con estimación de pomodoros y foco por tarea).",
+  "main": "app.js",
+  "scripts": {
+    "dev": "npx serve .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsilvacode/pomodoro-pwa.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jsilvacode/pomodoro-pwa/issues"
+  },
+  "homepage": "https://github.com/jsilvacode/pomodoro-pwa#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
