@@ -1,10 +1,12 @@
-const CACHE_NAME = 'flowmodoro-v55';
+const CACHE_NAME = 'flowmodoro-v56';
 const AUDIO_CACHE_NAME = 'flowmodoro-audio-v1';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
+  './activity-overlay.css',
   './app.js',
+  './assets/cielo-violeta.webp',
   './manifest.json',
   './icons/icon.svg',
   './icons/icon-192.png',

@@ -10,7 +10,7 @@ const { randomUUID } = require('node:crypto');
 
 const source = fs.readFileSync(process.env.FLOWMODORO_SOURCE || path.join(__dirname, '..', 'app.js'), 'utf8');
 
-function createApp(saved = {}, start = Date.parse('2026-09-22T12:00:00Z')) {
+function createApp(saved = {}, start = Date.parse('2026-09-22T12:00:00Z'), browserLanguages = ['es-CL']) {
   let now = start;
   let acceptDiscard = true;
   let nextTimer = 0;
@@ -78,7 +78,7 @@ function createApp(saved = {}, start = Date.parse('2026-09-22T12:00:00Z')) {
     constructor(...args) { super(...(args.length ? args : [now])); }
     static now() { return now; }
   }
-  const navigator = { language: 'es-CL', userAgent: 'test' };
+  const navigator = { language: browserLanguages[0], languages: browserLanguages, userAgent: 'test' };
   const window = Object.assign(new Element(), {
     navigator, location: { hash: '' }, scrollY: 0, innerWidth: 1440, innerHeight: 900,
     matchMedia: q => ({ matches: q.includes('reduced-motion'), addEventListener() {} }),
@@ -124,7 +124,6 @@ test('paused session survives saving settings and reloading; new duration applie
   app.advance(73_000);
   app.run('pauseTimer(); openSettings()');
   app.el('setWork').value = '40';
-  app.el('themePreference').value = 'light';
   app.el('saveSettings').click();
   assert.equal(app.state().timeLeft, 1427);
   assert.equal(app.state().totalTime, 1500);
@@ -136,6 +135,29 @@ test('paused session survives saving settings and reloading; new duration applie
   assert.equal(loaded.state().history[0].durationMin, 25);
   loaded.run("transitionToPending(false); setMode('work')");
   assert.equal(loaded.state().timeLeft, 2400);
+});
+
+test('first visit follows browser language and stays dark even with a former light preference', () => {
+  const app = createApp({ fm_theme_preference: 'light' }, Date.parse('2026-09-22T12:00:00Z'), ['fr-FR', 'pt-BR']);
+  assert.equal(app.state().lang, 'pt');
+  assert.equal(app.run("t('home.title')"), 'Faça mais, com calma.');
+  assert.equal(app.document.documentElement.getAttribute('data-theme'), 'dark');
+  assert.equal(app.saved().fm_theme_preference, undefined);
+  assert.equal(app.saved().fm_lang, undefined);
+  assert.equal(createApp({}, app.now(), ['en-US']).state().lang, 'en');
+});
+
+test('language button cycles through three languages and preserves a manual choice', () => {
+  const app = createApp({}, Date.parse('2026-09-22T12:00:00Z'), ['pt-PT']);
+  assert.equal(app.el('languageToggleBtn').textContent, 'ESP');
+  app.el('languageToggleBtn').click();
+  assert.equal(app.state().lang, 'es');
+  assert.equal(app.el('languageToggleBtn').textContent, 'ENG');
+  app.el('languageToggleBtn').click();
+  assert.equal(app.state().lang, 'en');
+  assert.equal(app.el('languageToggleBtn').textContent, 'PT');
+  assert.equal(app.saved().fm_lang_override, 'true');
+  assert.equal(createApp(app.saved(), app.now(), ['es-CL']).state().lang, 'en');
 });
 
 test('finished session survives repeated reloads with zero seconds and the next break', () => {
