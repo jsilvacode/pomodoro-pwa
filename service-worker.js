@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flowmodoro-v53';
+const CACHE_NAME = 'flowmodoro-v54';
 const AUDIO_CACHE_NAME = 'flowmodoro-audio-v1';
 const ASSETS = [
   './',
@@ -6,6 +6,7 @@ const ASSETS = [
   './styles.css',
   './app.js',
   './manifest.json',
+  './icons/icon.svg',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './favicon.ico'
