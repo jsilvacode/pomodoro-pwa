@@ -34,7 +34,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Tenor+Sans&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -49,7 +49,7 @@
       <div class="nav-links">
         <button type="button" class="nav-link active" data-view-target="focus" data-i18n="nav.focus">Foco</button>
         <button type="button" class="nav-link" data-view-target="today" data-i18n="nav.today">Hoy</button>
-        <button type="button" class="nav-link" data-view-target="guide" data-i18n="nav.guide">Cómo funciona</button>
+        <button type="button" class="nav-link" data-view-target="guide" data-guide-quick="true" data-i18n="nav.guide" aria-haspopup="dialog">Guía</button>
         <button class="nav-link nav-more-btn" id="moreBtn" type="button" data-i18n="nav.settings">Ajustes</button>
       </div>
     </div>
@@ -62,6 +62,7 @@
         <h1 id="homeTitle" data-i18n="home.title">Una cosa a la vez.</h1>
         <p data-i18n="home.subtitle">Elige qué importa ahora o empieza sin tarea.</p>
       </div>
+      <button class="home-help-btn" id="guideQuickBtn" type="button" data-guide-quick="true" data-i18n="guide.quick.open" aria-haspopup="dialog">Cómo se usa</button>
     </section>
 
     <section class="integrated-workspace" aria-label="Espacio de trabajo" data-i18n-aria="home.workspace">
@@ -181,7 +182,35 @@
         </div>
 
         <div class="timer-action-zone">
-          <div class="sound-dock" id="soundDock">
+          <div class="timer-controls">
+            <button class="ctrl-btn ctrl-btn-primary" id="startBtn" type="button" aria-label="Iniciar">
+              <span class="timer-play-icon" id="timerPlayIcon" aria-hidden="true">▶</span>
+              <span class="timer-play-label" id="timerPlayLabel" data-i18n="timer.start">Iniciar</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="session-complete-card" id="sessionCompleteCard" hidden aria-live="polite">
+          <button class="session-complete-dismiss" id="dismissSessionBtn" type="button" aria-label="Cerrar">✕</button>
+          <span class="session-complete-kicker" data-i18n="complete.kicker">Sesión completada</span>
+          <strong class="session-complete-title" id="sessionCompleteTitle">25 min de foco</strong>
+          <span class="session-complete-task" id="sessionCompleteTask"></span>
+          <div class="session-complete-actions">
+            <button class="btn-primary" id="nextSessionBtn" type="button">Iniciar descanso</button>
+            <button class="btn-ghost" id="completeTaskBtn" type="button" data-i18n="complete.markTask" hidden>Marcar tarea terminada</button>
+            <button class="btn-ghost" id="laterSessionBtn" type="button" data-i18n="complete.later">Ahora no</button>
+          </div>
+        </div>
+
+        <button id="focusAudioToggleBtn" class="focus-audio-toggle" type="button" hidden aria-label="Reproducir ambiente" title="Reproducir ambiente">
+          <span aria-hidden="true">♫</span>
+        </button>
+
+        <!-- Exit immersive focus: pauses the timer, stops ambience and returns to the Focus view. -->
+        <button id="focusExitBtn" class="focus-exit-btn" type="button" aria-label="Pausar y salir del foco" data-i18n-aria="focus.exitRunning">✕</button>
+      </div>
+      <div class="focus-utility-bar" role="group" data-i18n-aria="timer.utilities" aria-label="Controles adicionales">
+        <div class="sound-dock" id="soundDock">
           <button class="ambient-pill" id="ambientPill" type="button" aria-haspopup="dialog" aria-expanded="false">
             <span class="ambient-pill-icon" aria-hidden="true">♫</span>
             <span class="ambient-pill-name" id="ambientPillName" data-i18n="ambient.sound">Sonido</span>
@@ -238,45 +267,17 @@
             </div>
           </div>
         </div>
-
-        <!-- Controls -->
-        <div class="timer-controls">
-          <button class="ctrl-btn ctrl-btn-ghost" id="resetBtn" aria-label="Reset">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/>
-            </svg>
-          </button>
-          <button class="ctrl-btn ctrl-btn-primary" id="startBtn" type="button" aria-label="Iniciar">
-            <span class="timer-play-icon" id="timerPlayIcon" aria-hidden="true">▶</span>
-            <span class="timer-play-label" id="timerPlayLabel" data-i18n="timer.start">Iniciar</span>
-          </button>
-          <button class="ctrl-btn ctrl-btn-ghost timer-settings-btn" id="timerSettingsBtn" type="button" data-i18n-aria="timer.adjustTimes" aria-label="Ajustar tiempos" title="Ajustar tiempos">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-              <circle cx="12" cy="12" r="3"/>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-            </svg>
-          </button>
-        </div>
-        </div>
-
-        <div class="session-complete-card" id="sessionCompleteCard" hidden aria-live="polite">
-          <button class="session-complete-dismiss" id="dismissSessionBtn" type="button" aria-label="Cerrar">✕</button>
-          <span class="session-complete-kicker" data-i18n="complete.kicker">Sesión completada</span>
-          <strong class="session-complete-title" id="sessionCompleteTitle">25 min de foco</strong>
-          <span class="session-complete-task" id="sessionCompleteTask"></span>
-          <div class="session-complete-actions">
-            <button class="btn-primary" id="nextSessionBtn" type="button">Iniciar descanso</button>
-            <button class="btn-ghost" id="completeTaskBtn" type="button" data-i18n="complete.markTask" hidden>Marcar tarea terminada</button>
-            <button class="btn-ghost" id="laterSessionBtn" type="button" data-i18n="complete.later">Ahora no</button>
-          </div>
-        </div>
-
-        <button id="focusAudioToggleBtn" class="focus-audio-toggle" type="button" hidden aria-label="Reproducir ambiente" title="Reproducir ambiente">
-          <span aria-hidden="true">♫</span>
+        <button class="ctrl-btn ctrl-btn-ghost" id="resetBtn" type="button" data-i18n-aria="timer.reset" aria-label="Reiniciar sesión" title="Reiniciar sesión">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/>
+          </svg>
         </button>
-
-        <!-- Exit immersive focus: pauses the timer, stops ambience and returns to the Focus view. -->
-        <button id="focusExitBtn" class="focus-exit-btn" type="button" aria-label="Pausar y salir del foco" data-i18n-aria="focus.exitRunning">✕</button>
+        <button class="ctrl-btn ctrl-btn-ghost timer-settings-btn" id="timerSettingsBtn" type="button" data-i18n-aria="timer.adjustTimes" aria-label="Ajustar tiempos" title="Ajustar tiempos">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
       </div>
     </div>
   </section>
@@ -299,13 +300,6 @@
         </button>
       </div>
 
-      <div class="today-strip" aria-label="Resumen de hoy">
-        <span class="today-strip-label" data-i18n="nav.today">Hoy</span>
-        <span><strong id="todaySessions">0</strong> <span data-i18n="today.sessions">sesiones</span></span>
-        <i>·</i>
-        <span><strong id="todayMinutes">0 min</strong> <span data-i18n="today.focus">en foco</span></span>
-      </div>
-
       <div class="task-input-row">
         <input
           type="text"
@@ -320,8 +314,14 @@
 
       <div class="task-list" id="taskList">
         <div class="task-empty" id="taskEmpty">
-          <p id="taskEmptyText" data-i18n="tasks.empty">No hay tareas aún. Agrega la primera.</p>
+          <p id="taskEmptyText" data-i18n="tasks.empty">Puedes empezar sin tarea. Si quieres, anota una aquí.</p>
         </div>
+      </div>
+
+      <div class="today-strip" data-i18n-aria="today.summary" aria-label="Resumen de hoy">
+        <span><strong id="todaySessions">0</strong> <span data-i18n="today.sessions">sesiones</span></span>
+        <i>·</i>
+        <span><strong id="todayMinutes">0 min</strong> <span data-i18n="today.focus">en foco</span></span>
       </div>
 
       <button class="clear-done-subtle" id="clearDoneBtn" type="button" data-i18n="tasks.clearDone" hidden>Limpiar completadas</button>
@@ -355,7 +355,7 @@
 
   <!-- Settings drawer -->
   <div class="drawer-backdrop" id="settingsBackdrop" hidden></div>
-  <aside class="settings-drawer" id="settingsPanel" aria-hidden="true" aria-labelledby="settingsTitle">
+  <aside class="settings-drawer" id="settingsPanel" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="settingsTitle">
     <div class="drawer-header">
       <div>
         <span class="drawer-eyebrow">Flowmodoro</span>
@@ -425,7 +425,7 @@
 
     <div class="drawer-section drawer-links">
       <button class="drawer-link" id="installDrawerBtn" type="button" data-i18n="nav.install" hidden>Instalar App</button>
-      <button class="drawer-link" id="guideDrawerBtn" type="button" data-i18n="nav.guide">Cómo funciona</button>
+      <button class="drawer-link" id="guideDrawerBtn" type="button" data-guide-quick="true" data-i18n="nav.guide" aria-haspopup="dialog">Guía</button>
       <button class="drawer-link" id="shortcutsBtn" type="button" data-i18n="shortcuts.title">Atajos de teclado</button>
       <button class="drawer-link" id="supportDrawerBtn" type="button" data-i18n="nav.support">Apoyar proyecto</button>
     </div>
@@ -532,9 +532,9 @@
   </main>
 
   <nav class="mobile-bottom-nav" aria-label="Navegación principal">
-    <button type="button" class="mobile-bottom-link active" data-view-target="focus"><span>◎</span><small data-i18n="nav.focus">Foco</small></button>
-    <button type="button" class="mobile-bottom-link" data-view-target="today"><span>✓</span><small data-i18n="nav.today">Hoy</small></button>
-    <button class="mobile-bottom-link" id="bottomMoreBtn" type="button"><span>•••</span><small data-i18n="nav.settings">Ajustes</small></button>
+    <button type="button" class="mobile-bottom-link active" data-view-target="focus"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/></svg></span><small data-i18n="nav.focus">Foco</small></button>
+    <button type="button" class="mobile-bottom-link" data-view-target="today"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8 12 2.5 2.5L16 9"/></svg></span><small data-i18n="nav.today">Hoy</small></button>
+    <button class="mobile-bottom-link" id="bottomMoreBtn" type="button"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="var(--bg-surface)"/><circle cx="15" cy="17" r="2" fill="var(--bg-surface)"/></svg></span><small data-i18n="nav.settings">Ajustes</small></button>
   </nav>
 
 
@@ -560,26 +560,40 @@
     </div>
   </dialog>
 
-  <dialog class="flow-dialog guide-dialog" id="guideDialog" aria-labelledby="guideDialogTitle">
+  <dialog class="flow-dialog guide-dialog" id="guideDialog" aria-labelledby="guideDialogTitle" aria-describedby="guideDialogIntro">
     <div class="flow-dialog-shell guide-dialog-shell">
       <header class="flow-dialog-header">
         <div>
-          <span class="flow-dialog-kicker" data-i18n="guide.badge">Técnica Pomodoro</span>
-          <h2 id="guideDialogTitle" data-i18n="guide.title">Un ritmo que se sostiene.</h2>
+          <span class="flow-dialog-kicker" data-i18n="guide.quick.badge">Guía rápida</span>
+          <h2 id="guideDialogTitle" data-i18n="guide.quick.title">Empieza en menos de un minuto.</h2>
         </div>
-        <button class="flow-dialog-close" id="guideDialogCloseBtn" type="button" aria-label="Cerrar">✕</button>
+        <button class="flow-dialog-close" id="guideDialogCloseBtn" type="button" data-i18n-aria="common.close" aria-label="Cerrar">✕</button>
       </header>
-      <p class="flow-dialog-intro" data-i18n="guide.subtitle">Trabaja con intención, descansa antes de agotarte y vuelve con claridad.</p>
-      <div class="guide-modal-sequence" aria-label="Ciclo Pomodoro">
-        <div><span>01</span><strong>25 min</strong><small data-i18n="guide.cycle.work">Trabajo profundo</small></div>
-        <div><span>02</span><strong>5 min</strong><small data-i18n="guide.cycle.short">Descanso corto</small></div>
-        <div><span>03</span><strong>×4</strong><small data-i18n="guide.cycle.repeat">Repetir</small></div>
-        <div><span>04</span><strong>15–30</strong><small data-i18n="guide.cycle.long">Descanso largo</small></div>
+      <p class="flow-dialog-intro" id="guideDialogIntro" data-i18n="guide.quick.subtitle">Una sesión puede empezar sin tarea y terminar con un descanso claro.</p>
+      <div class="guide-quick-steps">
+        <article class="guide-quick-step">
+          <span class="guide-quick-step-index">01</span>
+          <div>
+            <strong data-i18n="guide.quick.step1.title">Elige una tarea (opcional)</strong>
+            <p data-i18n="guide.quick.step1.text">Puedes seleccionar una tarea en Hoy o comenzar solo con el reloj.</p>
+          </div>
+        </article>
+        <article class="guide-quick-step">
+          <span class="guide-quick-step-index">02</span>
+          <div>
+            <strong data-i18n="guide.quick.step2.title">Inicia y pausa cuando lo necesites</strong>
+            <p data-i18n="guide.quick.step2.text">Pulsa Iniciar; el mismo botón pasa a Pausar y luego Reanudar. Salir de foco conserva el bloque.</p>
+          </div>
+        </article>
+        <article class="guide-quick-step">
+          <span class="guide-quick-step-index">03</span>
+          <div>
+            <strong data-i18n="guide.quick.step3.title">Descansa y sigue en Hoy</strong>
+            <p data-i18n="guide.quick.step3.text">Al terminar, inicia el descanso o pulsa Ahora no. Hoy guarda tus tareas y tu progreso.</p>
+          </div>
+        </article>
       </div>
-      <div class="guide-modal-notes">
-        <p><strong data-i18n="guide.card3.title">Para empezar</strong><span data-i18n="guide.card3.text">Antes de iniciar, define una sola tarea. Si surge algo, anótalo y vuelve a tu intención.</span></p>
-        <p><strong data-i18n="guide.card4.title">Adáptalo a ti</strong><span data-i18n="guide.card4.text">El estándar 25/5 es un punto de partida. Ajusta los tiempos hasta encontrar un ritmo sostenible.</span></p>
-      </div>
+      <a class="guide-deep-link" href="#guide-section" data-guide-editorial-link="true" data-i18n="guide.quick.editorialLink">Ver cómo funciona la técnica Pomodoro</a>
     </div>
   </dialog>
 
@@ -603,6 +617,7 @@
   <div class="update-toast" id="updateToast" hidden>
     <span data-i18n="update.available">Hay una nueva versión disponible.</span>
     <button id="updateAppBtn" type="button" data-i18n="update.action">Actualizar</button>
+    <button id="updateDismissBtn" type="button" data-i18n-aria="update.dismiss" aria-label="Cerrar aviso">×</button>
   </div>
 
   <dialog class="shortcuts-dialog" id="shortcutsDialog">

@@ -8,18 +8,18 @@
 const TRANSLATIONS = {
   es: {
     'nav.focus':'Foco','nav.today':'Hoy','nav.progress':'Progreso','nav.more':'Más','nav.settings':'Ajustes',
-    'nav.timer':'Timer','nav.tasks':'Tareas','nav.guide':'Cómo funciona','nav.install':'Instalar App','nav.support':'Apoyar proyecto',
+    'nav.timer':'Timer','nav.tasks':'Tareas','nav.guide':'Guía','nav.install':'Instalar App','nav.support':'Apoyar proyecto',
     'home.kicker':'TU ESPACIO DE FOCO','home.title':'Una cosa a la vez.','home.subtitle':'Elige qué importa ahora o empieza sin tarea.',
     'home.logo':'Flowmodoro · Inicio','home.workspace':'Espacio de trabajo',
     'hero.badge':'✨ Tu flujo de trabajo perfecto','hero.title1':'Trabaja mejor,','hero.title2':'descansa mejor.',
     'hero.subtitle':'Usa la técnica Pomodoro para potenciar tu productividad con intervalos de trabajo y descanso que respetan tu cerebro.',
     'hero.cta':'Empezar ahora','hero.learn':'¿Qué es Pomodoro?','hero.stat1':'min de enfoque','hero.stat2':'min de descanso','hero.stat3':'y descansas 15 min',
-    'timer.work':'Trabajo','timer.short':'Descanso corto','timer.long':'Descanso largo','timer.start':'Iniciar','timer.pause':'Pausar','timer.resume':'Reanudar','timer.adjustTimes':'Ajustar tiempos','timer.confirmDiscard':'¿Descartar el bloque en curso? El tiempo no registrado se perderá.','timer.confirmReset':'¿Reiniciar y descartar el bloque en curso? El tiempo no registrado se perderá.',
+    'timer.work':'Trabajo','timer.short':'Descanso corto','timer.long':'Descanso largo','timer.start':'Iniciar','timer.pause':'Pausar','timer.resume':'Reanudar','timer.reset':'Reiniciar sesión','timer.utilities':'Controles adicionales','timer.adjustTimes':'Ajustar tiempos','timer.confirmDiscard':'¿Descartar el bloque en curso? El tiempo no registrado se perderá.','timer.confirmReset':'¿Reiniciar y descartar el bloque en curso? El tiempo no registrado se perderá.',
     'timer.focusTime':'Tiempo de enfoque','timer.shortBreak':'Descanso corto','timer.longBreak':'Descanso largo',
     'timer.done.work':'Sesión de foco completada.','timer.done.short':'Descanso terminado.','timer.done.long':'Descanso largo terminado.',
     'timer.done.work.task':'Foco completado · 🍅 {act}/{est} · {task}','timer.done.work.taskComplete':'Tarea completada · {task}',
     'timer.focusTitle':'Enfocar en…','timer.focusChoose':'Elegir tarea','timer.focusQuickAdd':'+ Nueva tarea…','timer.focusCompleted':'Tarea completada',
-    'timer.currentTask':'Esta sesión · {task}','timer.nextTask':'Después · {task}','timer.nextChoose':'Elegir tarea para después','timer.changeNext':'Cambiar próxima tarea',
+    'timer.currentTask':'Esta sesión · {task}','timer.readyTask':'Próximo bloque · {task}','timer.nextTask':'Después · {task}','timer.nextChoose':'Elegir tarea para después','timer.changeNext':'Cambiar próxima tarea',
     'focus.exit':'Salir de foco y pausar','focus.exitRunning':'Pausar y salir del foco','focus.exitPaused':'Volver a tareas; sesión pausada','focus.session':'Sesión de foco','focus.of':'de','focus.timerControl':'Reloj','focus.soundControl':'Sonido',
     'prep.kicker':'Preparar sesión','prep.title':'¿Cómo quieres empezar?','prep.text':'Puedes organizar lo que harás o entrar directo al timer.','prep.tasks':'Preparar tareas','prep.timerOnly':'Solo usar el timer',
     'planner.title':'Tus tareas para este foco.','planner.text':'Agrega tareas, estima pomodoros y elige con cuál comenzar.','planner.placeholder':'Nueva tarea…','planner.start':'Comenzar foco','planner.empty':'Agrega una tarea o entra directo al timer.',
@@ -32,9 +32,9 @@ const TRANSLATIONS = {
     'settings.appearance':'Apariencia','settings.themeLabel':'Tema','settings.language':'Idioma','settings.advanced':'Avanzado',
     'settings.theme.system':'Sistema','settings.theme.light':'Claro','settings.theme.dark':'Oscuro',
     'settings.save':'Guardar cambios',
-    'today.sessions':'sesiones','today.focus':'en foco','today.tasks':'tareas','today.plan':'planificados','today.next':'Próxima tarea','today.returnFocus':'Ir al reloj','today.useInFocus':'Ir al reloj',
+    'today.sessions':'sesiones','today.focus':'en foco','today.tasks':'tareas','today.plan':'planificados','today.next':'Próxima tarea','today.returnFocus':'Ir al reloj','today.useInFocus':'Ir al reloj','today.summary':'Resumen de hoy',
     'tasks.badge':'Hoy','tasks.title':'¿Qué vas a hacer ahora?','tasks.subtitle':'Anota lo que harás y elige una prioridad.',
-    'tasks.placeholder':'Agregar nueva tarea...','tasks.add':'+ Agregar','tasks.empty':'No hay tareas aún. Agrega la primera.','tasks.empty.filter':'No hay tareas aquí.',
+    'tasks.placeholder':'Agregar nueva tarea...','tasks.add':'+ Agregar','tasks.empty':'Puedes empezar sin tarea. Si quieres, anota una aquí.','tasks.empty.filter':'No hay tareas aquí.',
     'tasks.noTask':'Sin tarea','tasks.filter.all':'Todas','tasks.filter.active':'Pendientes','tasks.filter.done':'Completadas',
     'tasks.clearDone':'Limpiar completadas','tasks.clearDone.confirm':'¿Seguro?','tasks.estimation':'Real / estimado',
     'tasks.delete':'Eliminar','tasks.focus':'Enfocar','tasks.unfocus':'Quitar foco','tasks.complete':'Marcar como completada','tasks.nextSessionNotice':'{next} se usará en el siguiente bloque.',
@@ -46,6 +46,7 @@ const TRANSLATIONS = {
     'progress.export':'Exportar','progress.empty':'Completa una sesión para empezar tu historial.',
     'guide.badge':'Técnica Pomodoro','guide.title':'Un ritmo que se sostiene.',
     'guide.subtitle':'Trabaja con intención, descansa antes de agotarte y vuelve con claridad.',
+    'guide.quick.badge':'Guía rápida','guide.quick.title':'Empieza en menos de un minuto.','guide.quick.subtitle':'Una sesión puede empezar sin tarea y terminar con un descanso claro.','guide.quick.open':'Cómo se usa','guide.quick.step1.title':'Elige una tarea (opcional)','guide.quick.step1.text':'Puedes seleccionar una tarea en Hoy o comenzar solo con el reloj.','guide.quick.step2.title':'Inicia y pausa cuando lo necesites','guide.quick.step2.text':'Pulsa Iniciar; el mismo botón pasa a Pausar y luego Reanudar. Salir de foco conserva el bloque.','guide.quick.step3.title':'Descansa y sigue en Hoy','guide.quick.step3.text':'Al terminar, inicia el descanso o pulsa Ahora no. Hoy guarda tus tareas y tu progreso.','guide.quick.editorialLink':'Ver cómo funciona la técnica Pomodoro',
     'guide.cycle.work':'Trabajo profundo','guide.cycle.short':'Descanso corto','guide.cycle.repeat':'Repetir','guide.cycle.long':'Descanso largo',
     'guide.card1.title':'¿Por qué funciona?','guide.card1.text':'Los intervalos acotados ayudan a proteger la atención y reducen la fatiga de sostener foco continuo.',
     'guide.card2.title':'El origen del nombre','guide.card2.text':'Francesco Cirillo usaba un temporizador de cocina con forma de tomate cuando era estudiante.',
@@ -53,7 +54,7 @@ const TRANSLATIONS = {
     'guide.card4.title':'Adáptalo a ti','guide.card4.text':'El estándar 25/5 es un punto de partida. Ajusta los tiempos hasta encontrar un ritmo sostenible.',
     'footer.tagline':'Tu flujo de trabajo perfecto.','footer.developed':'Desarrollado con ❤️ por Julio Silva',
     'donation.badge':'Apoya Flowmodoro','donation.title':'Si te sirve, puedes ayudar a que siga mejorando.','donation.text':'Tu aporte ayuda a sostener el desarrollo, probar nuevas ideas y cuidar cada detalle del producto.',
-    'update.available':'Hay una nueva versión disponible.','update.action':'Actualizar',
+    'update.available':'Hay una nueva versión disponible.','update.action':'Actualizar','update.dismiss':'Cerrar aviso','common.close':'Cerrar',
     'shortcuts.title':'Atajos de teclado','shortcuts.toggle':'Iniciar / pausar','shortcuts.reset':'Reiniciar','shortcuts.modes':'Cambiar modo',
     'shortcuts.focus':'Ir a Foco / salir de inmersión','shortcuts.newTask':'Nueva tarea','shortcuts.help':'Ver atajos','shortcuts.escape':'Cerrar / salir y pausar',
     'install.ios':'En iPhone o iPad: abre Compartir en Safari y elige “Añadir a pantalla de inicio”.',
@@ -67,18 +68,18 @@ const TRANSLATIONS = {
   },
   en: {
     'nav.focus':'Focus','nav.today':'Today','nav.progress':'Progress','nav.more':'More','nav.settings':'Settings',
-    'nav.timer':'Timer','nav.tasks':'Tasks','nav.guide':'How it works','nav.install':'Install App','nav.support':'Support project',
+    'nav.timer':'Timer','nav.tasks':'Tasks','nav.guide':'Guide','nav.install':'Install App','nav.support':'Support project',
     'home.kicker':'YOUR FOCUS SPACE','home.title':'One thing at a time.','home.subtitle':'Choose what matters now, or start without a task.',
     'home.logo':'Flowmodoro · Home','home.workspace':'Workspace',
     'hero.badge':'✨ Your perfect workflow','hero.title1':'Work smarter,','hero.title2':'rest better.',
     'hero.subtitle':'Use the Pomodoro technique with focused work and recovery intervals that respect your attention.',
     'hero.cta':'Get started','hero.learn':'What is Pomodoro?','hero.stat1':'min of focus','hero.stat2':'min of rest','hero.stat3':'then 15 min break',
-    'timer.work':'Work','timer.short':'Short break','timer.long':'Long break','timer.start':'Start','timer.pause':'Pause','timer.resume':'Resume','timer.adjustTimes':'Adjust times','timer.confirmDiscard':'Discard the current block? Unregistered time will be lost.','timer.confirmReset':'Reset and discard the current block? Unregistered time will be lost.',
+    'timer.work':'Work','timer.short':'Short break','timer.long':'Long break','timer.start':'Start','timer.pause':'Pause','timer.resume':'Resume','timer.reset':'Reset session','timer.utilities':'Additional controls','timer.adjustTimes':'Adjust times','timer.confirmDiscard':'Discard the current block? Unregistered time will be lost.','timer.confirmReset':'Reset and discard the current block? Unregistered time will be lost.',
     'timer.focusTime':'Focus time','timer.shortBreak':'Short break','timer.longBreak':'Long break',
     'timer.done.work':'Focus session completed.','timer.done.short':'Break finished.','timer.done.long':'Long break finished.',
     'timer.done.work.task':'Focus completed · 🍅 {act}/{est} · {task}','timer.done.work.taskComplete':'Task completed · {task}',
     'timer.focusTitle':'Focus on…','timer.focusChoose':'Choose task','timer.focusQuickAdd':'+ New task…','timer.focusCompleted':'Task completed',
-    'timer.currentTask':'This session · {task}','timer.nextTask':'Next · {task}','timer.nextChoose':'Choose a task for later','timer.changeNext':'Change next task',
+    'timer.currentTask':'This session · {task}','timer.readyTask':'Next block · {task}','timer.nextTask':'Next · {task}','timer.nextChoose':'Choose a task for later','timer.changeNext':'Change next task',
     'focus.exit':'Exit focus and pause','focus.exitRunning':'Pause and exit focus','focus.exitPaused':'Back to tasks; session paused','focus.session':'Focus session','focus.of':'of','focus.timerControl':'Timer','focus.soundControl':'Sound',
     'prep.kicker':'Prepare session','prep.title':'How do you want to start?','prep.text':'Organize what you will do or go straight to the timer.','prep.tasks':'Prepare tasks','prep.timerOnly':'Use timer only',
     'planner.title':'Your tasks for this focus.','planner.text':'Add tasks, estimate pomodoros, and choose where to begin.','planner.placeholder':'New task…','planner.start':'Start focus','planner.empty':'Add a task or go straight to the timer.',
@@ -91,9 +92,9 @@ const TRANSLATIONS = {
     'settings.appearance':'Appearance','settings.themeLabel':'Theme','settings.language':'Language','settings.advanced':'Advanced',
     'settings.theme.system':'System','settings.theme.light':'Light','settings.theme.dark':'Dark',
     'settings.save':'Save changes',
-    'today.sessions':'sessions','today.focus':'in focus','today.tasks':'tasks','today.plan':'planned','today.next':'Next task','today.returnFocus':'Go to timer','today.useInFocus':'Go to timer',
+    'today.sessions':'sessions','today.focus':'in focus','today.tasks':'tasks','today.plan':'planned','today.next':'Next task','today.returnFocus':'Go to timer','today.useInFocus':'Go to timer','today.summary':'Today summary',
     'tasks.badge':'Today','tasks.title':'What will you do now?','tasks.subtitle':'Write down your plan and choose one priority.',
-    'tasks.placeholder':'Add a new task...','tasks.add':'+ Add','tasks.empty':'No tasks yet. Add your first one.','tasks.empty.filter':'No tasks here.',
+    'tasks.placeholder':'Add a new task...','tasks.add':'+ Add','tasks.empty':'You can start without a task. If you want one, add it here.','tasks.empty.filter':'No tasks here.',
     'tasks.noTask':'No task','tasks.filter.all':'All','tasks.filter.active':'Pending','tasks.filter.done':'Completed',
     'tasks.clearDone':'Clear completed','tasks.clearDone.confirm':'Sure?','tasks.estimation':'Actual / estimated',
     'tasks.delete':'Delete','tasks.focus':'Focus','tasks.unfocus':'Remove focus','tasks.complete':'Mark as completed','tasks.nextSessionNotice':'{next} will be used in the next block.',
@@ -105,6 +106,7 @@ const TRANSLATIONS = {
     'progress.export':'Export','progress.empty':'Complete a session to start your history.',
     'guide.badge':'Pomodoro Technique','guide.title':'A rhythm you can keep.',
     'guide.subtitle':'Work with intention, rest before fatigue, and return with clarity.',
+    'guide.quick.badge':'Quick guide','guide.quick.title':'Start in under a minute.','guide.quick.subtitle':'A session can start without a task and end with a clear break.','guide.quick.open':'How it works','guide.quick.step1.title':'Choose a task (optional)','guide.quick.step1.text':'Select a task in Today, or start with the timer on its own.','guide.quick.step2.title':'Start and pause as needed','guide.quick.step2.text':'Press Start; the same button becomes Pause and then Resume. Exiting focus keeps the block.','guide.quick.step3.title':'Take a break and continue in Today','guide.quick.step3.text':'When it ends, start the break or choose Not now. Today keeps your tasks and progress.','guide.quick.editorialLink':'See how the Pomodoro technique works',
     'guide.cycle.work':'Deep work','guide.cycle.short':'Short break','guide.cycle.repeat':'Repeat','guide.cycle.long':'Long break',
     'guide.card1.title':'Why does it work?','guide.card1.text':'Bounded intervals help protect attention and reduce the fatigue of sustaining focus continuously.',
     'guide.card2.title':'Where the name comes from','guide.card2.text':'Francesco Cirillo used a tomato-shaped kitchen timer while he was a student.',
@@ -112,7 +114,7 @@ const TRANSLATIONS = {
     'guide.card4.title':'Adapt it to you','guide.card4.text':'The 25/5 standard is a starting point. Adjust the times until you find a sustainable rhythm.',
     'footer.tagline':'Your perfect workflow.','footer.developed':'Developed with ❤️ by Julio Silva',
     'donation.badge':'Support Flowmodoro','donation.title':'If it helps you, you can help it keep improving.','donation.text':'Your support helps sustain development, test new ideas, and care for every detail of the product.',
-    'update.available':'A new version is available.','update.action':'Update',
+    'update.available':'A new version is available.','update.action':'Update','update.dismiss':'Dismiss notice','common.close':'Close',
     'shortcuts.title':'Keyboard shortcuts','shortcuts.toggle':'Start / pause','shortcuts.reset':'Reset','shortcuts.modes':'Change mode',
     'shortcuts.focus':'Go to Focus / exit immersion','shortcuts.newTask':'New task','shortcuts.help':'Show shortcuts','shortcuts.escape':'Close / exit and pause',
     'install.ios':'On iPhone or iPad: open Share in Safari and choose “Add to Home Screen”.',
@@ -304,7 +306,7 @@ const dom = {
   timerActiveTask: $('timerActiveTask'),
   plannerDialog: $('sessionPlannerDialog'), plannerCloseBtn: $('plannerCloseBtn'), plannerTaskInput: $('plannerTaskInput'),
   plannerAddBtn: $('plannerAddBtn'), plannerTaskList: $('plannerTaskList'), plannerTimerOnlyBtn: $('plannerTimerOnlyBtn'), plannerStartBtn: $('plannerStartBtn'),
-  guideDrawerBtn: $('guideDrawerBtn'), guideDialog: $('guideDialog'), guideDialogCloseBtn: $('guideDialogCloseBtn'),
+  guideQuickBtn: $('guideQuickBtn'), guideDrawerBtn: $('guideDrawerBtn'), guideDialog: $('guideDialog'), guideDialogCloseBtn: $('guideDialogCloseBtn'),
   supportDrawerBtn: $('supportDrawerBtn'), supportDialog: $('supportDialog'), supportDialogCloseBtn: $('supportDialogCloseBtn'),
   languagePreference: $('languagePreference'),
   installDrawerBtn: $('installDrawerBtn'),
@@ -339,7 +341,7 @@ const dom = {
   weekSessions: $('weekSessions'), weekMinutes: $('weekMinutes'), weekChart: $('weekChart'),
   sessionHistory: $('sessionHistory'), exportHistoryBtn: $('exportHistoryBtn'),
   shortcutsBtn: $('shortcutsBtn'), shortcutsDialog: $('shortcutsDialog'), shortcutsCloseBtn: $('shortcutsCloseBtn'),
-  updateToast: $('updateToast'), updateAppBtn: $('updateAppBtn')
+  updateToast: $('updateToast'), updateAppBtn: $('updateAppBtn'), updateDismissBtn: $('updateDismissBtn')
 };
 
 function t(key, vars) {
@@ -557,6 +559,11 @@ function showAppView(view, options) {
 
 document.querySelectorAll('[data-view-target]').forEach(function(control) {
   control.addEventListener('click', function(event) {
+    if (control.dataset.guideQuick === 'true') {
+      event.preventDefault();
+      openGuideDialog(control);
+      return;
+    }
     event.preventDefault();
     showAppView(control.dataset.viewTarget);
   });
@@ -569,7 +576,9 @@ window.addEventListener('hashchange', function() {
   showAppView(resolveInitialView(), { keepHash:true, instant:true });
 });
 
+let settingsReturnFocus = null;
 function openSettings() {
+  settingsReturnFocus = document.activeElement;
   dom.setWork.value = state.durations.work;
   dom.setShort.value = state.durations.short;
   dom.setLong.value = state.durations.long;
@@ -584,14 +593,34 @@ function openSettings() {
   dom.settingsBackdrop.hidden = false;
   dom.body.style.overflow = 'hidden';
   updateNotificationButton();
+  dom.settingsCloseBtn.focus({ preventScroll:true });
 }
 
-function closeSettings() {
+function closeSettings(restoreFocus = true) {
   dom.settingsPanel.classList.remove('open');
   dom.settingsPanel.setAttribute('aria-hidden','true');
   dom.settingsBackdrop.hidden = true;
   if (!focusMode) dom.body.style.overflow = '';
+  const returnTarget = settingsReturnFocus;
+  settingsReturnFocus = null;
+  if (restoreFocus && returnTarget && typeof returnTarget.focus === 'function') returnTarget.focus({ preventScroll:true });
 }
+
+dom.settingsPanel.addEventListener('keydown', function(event) {
+  if (event.key !== 'Tab') return;
+  const controls = Array.from(dom.settingsPanel.querySelectorAll('button:not([disabled]):not([hidden]), input:not([disabled]), select:not([disabled]), a[href]'))
+    .filter(function(el) { return el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden'; });
+  if (!controls.length) return;
+  const first = controls[0];
+  const last = controls[controls.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+});
 
 [dom.moreBtn,dom.bottomMoreBtn].filter(Boolean).forEach(function(btn) {
   btn.addEventListener('click', openSettings);
@@ -1494,6 +1523,9 @@ function renderFocusUI() {
     const taskText = timerTask ? timerTask.text : t('tasks.noTask');
     const progress = sessionTask ? ' · 🍅 ' + sessionTask.actPomos + '/' + sessionTask.estPomos : '';
     dom.timerActiveTask.textContent = t('timer.currentTask', { task:taskText }) + progress;
+  } else if (activeTask) {
+    dom.timerActiveTask.hidden = false;
+    dom.timerActiveTask.textContent = t('timer.readyTask', { task:activeTask.text });
   } else {
     dom.timerActiveTask.hidden = true;
     dom.timerActiveTask.textContent = '';
@@ -1715,11 +1747,13 @@ function renderTasks() {
     const item = document.createElement('div');
     item.className = 'task-item' + (task.id === state.activeTaskId ? ' active-task' : '') + (task.done ? ' done' : '');
     item.dataset.id = task.id;
-    const focusLabel = task.id === state.activeTaskId ? t('tasks.unfocus') : t('tasks.focus');
+    const isActive = task.id === state.activeTaskId;
+    const focusLabel = isActive ? t('tasks.unfocus') : t('tasks.focus');
     item.innerHTML =
       '<button class="task-check" data-action="toggle" aria-pressed="' + task.done + '" aria-label="' + escapeHtml(t('tasks.complete')) + '">' + (task.done ? '✓' : '') + '</button>' +
-      '<span class="task-text" data-action="focus" role="button" tabindex="0">' + escapeHtml(task.text) + '</span>' +
+      '<span class="task-text">' + escapeHtml(task.text) + '</span>' +
       '<div class="pomo-badge" title="' + escapeHtml(t('tasks.estimation')) + '"><span class="pomo-count">🍅 ' + task.actPomos + '/' + task.estPomos + '</span></div>' +
+      '<button class="task-focus-control' + (isActive ? ' is-active' : '') + '" data-action="focus" type="button" aria-pressed="' + isActive + '" aria-label="' + escapeHtml(focusLabel + ': ' + task.text) + '" title="' + escapeHtml(focusLabel) + '"' + (task.done ? ' disabled' : '') + '>' + escapeHtml(focusLabel) + '</button>' +
       '<div class="task-actions">' +
         '<button class="task-action-btn task-more-btn" data-action="more" aria-label="' + escapeHtml(t('nav.more')) + '">•••</button>' +
         '<div class="task-menu" hidden>' +
@@ -1803,8 +1837,13 @@ dom.taskList.addEventListener('click', function(event) {
     }
   } else if (action === 'focus') {
     if (!task.done) {
-      setActiveTask(task.id);
-      showAppView('focus');
+      const shouldRestoreFocus = item.contains(document.activeElement);
+      setActiveTask(state.activeTaskId === task.id ? null : task.id);
+      if (shouldRestoreFocus) {
+        const updated = Array.from(dom.taskList.querySelectorAll('.task-item')).find(function(row) { return row.dataset.id === task.id; });
+        const target = updated && updated.querySelector('.task-focus-control');
+        if (target) target.focus({ preventScroll:true });
+      }
     }
     return;
   } else if (action === 'edit') {
@@ -1830,13 +1869,6 @@ dom.taskList.addEventListener('click', function(event) {
   renderTasks();
   renderFocusUI();
   updateTaskSessionNotice();
-});
-
-dom.taskList.addEventListener('keydown', function(event) {
-  if ((event.key === 'Enter' || event.key === ' ') && event.target.classList.contains('task-text')) {
-    event.preventDefault();
-    event.target.click();
-  }
 });
 
 document.addEventListener('click', function(event) {
@@ -1961,19 +1993,46 @@ dom.exportHistoryBtn.addEventListener('click', function() {
 });
 
 
-function openGuideDialog() {
-  closeSettings();
-  showAppView('guide');
+let guideReturnFocus = null;
+function openGuideDialog(trigger) {
+  guideReturnFocus = trigger === dom.guideDrawerBtn
+    ? settingsReturnFocus || dom.moreBtn
+    : trigger && typeof trigger.focus === 'function' ? trigger : document.activeElement;
+  closeSettings(false);
+  setDialogOpen(dom.guideDialog, true);
+  window.requestAnimationFrame(function() {
+    if (dom.guideDialogCloseBtn) dom.guideDialogCloseBtn.focus();
+  });
 }
-function closeGuideDialog() { setDialogOpen(dom.guideDialog, false); }
+function closeGuideDialog() {
+  setDialogOpen(dom.guideDialog, false);
+  const returnTarget = guideReturnFocus;
+  guideReturnFocus = null;
+  if (returnTarget && typeof returnTarget.focus === 'function') returnTarget.focus();
+}
 function openSupportDialog() {
   closeSettings();
   showAppView('support');
 }
 function closeSupportDialog() { setDialogOpen(dom.supportDialog, false); }
 
-dom.guideDrawerBtn.addEventListener('click', openGuideDialog);
+if (dom.guideQuickBtn) dom.guideQuickBtn.addEventListener('click', function() { openGuideDialog(dom.guideQuickBtn); });
+dom.guideDrawerBtn.addEventListener('click', function() { openGuideDialog(dom.guideDrawerBtn); });
 dom.guideDialogCloseBtn.addEventListener('click', closeGuideDialog);
+if (dom.guideDialog) {
+  dom.guideDialog.addEventListener('close', function() {
+    if (!guideReturnFocus) return;
+    const returnTarget = guideReturnFocus;
+    guideReturnFocus = null;
+    if (typeof returnTarget.focus === 'function') returnTarget.focus();
+  });
+  const guideEditorialLink = dom.guideDialog.querySelector('[data-guide-editorial-link]');
+  if (guideEditorialLink) guideEditorialLink.addEventListener('click', function(event) {
+    event.preventDefault();
+    closeGuideDialog();
+    showAppView('guide');
+  });
+}
 dom.supportDrawerBtn.addEventListener('click', openSupportDialog);
 dom.supportDialogCloseBtn.addEventListener('click', closeSupportDialog);
 
@@ -2060,6 +2119,9 @@ if (dom.installDrawerBtn) dom.installDrawerBtn.addEventListener('click', trigger
 window.addEventListener('appinstalled', function(){
   deferredInstallPrompt = null;
   if (dom.installDrawerBtn) dom.installDrawerBtn.hidden = true;
+});
+if (dom.updateDismissBtn) dom.updateDismissBtn.addEventListener('click', function() {
+  if (dom.updateToast) dom.updateToast.hidden = true;
 });
 
 let refreshing = false;
