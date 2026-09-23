@@ -1,14 +1,15 @@
 /* ═══════════════════════════════════════════════════════════
    FLOWMODORO — Design System v3
-   Editorial premium · Crema/Cobre día · Obsidiana/Ámbar noche
+   Foco sereno · Crema/Cobre día · Azul noche/Ámbar
 ═══════════════════════════════════════════════════════════ */
 
 /* ─── Design tokens (Light — crema cálido) ─── */
 :root {
   /* Fuentes */
-  --font-display: 'Cormorant Garamond', serif;
-  --font-hero: 'Cormorant Garamond', serif;
-  --font-ui: 'Outfit', sans-serif;
+  --font-display: 'Manrope', sans-serif;
+  --font-hero: 'Manrope', sans-serif;
+  --font-ui: 'Manrope', sans-serif;
+  --font-brand: 'Cormorant Garamond', serif;
 
   /* Paleta base día (crema cálido) */
   --cream-50:  #FDFAF4;
@@ -105,18 +106,18 @@
 
 /* ─── Dark mode tokens ─── */
 [data-theme="dark"] {
-  --bg-primary:   #0E0D0C;
-  --bg-secondary: #141210;
-  --bg-surface:   #1C1916;
-  --bg-alt:       #181510;
-  --bg-card:      rgba(20, 18, 16, 0.92);
+  --bg-primary:   #0B1018;
+  --bg-secondary: #111722;
+  --bg-surface:   #18202B;
+  --bg-alt:       #202936;
+  --bg-card:      rgba(18, 25, 35, 0.94);
 
-  --text-primary:   #E8DDD0;
-  --text-secondary: #8A7860;
-  --text-muted:     #5A4E40;
+  --text-primary:   #F2F2EF;
+  --text-secondary: #BAC3CD;
+  --text-muted:     #8C99A7;
 
-  --border:        rgba(200, 160, 80, 0.1);
-  --border-strong: rgba(200, 160, 80, 0.2);
+  --border:        rgba(224, 233, 244, 0.08);
+  --border-strong: rgba(224, 233, 244, 0.17);
 
   --accent:        var(--amber-400);
   --accent-subtle: rgba(200, 160, 80, 0.1);
@@ -204,7 +205,7 @@ input { font-family: inherit; }
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--font-display);
+  font-family: var(--font-brand);
   font-weight: 500;
   font-size: 1.8rem;
   letter-spacing: -0.02em;
@@ -1730,7 +1731,7 @@ body[data-mode="long"] .ctrl-btn-primary {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-family: var(--font-display);
+  font-family: var(--font-brand);
   font-weight: 400;
   font-size: 1.4rem;
   letter-spacing: 0;
@@ -6020,8 +6021,8 @@ body.integrated-home:not(.focus-mode) {
 }
 
 [data-theme="dark"] body.integrated-home:not(.focus-mode) {
-  --text-secondary: #b7a995;
-  --text-muted: #948775;
+  --text-secondary: #bac3cd;
+  --text-muted: #93a0ad;
 }
 
 body.integrated-home:not(.focus-mode) .home-intro {
@@ -6402,5 +6403,117 @@ body.integrated-home:not(.focus-mode) #updateDismissBtn:hover { color: var(--tex
     flex: none;
     justify-content: flex-end;
     margin: 0;
+  }
+}
+
+/* A quieter, image-led surface keeps the clock and the primary action clear. */
+body.integrated-home:not(.focus-mode) .home-intro h1 {
+  font-family: var(--font-ui);
+  font-size: clamp(2rem, 4vw, 3.15rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 1.1;
+}
+body.integrated-home:not(.focus-mode) .app-view-today .section-title {
+  font-family: var(--font-ui);
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.2;
+}
+body.integrated-home:not(.focus-mode) .guide-section .section-title,
+body.integrated-home:not(.focus-mode) .support-section .section-title {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1.15;
+}
+
+.flow-dialog-header h2,
+.settings-drawer .drawer-header .settings-title {
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1.12;
+}
+
+body.integrated-home:not(.focus-mode) .timer-card,
+body.integrated-home:not(.focus-mode) .app-view-today {
+  border-radius: 24px;
+  box-shadow: 0 16px 48px rgba(12, 15, 22, 0.12);
+}
+
+[data-theme="light"] body.integrated-home:not(.focus-mode) {
+  background: radial-gradient(ellipse at 54% -8%, rgba(196, 150, 112, 0.1), transparent 48%), var(--bg-primary);
+}
+[data-theme="light"] body.integrated-home:not(.focus-mode) .timer-card {
+  background:
+    radial-gradient(ellipse at 86% 0%, rgba(206, 164, 122, 0.12), transparent 55%),
+    linear-gradient(155deg, #fffdf8, #f6f0e8);
+}
+
+[data-theme="dark"] body.integrated-home:not(.focus-mode) {
+  background: radial-gradient(ellipse at 54% -8%, rgba(76, 69, 98, 0.18), transparent 45%), var(--bg-primary);
+}
+[data-theme="dark"] body.integrated-home:not(.focus-mode) .navbar {
+  background: rgba(11, 16, 24, 0.94);
+}
+[data-theme="dark"] body.integrated-home:not(.focus-mode) .timer-card {
+  background:
+    radial-gradient(ellipse at 80% 4%, rgba(80, 96, 119, 0.22), transparent 52%),
+    linear-gradient(155deg, #1b2531, #141d29 55%, #111923);
+  border-color: rgba(238, 244, 250, 0.12);
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.2);
+}
+[data-theme="dark"] body.integrated-home:not(.focus-mode) .app-view-today {
+  background: #171e28;
+  border-color: rgba(238, 244, 250, 0.08);
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.14);
+}
+
+body.focus-mode #timer-section.app-view-focus {
+  background: #0b1018;
+}
+body.focus-mode .timer-card {
+  --bg-primary: #0b1018;
+  --bg-surface: #151c26;
+  --bg-alt: #202a37;
+  --text-primary: #f5f4f0;
+  --text-secondary: #c7ced5;
+  --text-muted: #a9b5c0;
+  --border: rgba(236, 243, 251, 0.12);
+  --border-strong: rgba(236, 243, 251, 0.22);
+  --accent: #d7ae6a;
+  background:
+    linear-gradient(180deg, rgba(6, 10, 17, 0.22), rgba(6, 10, 17, 0.45)),
+    url('assets/orilla-en-calma.webp') center 55% / cover no-repeat,
+    #111924;
+  border: 1px solid rgba(236, 243, 251, 0.18);
+}
+
+/* Immersion stays nocturnal even when the workspace uses the light theme. */
+[data-theme="light"] body.focus-mode .flip-card {
+  background-color: #101823;
+  color: #f5f4f0;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+[data-theme="light"] body.focus-mode .flip-card::after {
+  background-color: rgba(0, 0, 0, 0.65);
+}
+[data-theme="light"] body.focus-mode .half,
+[data-theme="light"] body.focus-mode .bottom,
+[data-theme="light"] body.focus-mode .flap-bottom {
+  background-color: #111924;
+}
+[data-theme="light"] body.focus-mode .top,
+[data-theme="light"] body.focus-mode .flap-top {
+  background-color: #1b2531;
+}
+[data-theme="light"] body.focus-mode .half span {
+  color: #f5f4f0;
+}
+
+@media (max-width: 768px) {
+  body.focus-mode .timer-card {
+    background-position: center, 53% center;
   }
 }
