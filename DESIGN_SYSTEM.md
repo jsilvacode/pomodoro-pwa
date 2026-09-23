@@ -121,10 +121,11 @@ Si necesita una excepción, debe existir una razón funcional o semántica clara
 
 La página principal vuelve a ser vertical. El primer tramo ofrece el reloj, una tarea opcional y la acción de empezar sin obligar a leer una introducción. En escritorio, Hoy acompaña al reloj; en móvil aparece inmediatamente después. Más abajo viven el progreso, la guía y el apoyo al proyecto. La navegación lleva a estas secciones mediante anclas y el logo vuelve arriba.
 
-- **Inicio:** una frase breve da contexto; reloj y botón principal quedan a la vista.
+- **Inicio:** una frase breve da contexto; la tarjeta del reloj contiene modos, tiempo y una sola acción principal. Sonido, reinicio y ajustes viven justo fuera de ella.
 - **Foco listo o pausado:** se puede empezar o reanudar sin preparación obligatoria. Una sesión pausada muestra su tarea actual; otra selección se indica como tarea del siguiente bloque.
 - **Foco inmersivo:** al iniciar un bloque de trabajo, la página se convierte en una escena tranquila con reloj, control de pausa y salida.
-- **Hoy:** una sola lista de tareas, accesible junto al reloj en escritorio y debajo en móvil.
+- **Hoy:** una sola lista de tareas, accesible junto al reloj en escritorio y debajo en móvil. Cada tarea ofrece una acción explícita para enfocarla; el resumen del día queda después de la lista.
+- **Guía:** la ayuda breve se abre a demanda en un diálogo; la explicación extensa permanece más abajo en la página.
 - **Ajustes:** controles de tiempo, apariencia y preferencias en un drawer; la guía y el apoyo también se pueden descubrir bajando por la página.
 
 El desplazamiento vertical sirve para explorar. La inmersión sirve para trabajar. Entrar, pausar, salir y volver no reinician el bloque ni cambian su tarea registrada.
