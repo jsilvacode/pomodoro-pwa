@@ -117,17 +117,17 @@ Antes de crear un estilo nuevo, intentar componerlo con:
 Si necesita una excepción, debe existir una razón funcional o semántica clara.
 
 
-## App Shell y estados de producto
+## Home integrada y estados de producto
 
-Flowmodoro v4 no usa scroll de documento como navegación principal. La aplicación se organiza en estados de interfaz:
+La página principal vuelve a ser vertical. El primer tramo ofrece el reloj, una tarea opcional y la acción de empezar sin obligar a leer una introducción. En escritorio, Hoy acompaña al reloj; en móvil aparece inmediatamente después. Más abajo viven el progreso, la guía y el apoyo al proyecto. La navegación lleva a estas secciones mediante anclas y el logo vuelve arriba.
 
-- **Foco / Timer:** el reloj y la acción principal están disponibles al entrar; elegir una tarea es opcional y aparece cerca del reloj.
-- **Foco / Preparar:** planificación accesible a demanda, sin interrumpir una sesión pausada.
-- **Foco / Inmersivo:** solo reloj, control Iniciar/Pausar y salida.
-- **Hoy:** gestor completo de tareas e historial.
-- **Más:** ajustes, guía, atajos, instalación y apoyo.
+- **Inicio:** una frase breve da contexto; reloj y botón principal quedan a la vista.
+- **Foco listo o pausado:** se puede empezar o reanudar sin preparación obligatoria. Una sesión pausada muestra su tarea actual; otra selección se indica como tarea del siguiente bloque.
+- **Foco inmersivo:** al iniciar un bloque de trabajo, la página se convierte en una escena tranquila con reloj, control de pausa y salida.
+- **Hoy:** una sola lista de tareas, accesible junto al reloj en escritorio y debajo en móvil.
+- **Ajustes:** controles de tiempo, apariencia y preferencias en un drawer; la guía y el apoyo también se pueden descubrir bajando por la página.
 
-La navegación `Foco / Hoy / Más` cambia estados dentro del mismo viewport. No debe reintroducir anchors de scroll para estas vistas.
+El desplazamiento vertical sirve para explorar. La inmersión sirve para trabajar. Entrar, pausar, salir y volver no reinician el bloque ni cambian su tarea registrada.
 
 ### Contrato de inmersión
 

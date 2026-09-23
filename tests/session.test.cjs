@@ -258,11 +258,32 @@ test('the immersive task label stays with the current block when the next task c
     fm_activeTask: 'a'
   });
   app.run('startTimer()');
+  assert.equal(app.el('focusPillText').textContent, 'Cambiar próxima tarea');
   app.run("setActiveTask('b')");
   assert.match(app.el('timerActiveTask').textContent, /Actual/);
   assert.doesNotMatch(app.el('timerActiveTask').textContent, /Siguiente/);
   app.run('leaveImmersiveFocus()');
+  assert.match(app.el('timerActiveTask').textContent, /Esta sesión · Actual/);
+  assert.match(app.el('focusPillText').textContent, /Después · Siguiente/);
   assert.match(app.el('taskSessionNotice').textContent, /Siguiente/);
+});
+
+test('vertical navigation keeps a paused session and its task intact', () => {
+  const app = createApp({
+    fm_tasks: JSON.stringify([{ id: 'a', text: 'Actual', estPomos: 1 }]),
+    fm_activeTask: 'a'
+  });
+  assert.equal(app.run('activeAppView'), 'home');
+  app.run('startTimer()');
+  app.advance(30_000);
+  app.run("showAppView('today')");
+  assert.equal(app.run('activeAppView'), 'today');
+  assert.equal(app.state().sessionPhase, 'paused');
+  assert.equal(app.state().timeLeft, 1470);
+  assert.equal(app.state().sessionTaskSnapshot.text, 'Actual');
+  app.run("showAppView('focus')");
+  assert.equal(app.el('timerPlayLabel').textContent, 'Reanudar');
+  assert.equal(app.state().timeLeft, 1470);
 });
 
 test('both creation paths select the first task without stealing an existing selection', () => {

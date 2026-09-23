@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flowmodoro — Your Perfect Workflow</title>
-  <meta name="description" content="Flowmodoro is a premium Pomodoro timer with task management, dark mode, and multi-language support. Focus better, rest better." />
+  <title>Flowmodoro — Una cosa a la vez</title>
+  <meta name="description" content="Elige una tarea, enfócate con un temporizador Pomodoro y descansa a tu ritmo. Flowmodoro reúne tu foco y tu plan del día en un solo lugar." />
   <meta name="theme-color" content="#C8844A" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#C8A050" media="(prefers-color-scheme: dark)" />
 
@@ -19,15 +19,15 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.flowmodoro.cloud/" />
-  <meta property="og:title" content="Flowmodoro — Your Perfect Workflow" />
-  <meta property="og:description" content="Premium Pomodoro timer with task management, dark mode, and elegant design. Focus better, rest better." />
+  <meta property="og:title" content="Flowmodoro — Una cosa a la vez" />
+  <meta property="og:description" content="Tu tarea, tu reloj y tu plan del día en un solo lugar." />
   <meta property="og:image" content="icons/og-image.png" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content="https://www.flowmodoro.cloud/" />
-  <meta property="twitter:title" content="Flowmodoro — Your Perfect Workflow" />
-  <meta property="twitter:description" content="Premium Pomodoro timer with task management, dark mode, and elegant design." />
+  <meta property="twitter:title" content="Flowmodoro — Una cosa a la vez" />
+  <meta property="twitter:description" content="Tu tarea, tu reloj y tu plan del día en un solo lugar." />
   <meta property="twitter:image" content="icons/og-image.png" />
 
 
@@ -38,68 +38,37 @@
 
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="app-shell-body" data-app-view="focus">
+<body class="integrated-home" data-app-view="focus">
   <!-- ═══════════════════════════════════ NAVBAR ═══════════════════════════════════ -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
-      <button class="nav-logo app-home-btn" id="homeFocusBtn" type="button" data-view-target="focus" aria-label="Flowmodoro · Foco">
+      <button class="nav-logo app-home-btn" id="homeFocusBtn" type="button" data-view-target="home" aria-label="Flowmodoro · Inicio" data-i18n-aria="home.logo">
         <img src="icons/icon-192.png" alt="" class="logo-img" aria-hidden="true" />
         <span class="logo-text">Flowmodoro</span>
       </button>
       <div class="nav-links">
         <button type="button" class="nav-link active" data-view-target="focus" data-i18n="nav.focus">Foco</button>
         <button type="button" class="nav-link" data-view-target="today" data-i18n="nav.today">Hoy</button>
-        <button class="nav-link nav-more-btn" id="moreBtn" type="button" data-i18n="nav.more">Más</button>
+        <button type="button" class="nav-link" data-view-target="guide" data-i18n="nav.guide">Cómo funciona</button>
+        <button class="nav-link nav-more-btn" id="moreBtn" type="button" data-i18n="nav.settings">Ajustes</button>
       </div>
     </div>
   </nav>
 
-  <section class="hero legacy-landing" id="hero" hidden aria-hidden="true">
-    <!-- Capa de gradiente (orbs) -->
-    <div class="hero__gradient" aria-hidden="true">
-      <div class="hero__orb hero__orb--1"></div>
-      <div class="hero__orb hero__orb--2"></div>
-      <div class="hero__orb hero__orb--3"></div>
-    </div>
-
-    <!-- Textura grain -->
-    <div class="hero__noise" aria-hidden="true"></div>
-
-    <div class="hero__content">
-      <div class="hero-badge" data-i18n="hero.badge">✨ Tu flujo de trabajo perfecto</div>
-      <h1 class="hero-title">
-        <span data-i18n="hero.title1">Trabaja mejor,</span><br />
-        <span class="gradient-text" data-i18n="hero.title2">descansa mejor.</span>
-      </h1>
-      <p class="hero-subtitle" data-i18n="hero.subtitle">
-        Usa la técnica Pomodoro para potenciar tu productividad con intervalos de trabajo y descanso que respetan tu cerebro.
-      </p>
-      <div class="hero-cta">
-        <a href="#timer-section" class="btn-primary btn-large" data-i18n="hero.cta">Empezar ahora</a>
-        <a href="#guide-section" class="btn-ghost btn-large" data-i18n="hero.learn">¿Qué es Pomodoro?</a>
+  <main class="integrated-main" id="home">
+    <section class="home-intro" id="hero" aria-labelledby="homeTitle">
+      <div class="home-intro-copy">
+        <span class="home-intro-kicker" data-i18n="home.kicker">TU ESPACIO DE FOCO</span>
+        <h1 id="homeTitle" data-i18n="home.title">Una cosa a la vez.</h1>
+        <p data-i18n="home.subtitle">Elige qué importa ahora o empieza sin tarea.</p>
       </div>
-      <!-- Mini stats -->
-      <div class="hero-stats">
-        <div class="stat-item">
-          <span class="stat-num">25</span>
-          <span class="stat-label" data-i18n="hero.stat1">min de enfoque</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="stat-num">5</span>
-          <span class="stat-label" data-i18n="hero.stat2">min de descanso</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="stat-num">4×</span>
-          <span class="stat-label" data-i18n="hero.stat3">y descansás 15 min</span>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="integrated-workspace" aria-label="Espacio de trabajo" data-i18n-aria="home.workspace">
+      <div class="workspace-grid">
 
   <!-- ═══════════════════════════════════ TIMER ════════════════════════════════════ -->
-  <section class="section app-view app-view-focus is-active" id="timer-section" data-app-view="focus" aria-label="Foco">
+  <section class="section app-view-focus is-active" id="timer-section" data-app-view="focus" aria-label="Foco">
     <div class="section-parallax__bg">
       <div class="deco-circle"></div>
     </div>
@@ -312,13 +281,85 @@
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════ TODAY ════════════════════════════════════ -->
+  <section class="section section-alt app-view-today" id="tasks-section" data-app-view="today" aria-label="Hoy">
+    <div class="section-parallax__bg">
+      <div class="deco-blob"></div>
+    </div>
+    <div class="container">
+      <div class="section-header section-header-lean today-header">
+        <div class="today-header-copy">
+          <div class="section-badge" data-i18n="nav.today">Hoy</div>
+          <h2 class="section-title" data-i18n="tasks.title">¿Qué vas a hacer ahora?</h2>
+          <p class="section-subtitle" data-i18n="tasks.subtitle">Anota lo que harás y elige una prioridad.</p>
+        </div>
+        <button class="today-return-focus" id="todayReturnFocusBtn" type="button">
+          <span id="todayReturnFocusLabel" data-i18n="today.returnFocus">Ir al reloj</span>
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
+
+      <div class="today-strip" aria-label="Resumen de hoy">
+        <span class="today-strip-label" data-i18n="nav.today">Hoy</span>
+        <span><strong id="todaySessions">0</strong> <span data-i18n="today.sessions">sesiones</span></span>
+        <i>·</i>
+        <span><strong id="todayMinutes">0 min</strong> <span data-i18n="today.focus">en foco</span></span>
+      </div>
+
+      <div class="task-input-row">
+        <input
+          type="text"
+          id="taskInput"
+          class="task-input"
+          placeholder="Agregar nueva tarea..."
+          data-i18n-placeholder="tasks.placeholder"
+          maxlength="120"
+        />
+        <button class="btn-primary" id="addTaskBtn" data-i18n="tasks.add">+ Agregar</button>
+      </div>
+
+      <div class="task-list" id="taskList">
+        <div class="task-empty" id="taskEmpty">
+          <p id="taskEmptyText" data-i18n="tasks.empty">No hay tareas aún. Agrega la primera.</p>
+        </div>
+      </div>
+
+      <button class="clear-done-subtle" id="clearDoneBtn" type="button" data-i18n="tasks.clearDone" hidden>Limpiar completadas</button>
+
+      <details class="progress-disclosure" id="progress-section">
+        <summary>
+          <div>
+            <span class="progress-disclosure-eyebrow" data-i18n="progress.week">Esta semana</span>
+            <strong><span id="weekSessions">0</span> <span data-i18n="today.sessions">sesiones</span> · <span id="weekMinutes">0</span> min</strong>
+          </div>
+          <span class="progress-disclosure-action" data-i18n="progress.details">Ver actividad</span>
+        </summary>
+
+        <div class="progress-detail-body">
+          <div class="week-chart" id="weekChart" aria-label="Sesiones de foco de los últimos siete días"></div>
+          <div class="history-header">
+            <div>
+              <h3 data-i18n="progress.history">Historial reciente</h3>
+              <p data-i18n="progress.localOnly">Tus datos permanecen en este dispositivo.</p>
+            </div>
+            <button class="btn-ghost btn-sm" id="exportHistoryBtn" type="button" data-i18n="progress.export">Exportar</button>
+          </div>
+          <div class="session-history" id="sessionHistory"></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+    </div>
+  </section>
+
   <!-- Settings drawer -->
   <div class="drawer-backdrop" id="settingsBackdrop" hidden></div>
   <aside class="settings-drawer" id="settingsPanel" aria-hidden="true" aria-labelledby="settingsTitle">
     <div class="drawer-header">
       <div>
         <span class="drawer-eyebrow">Flowmodoro</span>
-        <h2 class="settings-title" id="settingsTitle" data-i18n="nav.more">Más</h2>
+        <h2 class="settings-title" id="settingsTitle" data-i18n="nav.settings">Ajustes</h2>
       </div>
       <button class="drawer-close" id="settingsCloseBtn" type="button" aria-label="Cerrar">✕</button>
     </div>
@@ -384,7 +425,7 @@
 
     <div class="drawer-section drawer-links">
       <button class="drawer-link" id="installDrawerBtn" type="button" data-i18n="nav.install" hidden>Instalar App</button>
-      <button class="drawer-link" id="guideDrawerBtn" type="button" data-i18n="nav.guide">Guía Pomodoro</button>
+      <button class="drawer-link" id="guideDrawerBtn" type="button" data-i18n="nav.guide">Cómo funciona</button>
       <button class="drawer-link" id="shortcutsBtn" type="button" data-i18n="shortcuts.title">Atajos de teclado</button>
       <button class="drawer-link" id="supportDrawerBtn" type="button" data-i18n="nav.support">Apoyar proyecto</button>
     </div>
@@ -392,84 +433,15 @@
     <button class="btn-primary drawer-save" id="saveSettings" data-i18n="settings.save">Guardar cambios</button>
   </aside>
 
-  <!-- ═══════════════════════════════════ TODAY ════════════════════════════════════ -->
-  <section class="section section-alt app-view app-view-today" id="tasks-section" data-app-view="today" aria-label="Hoy" aria-hidden="true">
-    <div class="section-parallax__bg">
-      <div class="deco-blob"></div>
-    </div>
-    <div class="container">
-      <div class="section-header section-header-lean today-header">
-        <div class="today-header-copy">
-          <div class="section-badge" data-i18n="nav.today">Hoy</div>
-          <h2 class="section-title" data-i18n="tasks.title">¿Qué vas a hacer ahora?</h2>
-          <p class="section-subtitle" data-i18n="tasks.subtitle">Elige una tarea y vuelve al foco.</p>
-        </div>
-        <button class="today-return-focus" id="todayReturnFocusBtn" type="button">
-          <span id="todayReturnFocusLabel" data-i18n="today.returnFocus">Volver al timer</span>
-          <span aria-hidden="true">→</span>
-        </button>
-      </div>
-
-      <div class="today-strip" aria-label="Resumen de hoy">
-        <span class="today-strip-label" data-i18n="nav.today">Hoy</span>
-        <span><strong id="todaySessions">0</strong> <span data-i18n="today.sessions">sesiones</span></span>
-        <i>·</i>
-        <span><strong id="todayMinutes">0 min</strong> <span data-i18n="today.focus">en foco</span></span>
-      </div>
-
-      <div class="task-input-row">
-        <input
-          type="text"
-          id="taskInput"
-          class="task-input"
-          placeholder="Agregar nueva tarea..."
-          data-i18n-placeholder="tasks.placeholder"
-          maxlength="120"
-        />
-        <button class="btn-primary" id="addTaskBtn" data-i18n="tasks.add">+ Agregar</button>
-      </div>
-
-      <div class="task-list" id="taskList">
-        <div class="task-empty" id="taskEmpty">
-          <p id="taskEmptyText" data-i18n="tasks.empty">No hay tareas aún. Agrega la primera.</p>
-        </div>
-      </div>
-
-      <button class="clear-done-subtle" id="clearDoneBtn" type="button" data-i18n="tasks.clearDone" hidden>Limpiar completadas</button>
-
-      <details class="progress-disclosure" id="progress-section">
-        <summary>
-          <div>
-            <span class="progress-disclosure-eyebrow" data-i18n="progress.week">Esta semana</span>
-            <strong><span id="weekSessions">0</span> <span data-i18n="today.sessions">sesiones</span> · <span id="weekMinutes">0</span> min</strong>
-          </div>
-          <span class="progress-disclosure-action" data-i18n="progress.details">Ver actividad</span>
-        </summary>
-
-        <div class="progress-detail-body">
-          <div class="week-chart" id="weekChart" aria-label="Sesiones de foco de los últimos siete días"></div>
-          <div class="history-header">
-            <div>
-              <h3 data-i18n="progress.history">Historial reciente</h3>
-              <p data-i18n="progress.localOnly">Tus datos permanecen en este dispositivo.</p>
-            </div>
-            <button class="btn-ghost btn-sm" id="exportHistoryBtn" type="button" data-i18n="progress.export">Exportar</button>
-          </div>
-          <div class="session-history" id="sessionHistory"></div>
-        </div>
-      </details>
-    </div>
-  </section>
-
   <!-- ═══════════════════════════════════ GUIDE ════════════════════════════════════ -->
-  <section class="section guide-section legacy-section" id="guide-section" hidden aria-hidden="true">
+  <section class="section guide-section" id="guide-section">
     <div class="section-parallax__bg">
       <div class="deco-circle guide-deco"></div>
     </div>
     <div class="container">
       <div class="section-header guide-header">
         <div class="section-badge" data-i18n="guide.badge">Técnica Pomodoro</div>
-        <h2 class="section-title" data-i18n="guide.title">Una cosa a la vez.</h2>
+        <h2 class="section-title" data-i18n="guide.title">Un ritmo que se sostiene.</h2>
         <p class="section-subtitle" data-i18n="guide.subtitle">Trabaja con intención, descansa antes de agotarte y vuelve con claridad.</p>
       </div>
 
@@ -523,7 +495,7 @@
   </section>
 
   <!-- ═══════════════════════════════════ SUPPORT ══════════════════════════════════ -->
-  <section class="section support-section legacy-section" id="donation-section" hidden aria-hidden="true">
+  <section class="section support-section" id="donation-section">
     <div class="section-parallax__bg">
       <div class="deco-blob support-deco"></div>
     </div>
@@ -547,22 +519,22 @@
   </section>
 
   <!-- ═══════════════════════════════════ FOOTER ═══════════════════════════════════ -->
-  <footer class="footer legacy-section" hidden aria-hidden="true">
+  <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
         <img src="icons/icon-192.png" alt="Logo" class="logo-img" />
-        <span class="footer-name">Flowmodoro <span class="footer-version">v3.1</span></span>
+        <span class="footer-name">Flowmodoro</span>
       </div>
       <p class="footer-tagline" data-i18n="footer.developed">Desarrollado con ❤️ por Julio Silva</p>
       <p class="footer-email">jsilvacode@gmail.com</p>
     </div>
   </footer>
-
+  </main>
 
   <nav class="mobile-bottom-nav" aria-label="Navegación principal">
     <button type="button" class="mobile-bottom-link active" data-view-target="focus"><span>◎</span><small data-i18n="nav.focus">Foco</small></button>
     <button type="button" class="mobile-bottom-link" data-view-target="today"><span>✓</span><small data-i18n="nav.today">Hoy</small></button>
-    <button class="mobile-bottom-link" id="bottomMoreBtn" type="button"><span>•••</span><small data-i18n="nav.more">Más</small></button>
+    <button class="mobile-bottom-link" id="bottomMoreBtn" type="button"><span>•••</span><small data-i18n="nav.settings">Ajustes</small></button>
   </nav>
 
 
@@ -593,7 +565,7 @@
       <header class="flow-dialog-header">
         <div>
           <span class="flow-dialog-kicker" data-i18n="guide.badge">Técnica Pomodoro</span>
-          <h2 id="guideDialogTitle" data-i18n="guide.title">Una cosa a la vez.</h2>
+          <h2 id="guideDialogTitle" data-i18n="guide.title">Un ritmo que se sostiene.</h2>
         </div>
         <button class="flow-dialog-close" id="guideDialogCloseBtn" type="button" aria-label="Cerrar">✕</button>
       </header>
