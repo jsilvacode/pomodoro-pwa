@@ -5775,14 +5775,14 @@ body.integrated-home:not(.focus-mode) .nav-links {
 .integrated-main {
   width: min(100%, 1440px);
   margin: 0 auto;
-  padding: clamp(1.1rem, 2.5vw, 2rem) clamp(1rem, 4vw, 3.5rem) 5rem;
+  padding: 1rem clamp(1rem, 4vw, 3.5rem) 5rem;
 }
 
 body.integrated-home:not(.focus-mode) .home-intro {
   display: block;
   max-width: 1260px;
-  margin: 0 auto clamp(1rem, 2.5vw, 2rem);
-  padding: clamp(0.6rem, 1.5vw, 1rem) 0;
+  margin: 0 auto 1rem;
+  padding: 0.5rem 0;
 }
 
 .home-intro-copy { min-width: 0; }
@@ -5899,6 +5899,17 @@ body.integrated-home:not(.focus-mode) .timer-card {
 body.integrated-home:not(.focus-mode) .app-view-focus .mode-tabs { margin-bottom: clamp(0.8rem, 1.5vw, 1.25rem); }
 body.integrated-home:not(.focus-mode) .app-view-focus .timer-session-label { margin-top: 0.7rem; }
 body.integrated-home:not(.focus-mode) .app-view-focus .timer-action-zone { margin-top: clamp(0.7rem, 1.5vw, 1.1rem); }
+body.integrated-home:not(.focus-mode) .timer-task-focus { margin-top: 0.7rem; }
+body.integrated-home:not(.focus-mode) .pomo-counter,
+body.integrated-home:not(.focus-mode) #taskSessionNotice { display: none; }
+body.integrated-home:not(.focus-mode) .timer-action-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+}
+body.integrated-home:not(.focus-mode) .timer-controls { order: -1; }
+body.integrated-home:not(.focus-mode) .sound-dock { margin: 0; }
 body.integrated-home:not(.focus-mode) .app-view-focus .flip-clock { flex-direction: row; gap: clamp(0.35rem, 1vw, 0.8rem); }
 body.integrated-home:not(.focus-mode) .app-view-focus .flip-sep { display: block; }
 body.integrated-home:not(.focus-mode) .timer-active-task:not([hidden]) {
@@ -5984,7 +5995,6 @@ body.integrated-home:not(.focus-mode) .footer { padding-right: 0; padding-left: 
   body.integrated-home:not(.focus-mode) .nav-links { display: none; }
   body.integrated-home:not(.focus-mode) .nav-inner { justify-content: center; }
   body.integrated-home:not(.focus-mode) .nav-logo { margin-inline: auto; }
-  body.integrated-home:not(.focus-mode) .pomo-counter { display: none; }
   body.integrated-home:not(.focus-mode) .today-return-focus { display: inline-flex; }
   body.integrated-home:not(.focus-mode) .app-view-focus .flip-sep { display: flex; }
   body.integrated-home:not(.focus-mode) .app-view-focus .mode-tab { font-size: 0.7rem; }
