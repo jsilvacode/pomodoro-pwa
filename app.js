@@ -12,15 +12,15 @@ const TRANSLATIONS = {
     'hero.badge':'✨ Tu flujo de trabajo perfecto','hero.title1':'Trabaja mejor,','hero.title2':'descansa mejor.',
     'hero.subtitle':'Usa la técnica Pomodoro para potenciar tu productividad con intervalos de trabajo y descanso que respetan tu cerebro.',
     'hero.cta':'Empezar ahora','hero.learn':'¿Qué es Pomodoro?','hero.stat1':'min de enfoque','hero.stat2':'min de descanso','hero.stat3':'y descansas 15 min',
-    'timer.work':'Trabajo','timer.short':'Descanso corto','timer.long':'Descanso largo','timer.start':'Iniciar','timer.pause':'Pausar','timer.adjustTimes':'Ajustar tiempos',
+    'timer.work':'Trabajo','timer.short':'Descanso corto','timer.long':'Descanso largo','timer.start':'Iniciar','timer.pause':'Pausar','timer.resume':'Reanudar','timer.adjustTimes':'Ajustar tiempos','timer.confirmDiscard':'¿Descartar el bloque en curso? El tiempo no registrado se perderá.','timer.confirmReset':'¿Reiniciar y descartar el bloque en curso? El tiempo no registrado se perderá.',
     'timer.focusTime':'Tiempo de enfoque','timer.shortBreak':'Descanso corto','timer.longBreak':'Descanso largo',
     'timer.done.work':'Sesión de foco completada.','timer.done.short':'Descanso terminado.','timer.done.long':'Descanso largo terminado.',
     'timer.done.work.task':'Foco completado · 🍅 {act}/{est} · {task}','timer.done.work.taskComplete':'Tarea completada · {task}',
     'timer.focusTitle':'Enfocar en…','timer.focusChoose':'Elegir tarea','timer.focusQuickAdd':'+ Nueva tarea…','timer.focusCompleted':'Tarea completada',
-    'focus.exit':'Salir de foco y pausar','focus.session':'Sesión de foco','focus.of':'de','focus.timerControl':'Reloj','focus.soundControl':'Sonido',
+    'focus.exit':'Salir de foco y pausar','focus.exitRunning':'Pausar y salir del foco','focus.exitPaused':'Volver a tareas; sesión pausada','focus.session':'Sesión de foco','focus.of':'de','focus.timerControl':'Reloj','focus.soundControl':'Sonido',
     'prep.kicker':'Preparar sesión','prep.title':'¿Cómo quieres empezar?','prep.text':'Puedes organizar lo que harás o entrar directo al timer.','prep.tasks':'Preparar tareas','prep.timerOnly':'Solo usar el timer',
     'planner.title':'Tus tareas para este foco.','planner.text':'Agrega tareas, estima pomodoros y elige con cuál comenzar.','planner.placeholder':'Nueva tarea…','planner.start':'Comenzar foco','planner.empty':'Agrega una tarea o entra directo al timer.',
-    'complete.kicker':'Sesión completada','complete.later':'Ahora no','complete.startBreak':'Iniciar descanso','complete.startFocus':'Iniciar foco',
+    'complete.kicker':'Sesión completada','complete.later':'Ahora no','complete.markTask':'Marcar tarea terminada','complete.taskMarked':'Tarea marcada como terminada','complete.startBreak':'Iniciar descanso','complete.startFocus':'Iniciar foco',
     'settings.title':'Ajustes','settings.timer':'Temporizador','settings.flow':'Flujo','settings.experience':'Experiencia',
     'settings.work':'Foco','settings.short':'Descanso corto','settings.long':'Descanso largo','settings.sound':'Aviso al terminar',
     'settings.autoBreak':'Iniciar descansos automáticamente','settings.autoFocus':'Iniciar siguiente foco automáticamente',
@@ -34,7 +34,7 @@ const TRANSLATIONS = {
     'tasks.placeholder':'Agregar nueva tarea...','tasks.add':'+ Agregar','tasks.empty':'No hay tareas aún. Agrega la primera.','tasks.empty.filter':'No hay tareas aquí.',
     'tasks.noTask':'Sin tarea','tasks.filter.all':'Todas','tasks.filter.active':'Pendientes','tasks.filter.done':'Completadas',
     'tasks.clearDone':'Limpiar completadas','tasks.clearDone.confirm':'¿Seguro?','tasks.estimation':'Real / estimado',
-    'tasks.delete':'Eliminar','tasks.focus':'Enfocar','tasks.unfocus':'Quitar foco','tasks.complete':'Marcar como completada',
+    'tasks.delete':'Eliminar','tasks.focus':'Enfocar','tasks.unfocus':'Quitar foco','tasks.complete':'Marcar como completada','tasks.nextSessionNotice':'Para la próxima sesión: {next}; esta sesión sigue en {current}.',
     'tasks.reorder.up':'Subir','tasks.reorder.down':'Bajar','tasks.inc.pomos':'Aumentar estimación','tasks.dec.pomos':'Reducir estimación','tasks.edit':'Editar',
     'progress.badge':'Progreso','progress.week':'Esta semana','progress.details':'Ver actividad','progress.title':'Tu trabajo deja huella.',
     'progress.subtitle':'Compara lo que planeaste con lo que realmente tomó, sin convertir el foco en una competencia.',
@@ -68,15 +68,15 @@ const TRANSLATIONS = {
     'hero.badge':'✨ Your perfect workflow','hero.title1':'Work smarter,','hero.title2':'rest better.',
     'hero.subtitle':'Use the Pomodoro technique with focused work and recovery intervals that respect your attention.',
     'hero.cta':'Get started','hero.learn':'What is Pomodoro?','hero.stat1':'min of focus','hero.stat2':'min of rest','hero.stat3':'then 15 min break',
-    'timer.work':'Work','timer.short':'Short break','timer.long':'Long break','timer.start':'Start','timer.pause':'Pause','timer.adjustTimes':'Adjust times',
+    'timer.work':'Work','timer.short':'Short break','timer.long':'Long break','timer.start':'Start','timer.pause':'Pause','timer.resume':'Resume','timer.adjustTimes':'Adjust times','timer.confirmDiscard':'Discard the current block? Unregistered time will be lost.','timer.confirmReset':'Reset and discard the current block? Unregistered time will be lost.',
     'timer.focusTime':'Focus time','timer.shortBreak':'Short break','timer.longBreak':'Long break',
     'timer.done.work':'Focus session completed.','timer.done.short':'Break finished.','timer.done.long':'Long break finished.',
     'timer.done.work.task':'Focus completed · 🍅 {act}/{est} · {task}','timer.done.work.taskComplete':'Task completed · {task}',
     'timer.focusTitle':'Focus on…','timer.focusChoose':'Choose task','timer.focusQuickAdd':'+ New task…','timer.focusCompleted':'Task completed',
-    'focus.exit':'Exit focus and pause','focus.session':'Focus session','focus.of':'of','focus.timerControl':'Timer','focus.soundControl':'Sound',
+    'focus.exit':'Exit focus and pause','focus.exitRunning':'Pause and exit focus','focus.exitPaused':'Back to tasks; session paused','focus.session':'Focus session','focus.of':'of','focus.timerControl':'Timer','focus.soundControl':'Sound',
     'prep.kicker':'Prepare session','prep.title':'How do you want to start?','prep.text':'Organize what you will do or go straight to the timer.','prep.tasks':'Prepare tasks','prep.timerOnly':'Use timer only',
     'planner.title':'Your tasks for this focus.','planner.text':'Add tasks, estimate pomodoros, and choose where to begin.','planner.placeholder':'New task…','planner.start':'Start focus','planner.empty':'Add a task or go straight to the timer.',
-    'complete.kicker':'Session completed','complete.later':'Not now','complete.startBreak':'Start break','complete.startFocus':'Start focus',
+    'complete.kicker':'Session completed','complete.later':'Not now','complete.markTask':'Mark task complete','complete.taskMarked':'Task marked complete','complete.startBreak':'Start break','complete.startFocus':'Start focus',
     'settings.title':'Settings','settings.timer':'Timer','settings.flow':'Flow','settings.experience':'Experience',
     'settings.work':'Focus','settings.short':'Short break','settings.long':'Long break','settings.sound':'Completion sound',
     'settings.autoBreak':'Start breaks automatically','settings.autoFocus':'Start next focus automatically',
@@ -90,7 +90,7 @@ const TRANSLATIONS = {
     'tasks.placeholder':'Add a new task...','tasks.add':'+ Add','tasks.empty':'No tasks yet. Add your first one.','tasks.empty.filter':'No tasks here.',
     'tasks.noTask':'No task','tasks.filter.all':'All','tasks.filter.active':'Pending','tasks.filter.done':'Completed',
     'tasks.clearDone':'Clear completed','tasks.clearDone.confirm':'Sure?','tasks.estimation':'Actual / estimated',
-    'tasks.delete':'Delete','tasks.focus':'Focus','tasks.unfocus':'Remove focus','tasks.complete':'Mark as completed',
+    'tasks.delete':'Delete','tasks.focus':'Focus','tasks.unfocus':'Remove focus','tasks.complete':'Mark as completed','tasks.nextSessionNotice':'Next session: {next}; this session stays on {current}.',
     'tasks.reorder.up':'Move up','tasks.reorder.down':'Move down','tasks.inc.pomos':'Increase estimate','tasks.dec.pomos':'Reduce estimate','tasks.edit':'Edit',
     'progress.badge':'Progress','progress.week':'This week','progress.details':'View activity','progress.title':'Your work leaves a trace.',
     'progress.subtitle':'Compare what you planned with what it actually took, without turning focus into a competition.',
@@ -183,6 +183,27 @@ const storedDurations = safeGetJSON('fm_durations', { work:25, short:5, long:15 
 const storedSession = safeGetJSON('fm_session', null);
 const initialMode = storedSession && ['work','short','long'].includes(storedSession.currentMode) ? storedSession.currentMode : 'work';
 const defaultSeconds = (Number(storedDurations[initialMode]) || 25) * 60;
+const storedTimeLeft = storedSession && Number.isFinite(Number(storedSession.timeLeft))
+  ? Math.max(0, Number(storedSession.timeLeft))
+  : defaultSeconds;
+const storedTotalTime = storedSession && Number.isFinite(Number(storedSession.totalTime))
+  ? Math.max(1, Number(storedSession.totalTime))
+  : defaultSeconds;
+const storedPendingNextMode = storedSession && ['work','short','long'].includes(storedSession.pendingNextMode)
+  ? storedSession.pendingNextMode
+  : null;
+const storedCompletionEntry = storedSession && storedSession.completionEntry
+  ? normalizeHistory(storedSession.completionEntry)
+  : null;
+const hasStoredSessionTaskSnapshot = !!storedSession && Object.prototype.hasOwnProperty.call(storedSession, 'sessionTaskSnapshot');
+const storedPomoCount = storedSession && Number.isFinite(Number(storedSession.pomoCount))
+  ? Number(storedSession.pomoCount)
+  : Number(localStorage.getItem('fm_pomoCount')) || 0;
+const storedPhase = storedSession && ['ready','running','paused','finished'].includes(storedSession.phase)
+  ? storedSession.phase
+  : (storedSession && storedSession.isRunning
+    ? 'running'
+    : (storedSession && storedSession.sessionStartedAt && storedTimeLeft > 0 ? 'paused' : 'ready'));
 
 const state = {
   lang: localStorage.getItem('fm_lang') || ((navigator.language || '').toLowerCase().startsWith('es') ? 'es' : 'en'),
@@ -194,14 +215,24 @@ const state = {
     long: clamp(parseInt(storedDurations.long, 10) || 15, 1, 60)
   },
   currentMode: initialMode,
-  timeLeft: storedSession ? Math.max(0, Number(storedSession.timeLeft) || defaultSeconds) : defaultSeconds,
-  totalTime: storedSession ? Math.max(1, Number(storedSession.totalTime) || defaultSeconds) : defaultSeconds,
-  isRunning: false,
+  timeLeft: storedTimeLeft,
+  totalTime: storedTotalTime,
+  sessionPhase: storedPhase,
+  isRunning: storedPhase === 'running',
   intervalId: null,
   endTime: storedSession ? Number(storedSession.endTime) || null : null,
   sessionStartedAt: storedSession ? Number(storedSession.sessionStartedAt) || null : null,
+  sessionId: storedSession && storedSession.sessionId ? String(storedSession.sessionId) : null,
+  sessionTaskSnapshot: hasStoredSessionTaskSnapshot && storedSession.sessionTaskSnapshot ? {
+    id: storedSession.sessionTaskSnapshot.id ? String(storedSession.sessionTaskSnapshot.id) : null,
+    text: String(storedSession.sessionTaskSnapshot.text || '')
+  } : null,
+  sessionTaskSnapshotCaptured: hasStoredSessionTaskSnapshot,
+  taskProgressApplied: !!(storedSession && storedSession.taskProgressApplied),
+  pomoProgressApplied: !!(storedSession && storedSession.pomoProgressApplied),
   restoreExpired: false,
-  pomoCount: clamp(parseInt(storedSession && storedSession.pomoCount, 10) || parseInt(localStorage.getItem('fm_pomoCount'), 10) || 0, 0, 3),
+  restoreExpiredAt: null,
+  pomoCount: clamp(parseInt(storedPomoCount, 10) || 0, 0, 3),
   soundEnabled: getBool('fm_sound', true),
   autoStartBreaks: getBool('fm_auto_breaks', false),
   autoStartFocus: getBool('fm_auto_focus', false),
@@ -213,11 +244,31 @@ const state = {
   tasks: safeGetJSON('fm_tasks', []).map(normalizeTask).filter(function(t){ return t.text; }),
   activeTaskId: localStorage.getItem('fm_activeTask') || null,
   history: safeGetJSON('fm_history', []).map(normalizeHistory).filter(Boolean),
-  pendingNextMode: null,
+  pendingNextMode: storedPendingNextMode,
+  completionEntry: storedCompletionEntry,
   breakTipIndex: 0
 };
 
-if (storedSession && storedSession.isRunning && state.endTime) {
+// Legacy v4 sessions stored zero time without a phase after completion. Recover
+// the finished card only when the latest history entry matches the saved mode.
+if (storedSession && !storedSession.phase && state.timeLeft === 0 && !state.isRunning
+    && !state.sessionStartedAt && state.history.length) {
+  const latest = state.history[state.history.length - 1];
+  if (latest.mode === state.currentMode) {
+    state.sessionPhase = 'finished';
+    state.sessionId = latest.id;
+    state.completionEntry = latest;
+    state.pendingNextMode = latest.mode === 'work'
+      ? (state.pomoCount === 0 ? 'long' : 'short')
+      : 'work';
+    state.sessionTaskSnapshot = latest.taskId ? { id:latest.taskId, text:latest.taskText } : null;
+    state.sessionTaskSnapshotCaptured = true;
+    state.taskProgressApplied = true;
+    state.pomoProgressApplied = true;
+  }
+}
+
+if (state.sessionPhase === 'running' && state.endTime) {
   const remaining = Math.max(0, Math.round((state.endTime - Date.now()) / 1000));
   if (remaining > 0) {
     state.isRunning = true;
@@ -227,7 +278,12 @@ if (storedSession && storedSession.isRunning && state.endTime) {
     state.endTime = null;
     state.isRunning = false;
     state.restoreExpired = true;
+    state.restoreExpiredAt = Number(storedSession.endTime) || Date.now();
   }
+} else if (state.sessionPhase === 'running' && state.timeLeft === 0) {
+  state.isRunning = false;
+  state.restoreExpired = true;
+  state.restoreExpiredAt = storedSession && Number(storedSession.endTime) || Date.now();
 }
 
 const $ = function(id) { return document.getElementById(id); };
@@ -268,11 +324,12 @@ const dom = {
   focusPopover: $('focusPopover'), focusList: $('focusList'), focusQuickAdd: $('focusQuickAdd'),
   pomoCount: [0,1,2,3].map(function(i){ return $('pomo' + i); }),
   sessionCompleteCard: $('sessionCompleteCard'), sessionCompleteTitle: $('sessionCompleteTitle'),
-  sessionCompleteTask: $('sessionCompleteTask'), nextSessionBtn: $('nextSessionBtn'), dismissSessionBtn: $('dismissSessionBtn'),
+  sessionCompleteTask: $('sessionCompleteTask'), completeTaskBtn: $('completeTaskBtn'), laterSessionBtn: $('laterSessionBtn'), taskSessionNotice: $('taskSessionNotice'),
+  nextSessionBtn: $('nextSessionBtn'), dismissSessionBtn: $('dismissSessionBtn'),
   taskInput: $('taskInput'), addTaskBtn: $('addTaskBtn'), taskList: $('taskList'), taskEmpty: $('taskEmpty'), taskEmptyText: $('taskEmptyText'),
   clearDoneBtn: $('clearDoneBtn'),
   todayReturnFocusBtn: $('todayReturnFocusBtn'), todayReturnFocusLabel: $('todayReturnFocusLabel'),
-  todaySessions: $('todaySessions'), todayMinutes: $('todayMinutes'), todayTasks: $('todayTasks'),
+  todaySessions: $('todaySessions'), todayMinutes: $('todayMinutes'),
   weekSessions: $('weekSessions'), weekMinutes: $('weekMinutes'), weekChart: $('weekChart'),
   sessionHistory: $('sessionHistory'), exportHistoryBtn: $('exportHistoryBtn'),
   shortcutsBtn: $('shortcutsBtn'), shortcutsDialog: $('shortcutsDialog'), shortcutsCloseBtn: $('shortcutsCloseBtn'),
@@ -354,9 +411,17 @@ function persistSession() {
     currentMode: state.currentMode,
     timeLeft: state.timeLeft,
     totalTime: state.totalTime,
+    phase: state.sessionPhase,
     isRunning: state.isRunning,
     endTime: state.endTime,
     sessionStartedAt: state.sessionStartedAt,
+    sessionId: state.sessionId,
+    sessionTaskSnapshot: state.sessionTaskSnapshot,
+    sessionTaskSnapshotCaptured: state.sessionTaskSnapshotCaptured,
+    taskProgressApplied: state.taskProgressApplied,
+    pomoProgressApplied: state.pomoProgressApplied,
+    pendingNextMode: state.pendingNextMode,
+    completionEntry: state.completionEntry,
     pomoCount: state.pomoCount
   }));
   localStorage.setItem('fm_pomoCount', String(state.pomoCount));
@@ -420,11 +485,7 @@ function setDialogOpen(dialog, open) {
 }
 
 function shouldOfferFocusPrep() {
-  return activeAppView === 'focus' &&
-    !focusMode &&
-    !state.isRunning &&
-    state.currentMode === 'work' &&
-    !focusPrepDismissed;
+  return false;
 }
 
 function syncFocusPrep() {
@@ -523,10 +584,15 @@ dom.saveSettings.addEventListener('click', function() {
   setBool('fm_wake_lock', state.keepAwake);
   applyThemePreference(dom.themePreference.value, true);
   updateModeTabs();
-  if (!state.isRunning) {
+  if (state.sessionPhase === 'ready') {
     state.timeLeft = state.durations[state.currentMode] * 60;
     state.totalTime = state.timeLeft;
     state.sessionStartedAt = null;
+    state.sessionId = null;
+    state.sessionTaskSnapshot = null;
+    state.sessionTaskSnapshotCaptured = false;
+    state.taskProgressApplied = false;
+    state.pomoProgressApplied = false;
     updateTimerUI(true);
     persistSession();
   }
@@ -834,11 +900,24 @@ function formatTime(seconds) {
 function updateTimerUI(force) {
   updateFlipClock(!!force);
   dom.sessionLabel.textContent = SESSION_LABELS[state.currentMode]();
-  const timerActionLabel = state.isRunning ? t('timer.pause') : t('timer.start');
+  const timerActionLabel = state.isRunning
+    ? t('timer.pause')
+    : state.sessionPhase === 'paused'
+      ? t('timer.resume')
+      : state.sessionPhase === 'finished' && state.pendingNextMode
+        ? (state.pendingNextMode === 'work' ? t('complete.startFocus') : t('complete.startBreak'))
+        : t('timer.start');
   dom.timerPlayLabel.textContent = timerActionLabel;
   dom.timerPlayIcon.textContent = state.isRunning ? 'Ⅱ' : '▶';
   dom.startBtn.setAttribute('aria-label', timerActionLabel);
   dom.startBtn.title = timerActionLabel;
+  dom.startBtn.hidden = state.sessionPhase === 'finished';
+  if (dom.focusExitBtn) {
+    const exitLabel = state.sessionPhase === 'paused' ? t('focus.exitPaused') : t('focus.exitRunning');
+    dom.focusExitBtn.setAttribute('aria-label', exitLabel);
+    dom.focusExitBtn.title = exitLabel;
+  }
+  if (dom.taskSessionNotice) updateTaskSessionNotice();
   dom.focusSessionCycle.textContent = String(Math.min(state.pomoCount + 1, 4)) + ' ' + t('focus.of') + ' 4';
   const isBreak = state.currentMode !== 'work';
   dom.breakTip.hidden = !isBreak;
@@ -907,22 +986,69 @@ function updatePomoDotsUI() {
   });
 }
 
-function hideCompletion() {
+let autoTransitionTimer = null;
+
+function clearAutoTransition() {
+  if (autoTransitionTimer) clearTimeout(autoTransitionTimer);
+  autoTransitionTimer = null;
+}
+
+function clearCompletionState() {
+  clearAutoTransition();
   dom.sessionCompleteCard.hidden = true;
   state.pendingNextMode = null;
+  state.completionEntry = null;
+}
+
+function snapshotActiveTask() {
+  const active = state.tasks.find(function(task){ return task.id === state.activeTaskId && !task.done; });
+  return active ? { id:active.id, text:active.text } : null;
+}
+
+function taskName(taskId) {
+  const task = taskId && state.tasks.find(function(item){ return item.id === taskId; });
+  return task ? task.text : t('tasks.noTask');
+}
+
+function updateTaskSessionNotice() {
+  if (!dom.taskSessionNotice) return;
+  const inProgress = ['running','paused'].includes(state.sessionPhase);
+  const differs = state.sessionTaskSnapshot
+    ? state.activeTaskId !== state.sessionTaskSnapshot.id
+    : !!state.activeTaskId;
+  const visible = inProgress && differs && !focusMode;
+  dom.taskSessionNotice.hidden = !visible;
+  if (visible) {
+    dom.taskSessionNotice.textContent = t('tasks.nextSessionNotice', {
+      next: taskName(state.activeTaskId),
+      current: state.sessionTaskSnapshot ? state.sessionTaskSnapshot.text : t('tasks.noTask')
+    });
+  }
 }
 
 function setMode(mode, options) {
   if (!['work','short','long'].includes(mode)) return;
+  const force = options && options.force;
   const preserveImmersive = !!(options && options.preserveImmersive && focusMode);
+  if (!force && ['running','paused'].includes(state.sessionPhase)
+      && typeof window.confirm === 'function'
+      && !window.confirm(t('timer.confirmDiscard'))) return;
+  clearAutoTransition();
   pauseTimer();
   if (!preserveImmersive) exitFocusMode();
-  hideCompletion();
+  clearCompletionState();
   state.currentMode = mode;
   state.timeLeft = state.durations[mode] * 60;
   state.totalTime = state.timeLeft;
   state.endTime = null;
   state.sessionStartedAt = null;
+  state.sessionId = null;
+  state.sessionTaskSnapshot = null;
+  state.sessionTaskSnapshotCaptured = false;
+  state.taskProgressApplied = false;
+  state.pomoProgressApplied = false;
+  state.sessionPhase = 'ready';
+  state.isRunning = false;
   if (mode !== 'work') state.breakTipIndex = Math.floor(Math.random() * 4);
   updateModeTabs();
   updateTimerUI(true);
@@ -937,16 +1063,32 @@ function setMode(mode, options) {
 }
 
 function startTimer() {
-  if (state.isRunning) return;
+  if (state.sessionPhase === 'finished') {
+    transitionToPending(true, focusMode);
+    return;
+  }
+  if (state.isRunning || !['ready','paused'].includes(state.sessionPhase)) return;
+  clearAutoTransition();
   focusPrepDismissed = true;
   syncFocusPrep();
-  hideCompletion();
   if (state.timeLeft <= 0) {
+    if (state.sessionPhase === 'paused') return;
     state.timeLeft = state.durations[state.currentMode] * 60;
     state.totalTime = state.timeLeft;
   }
+  if (state.sessionPhase === 'ready') {
+    state.sessionId = state.sessionId || generateId();
+    state.sessionTaskSnapshot = snapshotActiveTask();
+    state.sessionTaskSnapshotCaptured = true;
+    state.taskProgressApplied = false;
+    state.pomoProgressApplied = false;
+    state.sessionStartedAt = Date.now();
+  } else if (!state.sessionTaskSnapshotCaptured) {
+    state.sessionTaskSnapshot = snapshotActiveTask();
+    state.sessionTaskSnapshotCaptured = true;
+  }
+  state.sessionPhase = 'running';
   state.isRunning = true;
-  state.sessionStartedAt = state.sessionStartedAt || Date.now();
   state.endTime = Date.now() + state.timeLeft * 1000;
   clearInterval(state.intervalId);
   state.intervalId = setInterval(tick, 250);
@@ -962,11 +1104,24 @@ function startTimer() {
 }
 
 function pauseTimer() {
-  if (!state.isRunning) return;
+  if (!state.isRunning || state.sessionPhase !== 'running') return;
+  const scheduledEnd = state.endTime;
+  const remaining = scheduledEnd ? Math.max(0, Math.round((scheduledEnd - Date.now()) / 1000)) : state.timeLeft;
+  if (remaining <= 0) {
+    clearInterval(state.intervalId);
+    state.intervalId = null;
+    state.isRunning = false;
+    state.timeLeft = 0;
+    state.endTime = null;
+    releaseWakeLock();
+    handleSessionEnd(false, scheduledEnd || Date.now());
+    return;
+  }
   state.isRunning = false;
+  state.sessionPhase = 'paused';
   clearInterval(state.intervalId);
   state.intervalId = null;
-  if (state.endTime) state.timeLeft = Math.max(0, Math.round((state.endTime - Date.now()) / 1000));
+  state.timeLeft = remaining;
   state.endTime = null;
   releaseWakeLock();
   persistSession();
@@ -974,20 +1129,33 @@ function pauseTimer() {
 }
 
 function resetTimer() {
+  if (['running','paused'].includes(state.sessionPhase)
+      && typeof window.confirm === 'function'
+      && !window.confirm(t('timer.confirmReset'))) return;
+  clearAutoTransition();
   pauseTimer();
-  hideCompletion();
+  exitFocusMode();
+  clearCompletionState();
   state.timeLeft = state.durations[state.currentMode] * 60;
   state.totalTime = state.timeLeft;
   state.endTime = null;
   state.sessionStartedAt = null;
+  state.sessionId = null;
+  state.sessionTaskSnapshot = null;
+  state.sessionTaskSnapshotCaptured = false;
+  state.taskProgressApplied = false;
+  state.pomoProgressApplied = false;
+  state.sessionPhase = 'ready';
+  state.isRunning = false;
   persistSession();
   updateTimerUI(true);
 }
 
 function tick() {
-  if (!state.isRunning || !state.endTime) return;
-  const remaining = Math.max(0, Math.round((state.endTime - Date.now()) / 1000));
-  if (remaining === state.timeLeft) return;
+  if (!state.isRunning || state.sessionPhase !== 'running' || !state.endTime) return;
+  const scheduledEnd = state.endTime;
+  const remaining = Math.max(0, Math.round((scheduledEnd - Date.now()) / 1000));
+  if (remaining === state.timeLeft && remaining > 0) return;
   state.timeLeft = remaining;
   updateTimerUI();
   persistSession();
@@ -1000,101 +1168,121 @@ function tick() {
     if (state.ambientPlaying) {
       fadeAmbientTo(ambientTargetVolumes().map(function(v){ return v * 0.22; }), 700);
     }
-    handleSessionEnd(false);
+    handleSessionEnd(false, scheduledEnd);
   }
 }
 
-function recordSession() {
-  const active = state.tasks.find(function(task){ return task.id === state.activeTaskId; });
+function recordSession(completedAt) {
+  const sessionId = state.sessionId || generateId();
+  state.sessionId = sessionId;
+  const existing = state.history.find(function(entry){ return entry.id === sessionId; });
+  if (existing) return { entry:existing, alreadyRecorded:true };
+  const snapshot = state.sessionTaskSnapshot;
   const entry = {
-    id: generateId(),
+    id: sessionId,
     mode: state.currentMode,
     startedAt: state.sessionStartedAt || (Date.now() - state.totalTime * 1000),
-    completedAt: Date.now(),
+    completedAt: completedAt || Date.now(),
     durationMin: Math.round((state.totalTime / 60) * 10) / 10,
-    taskId: active ? active.id : null,
-    taskText: active ? active.text : ''
+    taskId: snapshot ? snapshot.id : null,
+    taskText: snapshot ? snapshot.text : ''
   };
   state.history.push(entry);
   saveHistory();
-  return entry;
+  return { entry:entry, alreadyRecorded:false };
 }
 
 function showCompletion(nextMode, entry) {
+  state.sessionPhase = 'finished';
+  state.isRunning = false;
+  state.timeLeft = 0;
+  state.endTime = null;
   state.pendingNextMode = nextMode;
+  state.completionEntry = entry;
   dom.sessionCompleteTitle.textContent = Math.round(entry.durationMin) + ' min · ' + SESSION_LABELS[entry.mode]();
   dom.sessionCompleteTask.textContent = entry.taskText || '';
   dom.nextSessionBtn.textContent = nextMode === 'work' ? t('complete.startFocus') : t('complete.startBreak');
+  if (dom.completeTaskBtn) {
+    const task = entry.taskId && state.tasks.find(function(item){ return item.id === entry.taskId && !item.done; });
+    dom.completeTaskBtn.hidden = !task;
+    dom.completeTaskBtn.textContent = t('complete.markTask');
+  }
   dom.sessionCompleteCard.hidden = false;
+  persistSession();
+  updateTimerUI(true);
 }
 
 function transitionToPending(startImmediately, preserveImmersive) {
+  clearAutoTransition();
+  if (state.sessionPhase !== 'finished' || !state.pendingNextMode) return;
   const mode = state.pendingNextMode;
-  if (!mode) return;
-  setMode(mode, { preserveImmersive: !!preserveImmersive });
-  if (startImmediately) setTimeout(startTimer, 120);
+  setMode(mode, { force:true, preserveImmersive: !!preserveImmersive });
+  if (startImmediately) startTimer();
 }
 
-function handleSessionEnd(restored) {
+function handleSessionEnd(restored, completedAt) {
+  if (state.sessionPhase === 'finished' && state.completionEntry) {
+    showCompletion(state.pendingNextMode, state.completionEntry);
+    return;
+  }
   playSound();
-  const entry = recordSession();
-  let nextMode = 'work';
   let message;
+  let task = null;
 
   if (state.currentMode === 'work') {
-    const task = state.tasks.find(function(item){ return item.id === state.activeTaskId && !item.done; });
-    if (task) {
+    task = state.sessionTaskSnapshot && state.tasks.find(function(item){ return item.id === state.sessionTaskSnapshot.id; });
+    if (task && !state.taskProgressApplied) {
       task.actPomos += 1;
-      if (task.actPomos >= task.estPomos) {
-        task.done = true;
-        message = t('timer.done.work.taskComplete', { task:task.text });
-      } else {
-        message = t('timer.done.work.task', { act:task.actPomos, est:task.estPomos, task:task.text });
-      }
+      state.taskProgressApplied = true;
       saveTasks();
-      if (task.done) {
-        state.activeTaskId = null;
-        persistActiveTask();
-        flashFocusCompleted();
-      }
+      persistSession();
+      message = t('timer.done.work.task', { act:task.actPomos, est:task.estPomos, task:state.sessionTaskSnapshot.text });
+    } else if (state.sessionTaskSnapshot) {
+      message = t('timer.done.work.task', { act:task ? task.actPomos : 0, est:task ? task.estPomos : 0, task:state.sessionTaskSnapshot.text });
     }
-    state.pomoCount += 1;
-    if (state.pomoCount >= 4) {
-      state.pomoCount = 0;
-      nextMode = 'long';
-    } else {
-      nextMode = 'short';
+  }
+
+  const recorded = recordSession(completedAt);
+  const entry = recorded.entry;
+  let nextMode = 'work';
+  if (state.currentMode === 'work') {
+    if (!state.pomoProgressApplied) {
+      state.pomoCount += 1;
+      if (state.pomoCount >= 4) state.pomoCount = 0;
+      state.pomoProgressApplied = true;
+      persistSession();
     }
+    nextMode = state.pomoCount === 0 ? 'long' : 'short';
     message = message || t('timer.done.work');
   } else {
+    state.pomoProgressApplied = true;
+    persistSession();
     nextMode = 'work';
     message = state.currentMode === 'short' ? t('timer.done.short') : t('timer.done.long');
   }
 
   state.sessionStartedAt = null;
   updatePomoDotsUI();
-  persistSession();
   renderTasks();
   renderFocusUI();
   renderToday();
   renderProgress();
   showNotification(message);
 
-  const completedMode = entry.mode;
-  if (focusMode && completedMode === 'work' && !restored) {
-    state.pendingNextMode = nextMode;
-    dom.sessionCompleteCard.hidden = true;
-    setTimeout(function(){ transitionToPending(true, true); }, 700);
-    return;
-  }
-
   showCompletion(nextMode, entry);
-  const auto = completedMode === 'work' ? state.autoStartBreaks : state.autoStartFocus;
-  if (auto && !restored) setTimeout(function(){ transitionToPending(true, focusMode); }, 900);
+  const auto = entry.mode === 'work' ? state.autoStartBreaks : state.autoStartFocus;
+  if (auto && !restored) {
+    clearAutoTransition();
+    autoTransitionTimer = setTimeout(function(){
+      autoTransitionTimer = null;
+      transitionToPending(true, focusMode);
+    }, 900);
+  }
 }
 
 dom.startBtn.addEventListener('click', function() {
-  if (state.isRunning) pauseTimer();
+  if (state.sessionPhase === 'finished') transitionToPending(true, focusMode);
+  else if (state.isRunning) pauseTimer();
   else startTimer();
 });
 dom.resetBtn.addEventListener('click', resetTimer);
@@ -1102,7 +1290,26 @@ dom.tabWork.addEventListener('click', function(){ setMode('work'); });
 dom.tabShort.addEventListener('click', function(){ setMode('short'); });
 dom.tabLong.addEventListener('click', function(){ setMode('long'); });
 dom.nextSessionBtn.addEventListener('click', function(){ transitionToPending(true, focusMode); });
+if (dom.laterSessionBtn) dom.laterSessionBtn.addEventListener('click', function(){ transitionToPending(false); });
 dom.dismissSessionBtn.addEventListener('click', function(){ transitionToPending(false); });
+if (dom.completeTaskBtn) dom.completeTaskBtn.addEventListener('click', function() {
+  if (state.sessionPhase !== 'finished' || !state.completionEntry || !state.completionEntry.taskId) return;
+  const task = state.tasks.find(function(item){ return item.id === state.completionEntry.taskId && !item.done; });
+  if (!task) {
+    showCompletion(state.pendingNextMode, state.completionEntry);
+    return;
+  }
+  task.done = true;
+  if (state.activeTaskId === task.id) {
+    state.activeTaskId = null;
+    persistActiveTask();
+  }
+  saveTasks();
+  renderTasks();
+  renderFocusUI();
+  dom.completeTaskBtn.hidden = true;
+  dom.completeTaskBtn.textContent = t('complete.taskMarked');
+});
 
 let focusMode = false;
 
@@ -1116,6 +1323,7 @@ function enterFocusMode() {
   setThemeUI('dark');
   closeFocusPopover();
   closeSoundPopover();
+  updateTaskSessionNotice();
 }
 
 function exitFocusMode() {
@@ -1128,6 +1336,7 @@ function exitFocusMode() {
   setThemeUI(resolveTheme(state.themePreference));
   if (!dom.settingsPanel.classList.contains('open')) dom.body.style.overflow = '';
   syncFocusPrep();
+  updateTaskSessionNotice();
 }
 
 function leaveImmersiveFocus() {
@@ -1224,20 +1433,32 @@ function setActiveTask(id) {
   renderTasks();
   renderFocusUI();
   renderToday();
+  updateTaskSessionNotice();
 }
 
 function renderFocusUI() {
-  const task = state.tasks.find(function(item){ return item.id === state.activeTaskId && !item.done; });
-  if (task) {
+  const activeTask = state.tasks.find(function(item){ return item.id === state.activeTaskId && !item.done; });
+  const sessionInProgress = ['running','paused'].includes(state.sessionPhase);
+  const sessionTask = sessionInProgress && state.sessionTaskSnapshotCaptured && state.sessionTaskSnapshot
+    ? state.tasks.find(function(item){ return item.id === state.sessionTaskSnapshot.id; })
+    : null;
+  const timerTask = sessionInProgress && state.sessionTaskSnapshotCaptured
+    ? state.sessionTaskSnapshot
+    : activeTask;
+  if (timerTask) {
     dom.timerActiveTask.hidden = false;
-    dom.timerActiveTask.textContent = task.text + ' · 🍅 ' + task.actPomos + '/' + task.estPomos;
-    dom.focusPill.classList.remove('ghost','complete');
-    dom.focusPill.classList.add('active');
-    dom.focusPillText.textContent = task.text;
-    dom.focusPillProgress.textContent = '🍅 ' + task.actPomos + '/' + task.estPomos;
+    const progressTask = sessionTask || activeTask;
+    dom.timerActiveTask.textContent = timerTask.text + ' · 🍅 ' + (progressTask ? progressTask.actPomos : 0) + '/' + (progressTask ? progressTask.estPomos : 0);
   } else {
     dom.timerActiveTask.hidden = true;
     dom.timerActiveTask.textContent = '';
+  }
+  if (activeTask) {
+    dom.focusPill.classList.remove('ghost','complete');
+    dom.focusPill.classList.add('active');
+    dom.focusPillText.textContent = activeTask.text;
+    dom.focusPillProgress.textContent = '🍅 ' + activeTask.actPomos + '/' + activeTask.estPomos;
+  } else {
     dom.focusPill.classList.add('ghost');
     dom.focusPill.classList.remove('active','complete');
     dom.focusPillText.textContent = t('timer.focusChoose');
@@ -1256,6 +1477,24 @@ function renderFocusList() {
   dom.focusList.innerHTML =
     '<div class="focus-option ' + (!state.activeTaskId ? 'selected' : '') + '" data-id="" role="option" aria-selected="' + (!state.activeTaskId) + '">' +
     '<span class="focus-option-text">— ' + escapeHtml(t('tasks.noTask')) + ' —</span></div>' + rows;
+}
+
+function createTask(text) {
+  const value = String(text || '').trim();
+  if (!value) return null;
+  validateActiveTask();
+  const shouldSelect = !state.activeTaskId && !['running','paused'].includes(state.sessionPhase);
+  const task = normalizeTask({ id:generateId(), text:value, done:false, estPomos:1, actPomos:0 });
+  state.tasks.unshift(task);
+  markAsUsed();
+  saveTasks();
+  if (shouldSelect) setActiveTask(task.id);
+  else {
+    renderTasks();
+    renderFocusUI();
+    updateTaskSessionNotice();
+  }
+  return task;
 }
 
 function positionFocusPopover() {
@@ -1299,11 +1538,8 @@ dom.focusQuickAdd.addEventListener('keydown', function(event) {
   if (event.key !== 'Enter') return;
   const text = dom.focusQuickAdd.value.trim();
   if (!text) return;
-  const task = normalizeTask({ id:generateId(), text:text, done:false, estPomos:1, actPomos:0 });
-  state.tasks.unshift(task);
+  createTask(text);
   dom.focusQuickAdd.value = '';
-  saveTasks();
-  setActiveTask(task.id);
   closeFocusPopover();
 });
 
@@ -1349,12 +1585,8 @@ function renderPlanner() {
 function addPlannerTask() {
   const text = dom.plannerTaskInput.value.trim();
   if (!text) return;
-  const task = normalizeTask({ id:generateId(), text:text, done:false, estPomos:1, actPomos:0 });
-  state.tasks.unshift(task);
-  state.activeTaskId = task.id;
-  persistActiveTask();
+  createTask(text);
   dom.plannerTaskInput.value = '';
-  saveTasks();
   renderPlanner();
 }
 
@@ -1370,8 +1602,6 @@ function closePlanner() {
 }
 
 function prepareTimerOnly(startNow) {
-  state.activeTaskId = null;
-  persistActiveTask();
   focusPrepDismissed = true;
   closePlanner();
   renderFocusUI();
@@ -1524,9 +1754,11 @@ dom.taskList.addEventListener('click', function(event) {
       persistActiveTask();
     }
   } else if (action === 'focus') {
-    if (!task.done) state.activeTaskId = state.activeTaskId === task.id ? null : task.id;
-    if (state.activeTaskId) focusPrepDismissed = true;
-    persistActiveTask();
+    if (!task.done) {
+      setActiveTask(task.id);
+      showAppView('focus');
+    }
+    return;
   } else if (action === 'edit') {
     beginTaskEdit(item, task);
     return;
@@ -1549,6 +1781,7 @@ dom.taskList.addEventListener('click', function(event) {
   saveTasks();
   renderTasks();
   renderFocusUI();
+  updateTaskSessionNotice();
 });
 
 dom.taskList.addEventListener('keydown', function(event) {
@@ -1567,16 +1800,8 @@ document.addEventListener('click', function(event) {
 function addTask() {
   const text = dom.taskInput.value.trim();
   if (!text) return;
-  const task = normalizeTask({ id:generateId(), text:text, done:false, estPomos:1, actPomos:0 });
-  state.tasks.unshift(task);
-  state.activeTaskId = task.id;
-  focusPrepDismissed = true;
-  persistActiveTask();
+  createTask(text);
   dom.taskInput.value = '';
-  markAsUsed();
-  saveTasks();
-  renderTasks();
-  renderFocusUI();
 }
 
 dom.addTaskBtn.addEventListener('click', addTask);
@@ -1615,10 +1840,8 @@ function renderToday() {
   const today = new Date();
   const workToday = state.history.filter(function(entry){ return entry.mode === 'work' && isSameDay(entry.completedAt, today); });
   const minutes = Math.round(workToday.reduce(function(sum,entry){ return sum + entry.durationMin; },0));
-  const completed = state.tasks.filter(function(task){ return task.done; }).length;
   dom.todaySessions.textContent = String(workToday.length);
   dom.todayMinutes.textContent = String(minutes) + ' min';
-  dom.todayTasks.textContent = completed + ' / ' + state.tasks.length;
 
   const activeTask = state.tasks.find(function(task){ return task.id === state.activeTaskId && !task.done; });
   dom.todayReturnFocusLabel.textContent = activeTask ? t('today.useInFocus') : t('today.returnFocus');
@@ -1739,6 +1962,8 @@ document.addEventListener('keydown', function(event) {
     if (!dom.focusPopover.hidden) { closeFocusPopover(); return; }
     if (focusMode) { leaveImmersiveFocus(); return; }
   }
+
+  if (target && target.closest('button,a,select,textarea,input,summary,[role="dialog"],[role="button"],[role="option"]')) return;
 
   if (event.key === ' ') {
     event.preventDefault();
@@ -1866,6 +2091,13 @@ function init() {
   setLang(state.lang);
   updateModeTabs();
   validateActiveTask();
+  if (['running','paused'].includes(state.sessionPhase)) {
+    state.sessionId = state.sessionId || generateId();
+    if (!state.sessionTaskSnapshotCaptured) {
+      state.sessionTaskSnapshot = snapshotActiveTask();
+      state.sessionTaskSnapshotCaptured = true;
+    }
+  }
   renderTasks();
   renderFocusUI();
   updatePomoDotsUI();
@@ -1890,7 +2122,9 @@ function init() {
     acquireWakeLock();
   } else if (state.restoreExpired) {
     state.restoreExpired = false;
-    handleSessionEnd(true);
+    handleSessionEnd(true, state.restoreExpiredAt);
+  } else if (state.sessionPhase === 'finished' && state.pendingNextMode && state.completionEntry) {
+    showCompletion(state.pendingNextMode, state.completionEntry);
   }
 
   showAppView(resolveInitialView(), { keepHash:true });

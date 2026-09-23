@@ -121,8 +121,8 @@ Si necesita una excepción, debe existir una razón funcional o semántica clara
 
 Flowmodoro v4 no usa scroll de documento como navegación principal. La aplicación se organiza en estados de interfaz:
 
-- **Foco / Preparar:** decide si organizar tareas o usar solo el timer.
-- **Foco / Timer:** el reloj es el elemento central; tareas y audio son contexto secundario.
+- **Foco / Timer:** el reloj y la acción principal están disponibles al entrar; elegir una tarea es opcional y aparece cerca del reloj.
+- **Foco / Preparar:** planificación accesible a demanda, sin interrumpir una sesión pausada.
 - **Foco / Inmersivo:** solo reloj, control Iniciar/Pausar y salida.
 - **Hoy:** gestor completo de tareas e historial.
 - **Más:** ajustes, guía, atajos, instalación y apoyo.
@@ -131,10 +131,11 @@ La navegación `Foco / Hoy / Más` cambia estados dentro del mismo viewport. No 
 
 ### Contrato de inmersión
 
-- `Iniciar` entra a inmersión durante una sesión de trabajo.
+- `Iniciar` entra a inmersión durante una sesión de trabajo; `Reanudar` conserva el bloque pausado.
 - `Pausar` pausa el timer pero conserva la escena inmersiva y el ambiente.
 - `×` o `Esc` pausan el timer, detienen el ambiente y salen de inmersión.
-- El fin natural de una sesión de trabajo conserva la inmersión y transiciona al descanso.
+- El fin natural de una sesión de trabajo respeta la preferencia de inicio automático del descanso.
+- La escena inmersiva conserva una indicación discreta de fase y tarea actual para evitar desorientación.
 - El gestor de tareas, el selector de ambiente, reset y ajustes no aparecen dentro de la escena inmersiva.
 
 ### Continuidad espacial

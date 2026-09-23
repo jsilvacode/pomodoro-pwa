@@ -2521,6 +2521,7 @@ a, button, input, textarea,
   }
 }
 
+
 /* En landscape extremo es preferible permitir desplazamiento vertical
    controlado a ocultar controles o cortar el reloj. */
 @media (max-height: 520px) {
@@ -5562,4 +5563,172 @@ body.focus-mode .focus-exit-btn {
     width: 40px;
     height: 40px;
   }
+}
+
+/* The normal mobile timer remains immediately readable and actionable.
+   The large, cinematic clock is reserved for the immersive scene. */
+@media (max-width: 768px) {
+  body:not(.focus-mode) .app-view-focus {
+    --flip-w: clamp(53px, calc((100vw - 76px) / 4), 82px);
+    --flip-h: calc(var(--flip-w) * 1.35);
+    --flip-font-size: calc(var(--flip-w) * 1.04);
+    --flip-radius: 8px;
+  }
+
+  body:not(.focus-mode) .app-view-focus .timer-card {
+    padding-block: clamp(0.6rem, 2vh, 1rem);
+  }
+
+  body:not(.focus-mode) .app-view-focus .flip-clock {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: clamp(0.15rem, 1vw, 0.45rem);
+  }
+
+  body:not(.focus-mode) .app-view-focus .flip-group {
+    gap: clamp(0.15rem, 0.8vw, 0.4rem);
+  }
+
+  body:not(.focus-mode) .app-view-focus .flip-sep {
+    display: flex;
+    font-size: calc(var(--flip-font-size) * 0.72);
+    opacity: 0.55;
+    padding-bottom: 0;
+  }
+
+  body:not(.focus-mode) .app-view-focus .mode-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.25rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: clamp(0.8rem, 2.2vh, 1.2rem);
+  }
+
+  body:not(.focus-mode) .app-view-focus .mode-tab,
+  body:not(.focus-mode) .app-view-focus #tab-long {
+    grid-column: auto;
+    min-width: 0;
+    min-height: 54px;
+    padding: 0.45rem 0.1rem;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font-size: clamp(0.59rem, 2.4vw, 0.72rem);
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  body:not(.focus-mode) .app-view-focus .mode-tab.active {
+    border-bottom-color: var(--accent);
+  }
+
+  body:not(.focus-mode) .app-view-focus .timer-session-label {
+    margin-top: clamp(0.7rem, 1.8vh, 1rem);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+  }
+
+  body:not(.focus-mode) .app-view-focus .timer-action-zone {
+    margin-top: clamp(0.7rem, 2vh, 1.15rem);
+  }
+
+  body:not(.focus-mode) .app-view-focus .timer-controls {
+    flex-wrap: nowrap;
+    gap: 0.55rem;
+  }
+
+  body:not(.focus-mode) .app-view-focus .ctrl-btn-primary {
+    min-width: 0;
+    width: min(46vw, 190px);
+    min-height: 48px;
+    padding: 0.65rem 0.8rem;
+    border-radius: var(--radius-control);
+    background: var(--accent);
+    color: var(--bg-primary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  [data-theme="dark"] body:not(.focus-mode) .app-view-focus .ctrl-btn-primary {
+    background: var(--accent);
+    color: var(--obsidian-800);
+    border-color: var(--accent);
+  }
+}
+
+@media (max-width: 768px) and (max-height: 700px) {
+  body:not(.focus-mode) .app-view-focus .mode-tab,
+  body:not(.focus-mode) .app-view-focus #tab-long {
+    min-height: 44px;
+  }
+
+  body:not(.focus-mode) .app-view-focus .sound-dock {
+    margin-bottom: 0.4rem;
+  }
+}
+
+/* Even the quiet immersive scene should say whether this is focus or rest. */
+body.focus-mode .timer-session-label {
+  display: block !important;
+  margin-top: clamp(0.7rem, 1.5vh, 1rem);
+  color: var(--text-muted);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  opacity: 0.7;
+}
+
+body.focus-mode .timer-active-task:not([hidden]) {
+  display: block !important;
+  max-width: min(76vw, 440px);
+  margin-top: 0.4rem;
+  color: var(--text-secondary);
+  opacity: 0.84;
+}
+
+body.focus-mode .timer-controls {
+  opacity: 0.78;
+}
+
+/* A single task affordance next to the clock keeps planning optional. */
+.app-shell-body:not(.focus-mode) .app-view-focus .timer-task-focus {
+  display: flex;
+  margin-top: clamp(0.55rem, 1.6vh, 0.9rem);
+}
+
+.app-shell-body:not(.focus-mode) .app-view-focus .timer-active-task {
+  display: none !important;
+}
+
+.app-shell-body:not(.focus-mode) .app-view-focus .focus-pill {
+  max-width: min(80vw, 360px);
+  min-height: 36px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.app-shell-body:not(.focus-mode) .app-view-focus .focus-pill-icon {
+  display: none;
+}
+
+#taskSessionNotice:not([hidden]) {
+  display: block;
+  max-width: min(86vw, 470px);
+  margin: 0.4rem auto 0;
+  color: var(--text-secondary);
+  font-size: 0.69rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.session-complete-actions #laterSessionBtn {
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.session-complete-actions #laterSessionBtn:hover,
+.session-complete-actions #laterSessionBtn:focus-visible {
+  color: var(--text-primary);
+  background: var(--surface-hover);
 }
