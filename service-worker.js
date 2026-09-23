@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flowmodoro-v47';
+const CACHE_NAME = 'flowmodoro-v48';
 const AUDIO_CACHE_NAME = 'flowmodoro-audio-v1';
 const ASSETS = [
   './',
@@ -18,7 +18,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)))
+      Promise.all(keys.filter(key => key.startsWith('flowmodoro-') && key !== CACHE_NAME && key !== AUDIO_CACHE_NAME).map(key => caches.delete(key)))
     )
   );
   self.clients.claim();
