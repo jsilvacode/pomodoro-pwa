@@ -3,7 +3,7 @@
   "name": "Flowmodoro",
   "short_name": "Flowmodoro",
   "description": "Planifica tu intención, enfócate, descansa y aprende cuánto tiempo toma realmente tu trabajo.",
-  "start_url": "./index.html#focus",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "display_override": [

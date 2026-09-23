@@ -5732,3 +5732,273 @@ body.focus-mode .timer-controls {
   color: var(--text-primary);
   background: var(--surface-hover);
 }
+
+/* ═══════════════════════════════════════════════════════════
+   INTEGRATED HOME — timer and Today share one calm workspace
+═══════════════════════════════════════════════════════════ */
+
+body.integrated-home {
+  min-height: 100%;
+  height: auto;
+  background: var(--bg-primary);
+}
+
+body.integrated-home:not(.focus-mode) {
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: auto;
+}
+
+body.integrated-home.focus-mode {
+  overflow: hidden;
+}
+
+body.integrated-home.focus-mode .home-intro {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+body.integrated-home:not(.focus-mode) .navbar {
+  position: sticky;
+  top: 0;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--border) 75%, transparent);
+}
+
+body.integrated-home:not(.focus-mode) .nav-inner {
+  max-width: 1260px;
+}
+
+body.integrated-home:not(.focus-mode) .nav-links {
+  justify-content: flex-end;
+}
+
+.integrated-main {
+  width: min(100%, 1440px);
+  margin: 0 auto;
+  padding: clamp(1.1rem, 2.5vw, 2rem) clamp(1rem, 4vw, 3.5rem) 5rem;
+}
+
+body.integrated-home:not(.focus-mode) .home-intro {
+  display: block;
+  max-width: 1260px;
+  margin: 0 auto clamp(1rem, 2.5vw, 2rem);
+  padding: clamp(0.6rem, 1.5vw, 1rem) 0;
+}
+
+.home-intro-copy { min-width: 0; }
+
+.home-intro-kicker {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+}
+
+.home-intro h1 {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.5vw, 3.65rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+}
+
+.home-intro p {
+  margin-top: 0.55rem;
+  color: var(--text-muted);
+  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+  line-height: 1.45;
+}
+
+.integrated-workspace { width: 100%; }
+
+.workspace-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+  align-items: start;
+  gap: clamp(1rem, 2.4vw, 2.4rem);
+  max-width: 1260px;
+  margin: 0 auto;
+}
+
+.integrated-home #timer-section,
+.integrated-home #tasks-section,
+.integrated-home #guide-section,
+.integrated-home #donation-section {
+  scroll-margin-top: calc(var(--nav-height) + 1rem);
+}
+
+/* The old shell made these views fixed overlays. In the home they are grid panels. */
+body.integrated-home:not(.focus-mode) .app-view-focus,
+body.integrated-home:not(.focus-mode) .app-view-today {
+  position: relative;
+  inset: auto;
+  z-index: auto;
+  width: auto;
+  min-height: 0 !important;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  filter: none;
+  transition: none;
+}
+
+body.integrated-home:not(.focus-mode) .app-view-focus {
+  display: block;
+  overflow: visible;
+  padding: 0;
+  background: transparent;
+}
+
+body.integrated-home:not(.focus-mode) #timer-section.app-view-focus {
+  display: block;
+  padding: 0;
+}
+
+body.integrated-home:not(.focus-mode) #timer-section.app-view-focus > .container {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+body.integrated-home:not(.focus-mode) .app-view-focus > .section-parallax__bg,
+body.integrated-home:not(.focus-mode) .app-view-today > .section-parallax__bg { display: none; }
+
+body.integrated-home:not(.focus-mode) .app-view-focus > .container,
+body.integrated-home:not(.focus-mode) .app-view-today > .container {
+  width: 100%;
+  height: auto;
+  max-width: none;
+  margin: 0;
+  transform: none;
+}
+
+body.integrated-home:not(.focus-mode) .timer-card {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  min-height: 0;
+  padding: clamp(1.15rem, 2.5vw, 2rem) clamp(1rem, 2.7vw, 2.25rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--bg-surface) 92%, transparent);
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] body.integrated-home:not(.focus-mode) .timer-card,
+[data-theme="dark"] body.integrated-home:not(.focus-mode) .app-view-today {
+  border-color: var(--border);
+  background: color-mix(in srgb, var(--bg-surface) 88%, var(--bg-primary));
+}
+
+body.integrated-home:not(.focus-mode) .app-view-focus .mode-tabs { margin-bottom: clamp(0.8rem, 1.5vw, 1.25rem); }
+body.integrated-home:not(.focus-mode) .app-view-focus .timer-session-label { margin-top: 0.7rem; }
+body.integrated-home:not(.focus-mode) .app-view-focus .timer-action-zone { margin-top: clamp(0.7rem, 1.5vw, 1.1rem); }
+body.integrated-home:not(.focus-mode) .app-view-focus .flip-clock { flex-direction: row; gap: clamp(0.35rem, 1vw, 0.8rem); }
+body.integrated-home:not(.focus-mode) .app-view-focus .flip-sep { display: block; }
+body.integrated-home:not(.focus-mode) .timer-active-task:not([hidden]) {
+  max-width: min(100%, 30rem);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+body.integrated-home:not(.focus-mode) #taskSessionNotice:not([hidden]) {
+  max-width: min(100%, 30rem);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+body.integrated-home:not(.focus-mode) .app-view-today {
+  display: block;
+  overflow: visible;
+  padding: clamp(1rem, 2vw, 1.6rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--bg-surface) 92%, transparent);
+  box-shadow: var(--shadow-md);
+}
+
+body.integrated-home:not(.focus-mode) .app-view-today .section-header { margin-bottom: 1rem; text-align: left; }
+body.integrated-home:not(.focus-mode) .app-view-today .section-badge {
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-size: 0.68rem;
+}
+body.integrated-home:not(.focus-mode) .app-view-today .section-title { font-size: clamp(1.45rem, 3vw, 2.2rem); line-height: 1.05; }
+body.integrated-home:not(.focus-mode) .app-view-today .section-subtitle { margin-left: 0; font-size: 0.86rem; line-height: 1.45; }
+body.integrated-home:not(.focus-mode) .today-return-focus { display: none; }
+body.integrated-home:not(.focus-mode) .today-strip { margin-top: 0; padding: 0.65rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); font-size: 0.82rem; }
+body.integrated-home:not(.focus-mode) .task-input-row { margin-top: 1rem; gap: 0.5rem; }
+body.integrated-home:not(.focus-mode) .task-input-row .btn-primary { flex: 0 0 auto; padding-inline: 0.85rem; }
+body.integrated-home:not(.focus-mode) .task-list { max-height: none; overflow: visible; }
+body.integrated-home:not(.focus-mode) .progress-disclosure { margin-top: 1rem; }
+
+@media (min-width: 861px) {
+  body.integrated-home:not(.focus-mode) .app-view-focus {
+    --flip-w: clamp(68px, 8.1vw, 120px);
+    --flip-h: calc(var(--flip-w) * 1.5);
+    --flip-font-size: calc(var(--flip-w) * 1.08);
+  }
+}
+
+body.integrated-home:not(.focus-mode) .guide-section,
+body.integrated-home:not(.focus-mode) .support-section,
+body.integrated-home:not(.focus-mode) .footer {
+  max-width: 1260px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+body.integrated-home:not(.focus-mode) .guide-section { margin-top: clamp(3rem, 7vw, 7rem); padding: clamp(2rem, 5vw, 4rem) 0; border-top: 1px solid var(--border); }
+body.integrated-home:not(.focus-mode) .support-section { padding: clamp(1rem, 3vw, 2rem) 0; }
+body.integrated-home:not(.focus-mode) .footer { padding-right: 0; padding-left: 0; }
+
+@media (max-width: 860px) {
+  body.integrated-home:not(.focus-mode) .nav-inner { gap: 0.55rem; padding-inline: 0.9rem; }
+  body.integrated-home:not(.focus-mode) .nav-logo { font-size: 1.35rem; }
+  body.integrated-home:not(.focus-mode) .nav-links { display: flex; gap: 0; min-width: 0; }
+  body.integrated-home:not(.focus-mode) .nav-link { padding: 0.35rem 0.42rem; font-size: 0.62rem; letter-spacing: 0.08em; }
+  .integrated-main { padding: 0.85rem 0.8rem 5.5rem; }
+  body.integrated-home:not(.focus-mode) .home-intro { align-items: flex-start; gap: 0.7rem; margin-bottom: 0.8rem; padding: 0.45rem 0; }
+  .home-intro h1 { font-size: clamp(1.9rem, 8vw, 2.8rem); }
+  .home-intro p { margin-top: 0.35rem; font-size: 0.86rem; }
+  .home-intro-link { display: none; }
+  .workspace-grid { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+  body.integrated-home:not(.focus-mode) .app-view-today { padding: 1rem; }
+  body.integrated-home:not(.focus-mode) .app-view-today .task-list { max-height: none; }
+  body.integrated-home:not(.focus-mode) .guide-section,
+  body.integrated-home:not(.focus-mode) .support-section,
+  body.integrated-home:not(.focus-mode) .footer { margin-top: 2.5rem; padding-right: 0; padding-left: 0; }
+}
+
+@media (max-width: 768px) {
+  body.integrated-home:not(.focus-mode) .nav-links { display: none; }
+  body.integrated-home:not(.focus-mode) .nav-inner { justify-content: center; }
+  body.integrated-home:not(.focus-mode) .nav-logo { margin-inline: auto; }
+  body.integrated-home:not(.focus-mode) .pomo-counter { display: none; }
+  body.integrated-home:not(.focus-mode) .today-return-focus { display: inline-flex; }
+  body.integrated-home:not(.focus-mode) .app-view-focus .flip-sep { display: flex; }
+  body.integrated-home:not(.focus-mode) .app-view-focus .mode-tab { font-size: 0.7rem; }
+  body.integrated-home:not(.focus-mode) .app-view-focus .ctrl-btn-primary {
+    min-height: 52px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 430px) {
+  body.integrated-home:not(.focus-mode) .home-intro-kicker { font-size: 0.64rem; }
+  body.integrated-home:not(.focus-mode) .timer-card { padding: 0.9rem 0.75rem 1rem; }
+  body.integrated-home:not(.focus-mode) .app-view-focus .flip-clock { gap: 0.25rem; }
+  body.integrated-home:not(.focus-mode) .app-view-focus .flip-sep { margin-inline: 0.08rem; }
+  body.integrated-home:not(.focus-mode) .task-input-row { align-items: stretch; }
+  body.integrated-home:not(.focus-mode) .task-input-row .btn-primary { width: 100%; }
+}

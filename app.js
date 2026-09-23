@@ -8,7 +8,9 @@
 const TRANSLATIONS = {
   es: {
     'nav.focus':'Foco','nav.today':'Hoy','nav.progress':'Progreso','nav.more':'Más','nav.settings':'Ajustes',
-    'nav.timer':'Timer','nav.tasks':'Tareas','nav.guide':'Guía Pomodoro','nav.install':'Instalar App','nav.support':'Apoyar proyecto',
+    'nav.timer':'Timer','nav.tasks':'Tareas','nav.guide':'Cómo funciona','nav.install':'Instalar App','nav.support':'Apoyar proyecto',
+    'home.kicker':'TU ESPACIO DE FOCO','home.title':'Una cosa a la vez.','home.subtitle':'Elige qué importa ahora o empieza sin tarea.',
+    'home.logo':'Flowmodoro · Inicio','home.workspace':'Espacio de trabajo',
     'hero.badge':'✨ Tu flujo de trabajo perfecto','hero.title1':'Trabaja mejor,','hero.title2':'descansa mejor.',
     'hero.subtitle':'Usa la técnica Pomodoro para potenciar tu productividad con intervalos de trabajo y descanso que respetan tu cerebro.',
     'hero.cta':'Empezar ahora','hero.learn':'¿Qué es Pomodoro?','hero.stat1':'min de enfoque','hero.stat2':'min de descanso','hero.stat3':'y descansas 15 min',
@@ -17,6 +19,7 @@ const TRANSLATIONS = {
     'timer.done.work':'Sesión de foco completada.','timer.done.short':'Descanso terminado.','timer.done.long':'Descanso largo terminado.',
     'timer.done.work.task':'Foco completado · 🍅 {act}/{est} · {task}','timer.done.work.taskComplete':'Tarea completada · {task}',
     'timer.focusTitle':'Enfocar en…','timer.focusChoose':'Elegir tarea','timer.focusQuickAdd':'+ Nueva tarea…','timer.focusCompleted':'Tarea completada',
+    'timer.currentTask':'Esta sesión · {task}','timer.nextTask':'Después · {task}','timer.nextChoose':'Elegir tarea para después','timer.changeNext':'Cambiar próxima tarea',
     'focus.exit':'Salir de foco y pausar','focus.exitRunning':'Pausar y salir del foco','focus.exitPaused':'Volver a tareas; sesión pausada','focus.session':'Sesión de foco','focus.of':'de','focus.timerControl':'Reloj','focus.soundControl':'Sonido',
     'prep.kicker':'Preparar sesión','prep.title':'¿Cómo quieres empezar?','prep.text':'Puedes organizar lo que harás o entrar directo al timer.','prep.tasks':'Preparar tareas','prep.timerOnly':'Solo usar el timer',
     'planner.title':'Tus tareas para este foco.','planner.text':'Agrega tareas, estima pomodoros y elige con cuál comenzar.','planner.placeholder':'Nueva tarea…','planner.start':'Comenzar foco','planner.empty':'Agrega una tarea o entra directo al timer.',
@@ -29,19 +32,19 @@ const TRANSLATIONS = {
     'settings.appearance':'Apariencia','settings.themeLabel':'Tema','settings.language':'Idioma','settings.advanced':'Avanzado',
     'settings.theme.system':'Sistema','settings.theme.light':'Claro','settings.theme.dark':'Oscuro',
     'settings.save':'Guardar cambios',
-    'today.sessions':'sesiones','today.focus':'en foco','today.tasks':'tareas','today.plan':'planificados','today.next':'Próxima tarea','today.returnFocus':'Volver al timer','today.useInFocus':'Usar en foco',
-    'tasks.badge':'Hoy','tasks.title':'¿Qué vas a hacer ahora?','tasks.subtitle':'Elige una tarea y vuelve al foco.',
+    'today.sessions':'sesiones','today.focus':'en foco','today.tasks':'tareas','today.plan':'planificados','today.next':'Próxima tarea','today.returnFocus':'Ir al reloj','today.useInFocus':'Ir al reloj',
+    'tasks.badge':'Hoy','tasks.title':'¿Qué vas a hacer ahora?','tasks.subtitle':'Anota lo que harás y elige una prioridad.',
     'tasks.placeholder':'Agregar nueva tarea...','tasks.add':'+ Agregar','tasks.empty':'No hay tareas aún. Agrega la primera.','tasks.empty.filter':'No hay tareas aquí.',
     'tasks.noTask':'Sin tarea','tasks.filter.all':'Todas','tasks.filter.active':'Pendientes','tasks.filter.done':'Completadas',
     'tasks.clearDone':'Limpiar completadas','tasks.clearDone.confirm':'¿Seguro?','tasks.estimation':'Real / estimado',
-    'tasks.delete':'Eliminar','tasks.focus':'Enfocar','tasks.unfocus':'Quitar foco','tasks.complete':'Marcar como completada','tasks.nextSessionNotice':'Para la próxima sesión: {next}; esta sesión sigue en {current}.',
+    'tasks.delete':'Eliminar','tasks.focus':'Enfocar','tasks.unfocus':'Quitar foco','tasks.complete':'Marcar como completada','tasks.nextSessionNotice':'{next} se usará en el siguiente bloque.',
     'tasks.reorder.up':'Subir','tasks.reorder.down':'Bajar','tasks.inc.pomos':'Aumentar estimación','tasks.dec.pomos':'Reducir estimación','tasks.edit':'Editar',
     'progress.badge':'Progreso','progress.week':'Esta semana','progress.details':'Ver actividad','progress.title':'Tu trabajo deja huella.',
     'progress.subtitle':'Compara lo que planeaste con lo que realmente tomó, sin convertir el foco en una competencia.',
     'progress.weekSessions':'Sesiones esta semana','progress.weekMinutes':'Minutos de foco','progress.completedTasks':'Tareas completadas',
     'progress.estimateRatio':'Real / estimado','progress.history':'Historial reciente','progress.localOnly':'Tus datos permanecen en este dispositivo.',
     'progress.export':'Exportar','progress.empty':'Completa una sesión para empezar tu historial.',
-    'guide.badge':'Técnica Pomodoro','guide.title':'Una cosa a la vez.',
+    'guide.badge':'Técnica Pomodoro','guide.title':'Un ritmo que se sostiene.',
     'guide.subtitle':'Trabaja con intención, descansa antes de agotarte y vuelve con claridad.',
     'guide.cycle.work':'Trabajo profundo','guide.cycle.short':'Descanso corto','guide.cycle.repeat':'Repetir','guide.cycle.long':'Descanso largo',
     'guide.card1.title':'¿Por qué funciona?','guide.card1.text':'Los intervalos acotados ayudan a proteger la atención y reducen la fatiga de sostener foco continuo.',
@@ -64,7 +67,9 @@ const TRANSLATIONS = {
   },
   en: {
     'nav.focus':'Focus','nav.today':'Today','nav.progress':'Progress','nav.more':'More','nav.settings':'Settings',
-    'nav.timer':'Timer','nav.tasks':'Tasks','nav.guide':'Pomodoro guide','nav.install':'Install App','nav.support':'Support project',
+    'nav.timer':'Timer','nav.tasks':'Tasks','nav.guide':'How it works','nav.install':'Install App','nav.support':'Support project',
+    'home.kicker':'YOUR FOCUS SPACE','home.title':'One thing at a time.','home.subtitle':'Choose what matters now, or start without a task.',
+    'home.logo':'Flowmodoro · Home','home.workspace':'Workspace',
     'hero.badge':'✨ Your perfect workflow','hero.title1':'Work smarter,','hero.title2':'rest better.',
     'hero.subtitle':'Use the Pomodoro technique with focused work and recovery intervals that respect your attention.',
     'hero.cta':'Get started','hero.learn':'What is Pomodoro?','hero.stat1':'min of focus','hero.stat2':'min of rest','hero.stat3':'then 15 min break',
@@ -73,6 +78,7 @@ const TRANSLATIONS = {
     'timer.done.work':'Focus session completed.','timer.done.short':'Break finished.','timer.done.long':'Long break finished.',
     'timer.done.work.task':'Focus completed · 🍅 {act}/{est} · {task}','timer.done.work.taskComplete':'Task completed · {task}',
     'timer.focusTitle':'Focus on…','timer.focusChoose':'Choose task','timer.focusQuickAdd':'+ New task…','timer.focusCompleted':'Task completed',
+    'timer.currentTask':'This session · {task}','timer.nextTask':'Next · {task}','timer.nextChoose':'Choose a task for later','timer.changeNext':'Change next task',
     'focus.exit':'Exit focus and pause','focus.exitRunning':'Pause and exit focus','focus.exitPaused':'Back to tasks; session paused','focus.session':'Focus session','focus.of':'of','focus.timerControl':'Timer','focus.soundControl':'Sound',
     'prep.kicker':'Prepare session','prep.title':'How do you want to start?','prep.text':'Organize what you will do or go straight to the timer.','prep.tasks':'Prepare tasks','prep.timerOnly':'Use timer only',
     'planner.title':'Your tasks for this focus.','planner.text':'Add tasks, estimate pomodoros, and choose where to begin.','planner.placeholder':'New task…','planner.start':'Start focus','planner.empty':'Add a task or go straight to the timer.',
@@ -85,19 +91,19 @@ const TRANSLATIONS = {
     'settings.appearance':'Appearance','settings.themeLabel':'Theme','settings.language':'Language','settings.advanced':'Advanced',
     'settings.theme.system':'System','settings.theme.light':'Light','settings.theme.dark':'Dark',
     'settings.save':'Save changes',
-    'today.sessions':'sessions','today.focus':'in focus','today.tasks':'tasks','today.plan':'planned','today.next':'Next task','today.returnFocus':'Back to timer','today.useInFocus':'Use in focus',
-    'tasks.badge':'Today','tasks.title':'What will you do now?','tasks.subtitle':'Choose one task and return to focus.',
+    'today.sessions':'sessions','today.focus':'in focus','today.tasks':'tasks','today.plan':'planned','today.next':'Next task','today.returnFocus':'Go to timer','today.useInFocus':'Go to timer',
+    'tasks.badge':'Today','tasks.title':'What will you do now?','tasks.subtitle':'Write down your plan and choose one priority.',
     'tasks.placeholder':'Add a new task...','tasks.add':'+ Add','tasks.empty':'No tasks yet. Add your first one.','tasks.empty.filter':'No tasks here.',
     'tasks.noTask':'No task','tasks.filter.all':'All','tasks.filter.active':'Pending','tasks.filter.done':'Completed',
     'tasks.clearDone':'Clear completed','tasks.clearDone.confirm':'Sure?','tasks.estimation':'Actual / estimated',
-    'tasks.delete':'Delete','tasks.focus':'Focus','tasks.unfocus':'Remove focus','tasks.complete':'Mark as completed','tasks.nextSessionNotice':'Next session: {next}; this session stays on {current}.',
+    'tasks.delete':'Delete','tasks.focus':'Focus','tasks.unfocus':'Remove focus','tasks.complete':'Mark as completed','tasks.nextSessionNotice':'{next} will be used in the next block.',
     'tasks.reorder.up':'Move up','tasks.reorder.down':'Move down','tasks.inc.pomos':'Increase estimate','tasks.dec.pomos':'Reduce estimate','tasks.edit':'Edit',
     'progress.badge':'Progress','progress.week':'This week','progress.details':'View activity','progress.title':'Your work leaves a trace.',
     'progress.subtitle':'Compare what you planned with what it actually took, without turning focus into a competition.',
     'progress.weekSessions':'Sessions this week','progress.weekMinutes':'Focus minutes','progress.completedTasks':'Completed tasks',
     'progress.estimateRatio':'Actual / estimated','progress.history':'Recent history','progress.localOnly':'Your data stays on this device.',
     'progress.export':'Export','progress.empty':'Complete a session to start your history.',
-    'guide.badge':'Pomodoro Technique','guide.title':'One thing at a time.',
+    'guide.badge':'Pomodoro Technique','guide.title':'A rhythm you can keep.',
     'guide.subtitle':'Work with intention, rest before fatigue, and return with clarity.',
     'guide.cycle.work':'Deep work','guide.cycle.short':'Short break','guide.cycle.repeat':'Repeat','guide.cycle.long':'Long break',
     'guide.card1.title':'Why does it work?','guide.card1.text':'Bounded intervals help protect attention and reduce the fatigue of sustaining focus continuously.',
@@ -467,11 +473,37 @@ if (dom.languagePreference) {
 window.addEventListener('scroll', function() {
   if (!dom.navbar) return;
   dom.navbar.style.boxShadow = window.scrollY > 10 ? '0 4px 20px rgba(0,0,0,0.08)' : '';
+  syncActiveSection();
 }, { passive:true });
 
 
-let activeAppView = 'focus';
+let activeAppView = 'home';
 let focusPrepDismissed = false;
+
+const pageSections = {
+  home: $('hero'),
+  focus: dom.timerSection,
+  today: dom.tasksSection,
+  guide: $('guide-section'),
+  support: $('donation-section')
+};
+
+function syncActiveSection() {
+  if (focusMode) return;
+  const threshold = (dom.navbar ? dom.navbar.getBoundingClientRect().height : 0) + 80;
+  let visible = 'home';
+  if (pageSections.support.getBoundingClientRect().top <= threshold) visible = 'support';
+  else if (pageSections.guide.getBoundingClientRect().top <= threshold) visible = 'guide';
+  else if (window.innerWidth <= 860 && pageSections.today.getBoundingClientRect().top <= threshold) visible = 'today';
+  else if (pageSections.focus.getBoundingClientRect().top <= threshold) {
+    visible = window.innerWidth > 860 && activeAppView === 'today' ? 'today' : 'focus';
+  }
+  activeAppView = visible;
+  dom.body.dataset.appView = visible;
+  document.querySelectorAll('[data-view-target]').forEach(function(control) {
+    control.classList.toggle('active', control.dataset.viewTarget === visible);
+  });
+}
 
 function setDialogOpen(dialog, open) {
   if (!dialog) return;
@@ -497,24 +529,25 @@ function syncFocusPrep() {
 }
 
 function showAppView(view, options) {
-  const next = view === 'today' ? 'today' : 'focus';
+  const next = pageSections[view] ? view : 'focus';
   if (focusMode && next !== 'focus') leaveImmersiveFocus();
   activeAppView = next;
   dom.body.dataset.appView = next;
-
-  document.querySelectorAll('.app-view').forEach(function(section) {
-    const active = section.dataset.appView === next;
-    section.classList.toggle('is-active', active);
-    section.setAttribute('aria-hidden', active ? 'false' : 'true');
-  });
 
   document.querySelectorAll('[data-view-target]').forEach(function(control) {
     control.classList.toggle('active', control.dataset.viewTarget === next);
   });
 
   if (!(options && options.keepHash)) {
-    const hash = next === 'today' ? '#today' : '#focus';
-    if (window.location.hash !== hash) history.replaceState(null,'',hash);
+    const hash = next === 'home' ? '#home' : '#' + next;
+    if (window.location.hash !== hash) history.pushState(null,'',hash);
+  }
+
+  if (!(options && options.skipScroll)) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const behavior = (options && options.instant) || reduceMotion ? 'auto' : 'smooth';
+    if (next === 'home') window.scrollTo({ top:0, behavior:behavior });
+    else pageSections[next].scrollIntoView({ behavior:behavior, block:'start' });
   }
 
   closeFocusPopover();
@@ -523,9 +556,17 @@ function showAppView(view, options) {
 }
 
 document.querySelectorAll('[data-view-target]').forEach(function(control) {
-  control.addEventListener('click', function() {
+  control.addEventListener('click', function(event) {
+    event.preventDefault();
     showAppView(control.dataset.viewTarget);
   });
+});
+
+window.addEventListener('popstate', function() {
+  showAppView(resolveInitialView(), { keepHash:true, instant:true });
+});
+window.addEventListener('hashchange', function() {
+  showAppView(resolveInitialView(), { keepHash:true, instant:true });
 });
 
 function openSettings() {
@@ -1052,6 +1093,7 @@ function setMode(mode, options) {
   if (mode !== 'work') state.breakTipIndex = Math.floor(Math.random() * 4);
   updateModeTabs();
   updateTimerUI(true);
+  renderFocusUI();
   syncAmbientVolume();
   persistSession();
   if (preserveImmersive) {
@@ -1101,6 +1143,7 @@ function startTimer() {
   acquireWakeLock();
   persistSession();
   updateTimerUI();
+  renderFocusUI();
 }
 
 function pauseTimer() {
@@ -1149,6 +1192,7 @@ function resetTimer() {
   state.isRunning = false;
   persistSession();
   updateTimerUI(true);
+  renderFocusUI();
 }
 
 function tick() {
@@ -1210,6 +1254,7 @@ function showCompletion(nextMode, entry) {
   dom.sessionCompleteCard.hidden = false;
   persistSession();
   updateTimerUI(true);
+  renderFocusUI();
 }
 
 function transitionToPending(startImmediately, preserveImmersive) {
@@ -1337,6 +1382,7 @@ function exitFocusMode() {
   if (!dom.settingsPanel.classList.contains('open')) dom.body.style.overflow = '';
   syncFocusPrep();
   updateTaskSessionNotice();
+  syncActiveSection();
 }
 
 function leaveImmersiveFocus() {
@@ -1442,13 +1488,12 @@ function renderFocusUI() {
   const sessionTask = sessionInProgress && state.sessionTaskSnapshotCaptured && state.sessionTaskSnapshot
     ? state.tasks.find(function(item){ return item.id === state.sessionTaskSnapshot.id; })
     : null;
-  const timerTask = sessionInProgress && state.sessionTaskSnapshotCaptured
-    ? state.sessionTaskSnapshot
-    : activeTask;
-  if (timerTask) {
+  const timerTask = sessionInProgress && state.sessionTaskSnapshotCaptured ? state.sessionTaskSnapshot : null;
+  if (sessionInProgress) {
     dom.timerActiveTask.hidden = false;
-    const progressTask = sessionTask || activeTask;
-    dom.timerActiveTask.textContent = timerTask.text + ' · 🍅 ' + (progressTask ? progressTask.actPomos : 0) + '/' + (progressTask ? progressTask.estPomos : 0);
+    const taskText = timerTask ? timerTask.text : t('tasks.noTask');
+    const progress = sessionTask ? ' · 🍅 ' + sessionTask.actPomos + '/' + sessionTask.estPomos : '';
+    dom.timerActiveTask.textContent = t('timer.currentTask', { task:taskText }) + progress;
   } else {
     dom.timerActiveTask.hidden = true;
     dom.timerActiveTask.textContent = '';
@@ -1456,12 +1501,15 @@ function renderFocusUI() {
   if (activeTask) {
     dom.focusPill.classList.remove('ghost','complete');
     dom.focusPill.classList.add('active');
-    dom.focusPillText.textContent = activeTask.text;
-    dom.focusPillProgress.textContent = '🍅 ' + activeTask.actPomos + '/' + activeTask.estPomos;
+    const sameAsCurrent = sessionInProgress && timerTask && activeTask.id === timerTask.id;
+    dom.focusPillText.textContent = sameAsCurrent
+      ? t('timer.changeNext')
+      : sessionInProgress ? t('timer.nextTask', { task:activeTask.text }) : activeTask.text;
+    dom.focusPillProgress.textContent = sameAsCurrent ? '' : '🍅 ' + activeTask.actPomos + '/' + activeTask.estPomos;
   } else {
     dom.focusPill.classList.add('ghost');
     dom.focusPill.classList.remove('active','complete');
-    dom.focusPillText.textContent = t('timer.focusChoose');
+    dom.focusPillText.textContent = sessionInProgress ? t('timer.nextChoose') : t('timer.focusChoose');
     dom.focusPillProgress.textContent = '';
   }
   renderFocusList();
@@ -1844,12 +1892,9 @@ function renderToday() {
   dom.todayMinutes.textContent = String(minutes) + ' min';
 
   const activeTask = state.tasks.find(function(task){ return task.id === state.activeTaskId && !task.done; });
-  dom.todayReturnFocusLabel.textContent = activeTask ? t('today.useInFocus') : t('today.returnFocus');
+  dom.todayReturnFocusLabel.textContent = t('today.returnFocus');
   dom.todayReturnFocusBtn.classList.toggle('has-task', !!activeTask);
-  dom.todayReturnFocusBtn.setAttribute(
-    'aria-label',
-    activeTask ? t('today.useInFocus') + ': ' + activeTask.text : t('today.returnFocus')
-  );
+  dom.todayReturnFocusBtn.setAttribute('aria-label', t('today.returnFocus'));
 }
 
 dom.todayReturnFocusBtn.addEventListener('click', function() {
@@ -1918,12 +1963,12 @@ dom.exportHistoryBtn.addEventListener('click', function() {
 
 function openGuideDialog() {
   closeSettings();
-  setDialogOpen(dom.guideDialog, true);
+  showAppView('guide');
 }
 function closeGuideDialog() { setDialogOpen(dom.guideDialog, false); }
 function openSupportDialog() {
   closeSettings();
-  setDialogOpen(dom.supportDialog, true);
+  showAppView('support');
 }
 function closeSupportDialog() { setDialogOpen(dom.supportDialog, false); }
 
@@ -2077,7 +2122,14 @@ class ParallaxController {
 
 
 function resolveInitialView() {
-  return window.location.hash === '#today' ? 'today' : 'focus';
+  const view = {
+    '#hero':'home', '#home':'home',
+    '#timer-section':'focus', '#focus':'focus',
+    '#tasks-section':'today', '#today':'today',
+    '#guide-section':'guide', '#guide':'guide',
+    '#donation-section':'support', '#support':'support'
+  }[window.location.hash];
+  return view || 'home';
 }
 
 function init() {
@@ -2127,8 +2179,8 @@ function init() {
     showCompletion(state.pendingNextMode, state.completionEntry);
   }
 
-  showAppView(resolveInitialView(), { keepHash:true });
-  if (!window.location.hash) history.replaceState(null,'','#focus');
+  const initialView = state.isRunning ? 'focus' : resolveInitialView();
+  showAppView(initialView, { keepHash:true, instant:true, skipScroll: initialView === 'home' || focusMode });
   syncFocusPrep();
 
   registerServiceWorker();
