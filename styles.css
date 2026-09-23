@@ -6224,6 +6224,20 @@ body.integrated-home:not(.focus-mode) .task-empty {
   font-size: 0.83rem;
 }
 
+body.integrated-home:not(.focus-mode) #taskSessionNotice:not([hidden]) {
+  display: block;
+  max-width: none;
+  margin: 0.55rem 0 0;
+  padding: 0.55rem 0.7rem;
+  border-left: 2px solid var(--accent);
+  border-radius: 0 var(--radius-control) var(--radius-control) 0;
+  background: var(--accent-subtle);
+  color: var(--text-secondary);
+  font-size: 0.76rem;
+  line-height: 1.4;
+  text-align: left;
+}
+
 .guide-dialog { width: min(640px, calc(100vw - 1.25rem)); }
 .guide-quick-steps { display: grid; gap: 0.65rem; margin-top: 1.35rem; }
 .guide-quick-step {
