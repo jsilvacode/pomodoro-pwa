@@ -6444,9 +6444,10 @@ body.integrated-home:not(.focus-mode) .app-view-today {
 
 [data-theme="light"] body.integrated-home:not(.focus-mode) {
   background:
-    radial-gradient(ellipse at 85% -8%, rgba(242, 119, 152, 0.10), transparent 45%),
-    radial-gradient(ellipse at 20% 5%, rgba(86, 0, 114, 0.05), transparent 44%),
-    var(--bg-primary);
+    radial-gradient(circle at 88% 10%, rgba(246, 108, 137, 0.48), transparent 43%) center top / 100% 960px no-repeat,
+    radial-gradient(circle at 4% 52%, rgba(35, 77, 104, 0.28), transparent 48%) center top / 100% 960px no-repeat,
+    radial-gradient(circle at 52% 78%, rgba(86, 0, 114, 0.16), transparent 48%) center top / 100% 960px no-repeat,
+    linear-gradient(145deg, #f8f4f8, #edf3f5 58%, #e8eef2);
 }
 [data-theme="light"] body.integrated-home:not(.focus-mode) .timer-card {
   background:
@@ -6456,9 +6457,10 @@ body.integrated-home:not(.focus-mode) .app-view-today {
 
 [data-theme="dark"] body.integrated-home:not(.focus-mode) {
   background:
-    radial-gradient(ellipse at 78% -8%, rgba(86, 0, 114, 0.24), transparent 48%),
-    radial-gradient(ellipse at 9% 6%, rgba(35, 77, 104, 0.28), transparent 43%),
-    var(--bg-primary);
+    radial-gradient(circle at 92% 12%, rgba(169, 0, 114, 0.62), transparent 46%) center top / 100% 960px no-repeat,
+    radial-gradient(circle at 5% 48%, rgba(1, 52, 64, 0.82), transparent 53%) center top / 100% 960px no-repeat,
+    radial-gradient(circle at 54% 88%, rgba(213, 0, 72, 0.24), transparent 48%) center top / 100% 960px no-repeat,
+    linear-gradient(145deg, #0b1a25, #17152d 48%, #0b202b);
 }
 [data-theme="dark"] body.integrated-home:not(.focus-mode) .navbar {
   background: rgba(11, 26, 37, 0.94);

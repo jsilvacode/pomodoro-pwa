@@ -98,7 +98,7 @@ El icono usa un arco de reloj crema sobre petróleo con un único punto coral. S
 
 No mezclar tipografías dentro de un mismo componente funcional.
 
-La home usa gradientes suaves en ambos temas: el contenido y el reloj mandan. La escena original `assets/orilla-en-calma.webp` aparece solo en la vista inmersiva, con un centro oscuro y espacio libre para el reloj. El archivo pesa cerca de 66 KB y queda fuera del precache inicial: si aún no cargó, aparece un fondo de color equivalente.
+La home usa gradientes expresivos de rosa, ciruela y petróleo en ambos temas. Las capas se concentran en los primeros 960 px de página; las tarjetas mantienen superficies serenas para proteger la lectura. La escena original `assets/orilla-en-calma.webp` aparece solo en la vista inmersiva, con un centro oscuro y espacio libre para el reloj. El archivo pesa cerca de 66 KB y queda fuera del precache inicial: si aún no cargó, aparece un fondo de color equivalente.
 
 Prompt de creación (herramienta integrada de generación de imágenes): lago sereno al anochecer, cordillera baja, árboles sólo en los extremos, niebla ligera, horizonte cobre y centro oscuro para el reloj; sin personas, objetos, letras ni interfaz. La composición es original y no utiliza imágenes de otros productos.
 
