@@ -8,7 +8,7 @@ Flowmodoro debe sentirse simple a primera vista y sofisticado al usarlo. La cali
 2. **Menos superficies, mejor jerarquía.** Preferir espacio, tipografía y divisores antes que añadir tarjetas.
 3. **La interacción comparte un mismo lenguaje.** Reposo → hover → focus → active debe sentirse igual en toda la app.
 4. **La complejidad aparece bajo demanda.** Opciones secundarias viven en popovers, drawers o disclosures.
-5. **El color semántico es excepcional.** Cobre/ámbar es el acento del producto; rojo solo representa acciones destructivas.
+5. **El color semántico es excepcional.** Frambuesa y coral guían la acción; el rojo intenso se reserva para acciones destructivas.
 
 ## Geometría
 
@@ -26,7 +26,7 @@ Altura compacta: `36px`.
 
 ### Primaria
 
-Usar para la decisión principal: iniciar, guardar, confirmar.
+Usar para la decisión principal: guardar o confirmar. Iniciar/reanudar usa una versión compacta y más serena.
 
 - fondo `--accent`
 - radio `--radius-control`
@@ -49,7 +49,7 @@ Clases actuales: `.btn-ghost`, `.ctrl-btn-ghost`, cierres y controles de reprodu
 
 ### Pill
 
-Solo para controles contextuales persistentes, no para botones genéricos.
+Para controles contextuales persistentes y el botón compacto de inicio; no se aplica a todos los botones.
 
 Clases actuales: `.focus-pill`, `.ambient-pill`.
 
@@ -81,13 +81,15 @@ No inventar una sombra o radio distinto por pantalla.
 
 ### Claro
 
-Crema cálido + cobre.
+Bruma clara `#F1F4F5`, texto petróleo `#0E2C38` y acento frambuesa `#A93661`.
 
 ### Oscuro
 
-Azul noche y superficies pizarra + ámbar. El cobre conserva la identidad sin teñir todos los fondos.
+Petróleo profundo `#0B1A25`, superficies azuladas `#17303D` y acento coral `#F27798`. Un velo ciruela suave da profundidad sin restar legibilidad.
 
 El color de modo del timer puede comunicar trabajo/descanso, pero no debe competir con el acento principal en controles de acción.
+
+El icono usa un arco de reloj crema sobre petróleo con un único punto coral. Su fuente vectorial está en `icons/icon.svg`; los PNG y el favicon derivan de ella.
 
 ## Tipografía
 
@@ -96,7 +98,7 @@ El color de modo del timer puede comunicar trabajo/descanso, pero no debe compet
 
 No mezclar tipografías dentro de un mismo componente funcional.
 
-La home usa gradientes oscuros y suaves: el contenido y el reloj mandan. La escena original `assets/orilla-en-calma.webp` aparece solo en la vista inmersiva, con un centro oscuro y espacio libre para el reloj. El archivo pesa cerca de 66 KB y queda fuera del precache inicial: si aún no cargó, aparece un fondo de color equivalente.
+La home usa gradientes suaves en ambos temas: el contenido y el reloj mandan. La escena original `assets/orilla-en-calma.webp` aparece solo en la vista inmersiva, con un centro oscuro y espacio libre para el reloj. El archivo pesa cerca de 66 KB y queda fuera del precache inicial: si aún no cargó, aparece un fondo de color equivalente.
 
 Prompt de creación (herramienta integrada de generación de imágenes): lago sereno al anochecer, cordillera baja, árboles sólo en los extremos, niebla ligera, horizonte cobre y centro oscuro para el reloj; sin personas, objetos, letras ni interfaz. La composición es original y no utiliza imágenes de otros productos.
 
