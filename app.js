@@ -9,7 +9,7 @@ const TRANSLATIONS = {
   es: {
     'nav.focus':'Foco','nav.today':'Hoy','nav.progress':'Progreso','nav.more':'Más','nav.settings':'Ajustes',
     'nav.timer':'Timer','nav.tasks':'Tareas','nav.guide':'Guía','nav.install':'Instalar App','nav.support':'Apoyar proyecto',
-    'home.kicker':'TU ESPACIO DE FOCO','home.title':'Una cosa a la vez.','home.subtitle':'Elige qué importa ahora o empieza sin tarea.',
+    'home.kicker':'TU ESPACIO DE FOCO','home.title':'Haz más, con calma.','home.subtitle':'Un espacio sereno para concentrarte y descansar a tu ritmo.',
     'home.logo':'Flowmodoro · Inicio','home.workspace':'Espacio de trabajo',
     'hero.badge':'✨ Tu flujo de trabajo perfecto','hero.title1':'Trabaja mejor,','hero.title2':'descansa mejor.',
     'hero.subtitle':'Usa la técnica Pomodoro para potenciar tu productividad con intervalos de trabajo y descanso que respetan tu cerebro.',
@@ -69,7 +69,7 @@ const TRANSLATIONS = {
   en: {
     'nav.focus':'Focus','nav.today':'Today','nav.progress':'Progress','nav.more':'More','nav.settings':'Settings',
     'nav.timer':'Timer','nav.tasks':'Tasks','nav.guide':'Guide','nav.install':'Install App','nav.support':'Support project',
-    'home.kicker':'YOUR FOCUS SPACE','home.title':'One thing at a time.','home.subtitle':'Choose what matters now, or start without a task.',
+    'home.kicker':'YOUR FOCUS SPACE','home.title':'Do more, at your own pace.','home.subtitle':'A calm space to focus and rest on your terms.',
     'home.logo':'Flowmodoro · Home','home.workspace':'Workspace',
     'hero.badge':'✨ Your perfect workflow','hero.title1':'Work smarter,','hero.title2':'rest better.',
     'hero.subtitle':'Use the Pomodoro technique with focused work and recovery intervals that respect your attention.',

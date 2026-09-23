@@ -85,16 +85,20 @@ Crema cálido + cobre.
 
 ### Oscuro
 
-Obsidiana + ámbar.
+Azul noche y superficies pizarra + ámbar. El cobre conserva la identidad sin teñir todos los fondos.
 
 El color de modo del timer puede comunicar trabajo/descanso, pero no debe competir con el acento principal en controles de acción.
 
 ## Tipografía
 
-- **Display:** Cormorant Garamond, solo para momentos editoriales o jerarquía expresiva.
-- **UI:** Outfit, para navegación, controles, labels y contenido funcional.
+- **Titulares y UI:** Manrope, con pesos claros para separar promesa, contenido y controles.
+- **Marca:** Cormorant Garamond solo en el nombre Flowmodoro.
 
 No mezclar tipografías dentro de un mismo componente funcional.
+
+La home usa gradientes oscuros y suaves: el contenido y el reloj mandan. La escena original `assets/orilla-en-calma.webp` aparece solo en la vista inmersiva, con un centro oscuro y espacio libre para el reloj. El archivo pesa cerca de 66 KB y queda fuera del precache inicial: si aún no cargó, aparece un fondo de color equivalente.
+
+Prompt de creación (herramienta integrada de generación de imágenes): lago sereno al anochecer, cordillera baja, árboles sólo en los extremos, niebla ligera, horizonte cobre y centro oscuro para el reloj; sin personas, objetos, letras ni interfaz. La composición es original y no utiliza imágenes de otros productos.
 
 ## Movimiento
 
