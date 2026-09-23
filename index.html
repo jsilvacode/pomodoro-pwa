@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flowmodoro — Haz más, con calma</title>
   <meta name="description" content="Elige una tarea, enfócate con un temporizador Pomodoro y descansa a tu ritmo. Flowmodoro reúne tu foco y tu plan del día en un solo lugar." />
-  <meta name="theme-color" content="#F1F4F5" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#0B1A25" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#0B1A25" />
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
@@ -38,6 +37,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="activity-overlay.css" />
 </head>
 <body class="integrated-home" data-app-view="focus">
   <!-- ═══════════════════════════════════ NAVBAR ═══════════════════════════════════ -->
@@ -70,7 +70,7 @@
       <div class="workspace-grid">
 
   <!-- ═══════════════════════════════════ TIMER ════════════════════════════════════ -->
-  <section class="section app-view-focus is-active" id="timer-section" data-app-view="focus" aria-label="Foco">
+  <section class="section app-view-focus is-active" id="timer-section" data-app-view="focus" aria-label="Foco" data-i18n-aria="nav.focus">
     <div class="section-parallax__bg">
       <div class="deco-circle"></div>
     </div>
@@ -159,7 +159,7 @@
           </button>
           <div class="focus-popover" id="focusPopover" hidden>
             <div class="focus-popover-title" data-i18n="timer.focusTitle">Enfocar en…</div>
-            <div class="focus-list" id="focusList" role="listbox" aria-label="Elegir tarea"></div>
+            <div class="focus-list" id="focusList" role="listbox" aria-label="Elegir tarea" data-i18n-aria="timer.focusChoose"></div>
             <div class="focus-quickadd">
               <input
                 type="text"
@@ -191,7 +191,7 @@
         </div>
 
         <div class="session-complete-card" id="sessionCompleteCard" hidden aria-live="polite">
-          <button class="session-complete-dismiss" id="dismissSessionBtn" type="button" aria-label="Cerrar">✕</button>
+          <button class="session-complete-dismiss" id="dismissSessionBtn" type="button" aria-label="Cerrar" data-i18n-aria="common.close">✕</button>
           <span class="session-complete-kicker" data-i18n="complete.kicker">Sesión completada</span>
           <strong class="session-complete-title" id="sessionCompleteTitle">25 min de foco</strong>
           <span class="session-complete-task" id="sessionCompleteTask"></span>
@@ -220,16 +220,16 @@
             <span id="ambientPlayIcon" aria-hidden="true">▶</span>
           </button>
 
-          <div class="sound-popover" id="soundPopover" hidden role="dialog" aria-label="Sonido de foco">
+          <div class="sound-popover" id="soundPopover" hidden role="dialog" aria-label="Sonido de foco" data-i18n-aria="ambient.focusSound">
             <div class="sound-popover-header">
               <div>
                 <span class="sound-popover-kicker">FLOWMODORO SOUNDS</span>
                 <strong data-i18n="ambient.focusSound">Sonido de foco</strong>
               </div>
-              <button class="sound-popover-close" id="soundPopoverClose" type="button" aria-label="Cerrar">✕</button>
+              <button class="sound-popover-close" id="soundPopoverClose" type="button" aria-label="Cerrar" data-i18n-aria="common.close">✕</button>
             </div>
 
-            <div class="sound-options" role="group" aria-label="Ambientes">
+            <div class="sound-options" role="group" aria-label="Ambientes" data-i18n-aria="ambient.label">
               <button class="sound-option" type="button" data-sound="off"><span>—</span><small data-i18n="ambient.off">Sin audio</small></button>
               <button class="sound-option" type="button" data-sound="rain"><span>☂</span><small data-i18n="ambient.rain">Lluvia suave</small></button>
               <button class="sound-option" type="button" data-sound="nightForest"><span>✦</span><small data-i18n="ambient.nightForest">Bosque nocturno</small></button>
@@ -283,7 +283,7 @@
   </section>
 
   <!-- ═══════════════════════════════════ TODAY ════════════════════════════════════ -->
-  <section class="section section-alt app-view-today" id="tasks-section" data-app-view="today" aria-label="Hoy">
+  <section class="section section-alt app-view-today" id="tasks-section" data-app-view="today" aria-label="Hoy" data-i18n-aria="nav.today">
     <div class="section-parallax__bg">
       <div class="deco-blob"></div>
     </div>
@@ -328,16 +328,26 @@
 
       <button class="clear-done-subtle" id="clearDoneBtn" type="button" data-i18n="tasks.clearDone" hidden>Limpiar completadas</button>
 
-      <details class="progress-disclosure" id="progress-section">
-        <summary>
-          <div>
+      <div class="progress-disclosure" id="progress-section">
+        <button class="progress-disclosure-trigger" id="activityOpenBtn" type="button" aria-haspopup="dialog" aria-controls="activityDialog">
+          <span class="progress-disclosure-summary">
             <span class="progress-disclosure-eyebrow" data-i18n="progress.week">Esta semana</span>
             <strong><span id="weekSessions">0</span> <span data-i18n="today.sessions">sesiones</span> · <span id="weekMinutes">0</span> min</strong>
-          </div>
+          </span>
           <span class="progress-disclosure-action" data-i18n="progress.details">Ver actividad</span>
-        </summary>
+        </button>
+      </div>
 
-        <div class="progress-detail-body">
+      <dialog class="activity-dialog" id="activityDialog" aria-labelledby="activityDialogTitle">
+        <div class="activity-dialog-panel">
+          <header class="activity-dialog-header">
+            <div>
+              <span class="progress-disclosure-eyebrow" data-i18n="progress.week">Esta semana</span>
+              <h2 id="activityDialogTitle" data-i18n="progress.activityTitle">Tu actividad</h2>
+            </div>
+            <button class="activity-dialog-close" id="activityCloseBtn" type="button" data-i18n-aria="progress.close" aria-label="Cerrar actividad">×</button>
+          </header>
+          <div class="progress-detail-body">
           <div class="week-chart" id="weekChart" aria-label="Sesiones de foco de los últimos siete días"></div>
           <div class="history-header">
             <div>
@@ -347,8 +357,9 @@
             <button class="btn-ghost btn-sm" id="exportHistoryBtn" type="button" data-i18n="progress.export">Exportar</button>
           </div>
           <div class="session-history" id="sessionHistory"></div>
+          </div>
         </div>
-      </details>
+      </dialog>
     </div>
   </section>
 
@@ -363,7 +374,7 @@
         <span class="drawer-eyebrow">Flowmodoro</span>
         <h2 class="settings-title" id="settingsTitle" data-i18n="nav.settings">Ajustes</h2>
       </div>
-      <button class="drawer-close" id="settingsCloseBtn" type="button" aria-label="Cerrar">✕</button>
+      <button class="drawer-close" id="settingsCloseBtn" type="button" aria-label="Cerrar" data-i18n-aria="common.close">✕</button>
     </div>
 
     <div class="drawer-section drawer-section-primary" id="timerSettingsSection">
@@ -376,23 +387,9 @@
     </div>
 
     <div class="drawer-section">
-      <h3 data-i18n="settings.appearance">Apariencia</h3>
-      <div class="settings-grid settings-grid-simple">
-        <div class="setting-item">
-          <label for="themePreference" data-i18n="settings.themeLabel">Tema</label>
-          <select id="themePreference" class="setting-input">
-            <option value="system" data-i18n="settings.theme.system">Sistema</option>
-            <option value="light" data-i18n="settings.theme.light">Claro</option>
-            <option value="dark" data-i18n="settings.theme.dark">Oscuro</option>
-          </select>
-        </div>
-        <div class="setting-item">
-          <label for="languagePreference" data-i18n="settings.language">Idioma</label>
-          <select id="languagePreference" class="setting-input">
-            <option value="es">Español</option>
-            <option value="en">English</option>
-          </select>
-        </div>
+      <div class="drawer-language-row">
+        <span data-i18n="settings.language">Idioma</span>
+        <button id="languageToggleBtn" class="setting-input language-toggle" type="button" aria-label="Cambiar idioma a inglés" title="Cambiar idioma a inglés">ENG</button>
       </div>
     </div>
 
@@ -547,7 +544,7 @@
           <span class="flow-dialog-kicker" data-i18n="prep.kicker">Preparar sesión</span>
           <h2 id="plannerTitle" data-i18n="planner.title">Tus tareas para este foco.</h2>
         </div>
-        <button class="flow-dialog-close" id="plannerCloseBtn" type="button" aria-label="Cerrar">✕</button>
+        <button class="flow-dialog-close" id="plannerCloseBtn" type="button" aria-label="Cerrar" data-i18n-aria="common.close">✕</button>
       </header>
       <p class="flow-dialog-intro" data-i18n="planner.text">Agrega tareas, estima pomodoros y elige con cuál comenzar.</p>
       <div class="planner-add">
@@ -606,7 +603,7 @@
           <span class="flow-dialog-kicker" data-i18n="donation.badge">Apoya Flowmodoro</span>
           <h2 id="supportDialogTitle" data-i18n="donation.title">Si te sirve, puedes ayudar a que siga mejorando.</h2>
         </div>
-        <button class="flow-dialog-close" id="supportDialogCloseBtn" type="button" aria-label="Cerrar">✕</button>
+        <button class="flow-dialog-close" id="supportDialogCloseBtn" type="button" aria-label="Cerrar" data-i18n-aria="common.close">✕</button>
       </header>
       <p class="flow-dialog-intro" data-i18n="donation.text">Tu aporte ayuda a sostener el desarrollo, probar nuevas ideas y cuidar cada detalle del producto.</p>
       <div class="support-dialog-actions">
@@ -625,7 +622,7 @@
   <dialog class="shortcuts-dialog" id="shortcutsDialog">
     <div class="shortcuts-header">
       <h2 data-i18n="shortcuts.title">Atajos de teclado</h2>
-      <button id="shortcutsCloseBtn" type="button" aria-label="Cerrar">✕</button>
+      <button id="shortcutsCloseBtn" type="button" aria-label="Cerrar" data-i18n-aria="common.close">✕</button>
     </div>
     <div class="shortcut-grid">
       <kbd>Space</kbd><span data-i18n="shortcuts.toggle">Iniciar / pausar</span>

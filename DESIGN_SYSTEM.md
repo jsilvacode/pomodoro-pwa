@@ -8,7 +8,7 @@ Flowmodoro debe sentirse simple a primera vista y sofisticado al usarlo. La cali
 2. **Menos superficies, mejor jerarquía.** Preferir espacio, tipografía y divisores antes que añadir tarjetas.
 3. **La interacción comparte un mismo lenguaje.** Reposo → hover → focus → active debe sentirse igual en toda la app.
 4. **La complejidad aparece bajo demanda.** Opciones secundarias viven en popovers, drawers o disclosures.
-5. **El color semántico es excepcional.** Frambuesa y coral guían la acción; el rojo intenso se reserva para acciones destructivas.
+5. **El color semántico es excepcional.** Ciruela y lila guían la acción; el rojo intenso se reserva para acciones destructivas.
 
 ## Geometría
 
@@ -79,13 +79,7 @@ No inventar una sombra o radio distinto por pantalla.
 
 ## Color
 
-### Claro
-
-Bruma clara `#F1F4F5`, texto petróleo `#0E2C38` y acento frambuesa `#A93661`.
-
-### Oscuro
-
-Petróleo profundo `#0B1A25`, superficies azuladas `#17303D` y acento coral `#F27798`. Un velo ciruela suave da profundidad sin restar legibilidad.
+La aplicación usa solo modo oscuro. Petróleo profundo `#0B1A25`, ciruela `#201832`, azul `#1D4A77` y verde azulado `#19616C` forman el fondo; el lila `#C4A8DD` identifica las acciones. La inmersión oscurece y suaviza la imagen para reducir distracciones.
 
 El color de modo del timer puede comunicar trabajo/descanso, pero no debe competir con el acento principal en controles de acción.
 
@@ -98,9 +92,9 @@ El icono usa un arco de reloj crema sobre petróleo con un único punto coral. S
 
 No mezclar tipografías dentro de un mismo componente funcional.
 
-La home usa gradientes expresivos de rosa, ciruela y petróleo en ambos temas. Las capas se concentran en los primeros 960 px de página; las tarjetas mantienen superficies serenas para proteger la lectura. La escena original `assets/orilla-en-calma.webp` aparece solo en la vista inmersiva, con un centro oscuro y espacio libre para el reloj. El archivo pesa cerca de 66 KB y queda fuera del precache inicial: si aún no cargó, aparece un fondo de color equivalente.
+La home usa gradientes de lila, ciruela, azul profundo y verde azulado, con un reflejo rosado tenue. Las capas se concentran en los primeros 960 px de página; las tarjetas mantienen superficies serenas para proteger la lectura. El flip clock comparte la paleta mediante caras superior e inferior ligeramente distintas, sin perder contraste.
 
-Prompt de creación (herramienta integrada de generación de imágenes): lago sereno al anochecer, cordillera baja, árboles sólo en los extremos, niebla ligera, horizonte cobre y centro oscuro para el reloj; sin personas, objetos, letras ni interfaz. La composición es original y no utiliza imágenes de otros productos.
+La escena inmersiva usa `assets/cielo-violeta.webp`, versión optimizada de la fotografía `thomas-bennie-B2e7_Q8Tixw-unsplash.jpg` proporcionada por el dueño del proyecto. La misma foto cubre toda la pantalla, difusa detrás, y aparece más definida bajo una capa oscura en la tarjeta del reloj. Pesa cerca de 115 KB y se guarda junto con los archivos de la PWA para que la escena esté disponible sin conexión.
 
 ## Movimiento
 
@@ -130,9 +124,9 @@ La página principal vuelve a ser vertical. El primer tramo ofrece el reloj, una
 - **Inicio:** una frase breve da contexto; la tarjeta del reloj contiene modos, tiempo y una sola acción principal. Sonido, reinicio y ajustes viven justo fuera de ella.
 - **Foco listo o pausado:** se puede empezar o reanudar sin preparación obligatoria. Una sesión pausada muestra su tarea actual; otra selección se indica como tarea del siguiente bloque.
 - **Foco inmersivo:** al iniciar un bloque de trabajo, la página se convierte en una escena tranquila con reloj, control de pausa y salida.
-- **Hoy:** una sola lista de tareas, accesible junto al reloj en escritorio y debajo en móvil. Cada tarea ofrece una acción explícita para enfocarla; el resumen del día queda después de la lista.
+- **Hoy:** una sola lista de tareas, accesible junto al reloj en escritorio y debajo en móvil. Cada tarea ofrece una acción explícita para enfocarla; si crece la lista en escritorio, se desplaza dentro de su tarjeta. El resumen del día queda después de la lista y abre la actividad en un diálogo centrado.
 - **Guía:** la ayuda breve se abre a demanda en un diálogo; la explicación extensa permanece más abajo en la página.
-- **Ajustes:** controles de tiempo, apariencia y preferencias en un drawer; la guía y el apoyo también se pueden descubrir bajando por la página.
+- **Ajustes:** controles de tiempo, un botón ESP/ENG/PT y preferencias en un drawer; la guía y el apoyo también se pueden descubrir bajando por la página. Al entrar por primera vez se toma el idioma preferido del navegador y el botón guarda cualquier cambio manual.
 
 El desplazamiento vertical sirve para explorar. La inmersión sirve para trabajar. Entrar, pausar, salir y volver no reinician el bloque ni cambian su tarea registrada.
 

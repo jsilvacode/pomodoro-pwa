@@ -1,0 +1,193 @@
+/* Activity history opens above the integrated workspace. */
+.drawer-language-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.drawer-language-row > span {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.drawer-language-row .language-toggle {
+  width: auto;
+  min-width: 76px;
+  min-height: 40px;
+  padding-inline: 0.9rem;
+  border-radius: var(--radius-pill);
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+body.integrated-home:not(.focus-mode) .progress-disclosure {
+  margin-top: 1rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.progress-disclosure-trigger {
+  width: 100%;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.progress-disclosure-summary { min-width: 0; }
+.progress-disclosure-trigger strong {
+  color: var(--text-primary);
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+.progress-disclosure-action {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  transition: color 180ms ease, transform 180ms ease;
+}
+.progress-disclosure-trigger:hover .progress-disclosure-action,
+.progress-disclosure-trigger:focus-visible .progress-disclosure-action {
+  color: var(--accent);
+  transform: translateX(2px);
+}
+
+.activity-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(760px, calc(100vw - 2rem));
+  max-width: none;
+  max-height: min(82vh, 760px);
+  padding: 0;
+  overflow: visible;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  border-radius: 24px;
+  background: transparent;
+  color: var(--text-primary);
+  box-shadow: 0 28px 90px rgba(5, 9, 18, 0.42);
+  opacity: 0;
+  transform: translateY(14px) scale(0.985);
+  transition: opacity 220ms ease, transform 220ms cubic-bezier(.2,.75,.25,1), overlay 220ms allow-discrete, display 220ms allow-discrete;
+}
+.activity-dialog[open] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.activity-dialog::backdrop {
+  background: rgba(9, 12, 24, 0.58);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity 220ms ease, overlay 220ms allow-discrete, display 220ms allow-discrete;
+}
+.activity-dialog[open]::backdrop { opacity: 1; }
+@starting-style {
+  .activity-dialog[open] { opacity: 0; transform: translateY(14px) scale(0.985); }
+  .activity-dialog[open]::backdrop { opacity: 0; }
+}
+.activity-dialog-panel {
+  display: flex;
+  max-height: min(82vh, 760px);
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: inherit;
+  background: var(--bg-surface, #142e3b);
+}
+.activity-dialog-header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem 1.4rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+.activity-dialog-header h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+}
+.activity-dialog-close {
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--bg-primary) 25%, transparent);
+  color: var(--text-secondary);
+  font-size: 1.35rem;
+  cursor: pointer;
+}
+.activity-dialog .progress-detail-body {
+  overflow: auto;
+  padding: 1rem 1.4rem 1.4rem;
+  overscroll-behavior: contain;
+}
+
+@media (min-width: 861px) {
+  body.integrated-home:not(.focus-mode) .workspace-grid {
+    align-items: stretch;
+    padding-bottom: 62px;
+  }
+  body.integrated-home:not(.focus-mode) #timer-section,
+  body.integrated-home:not(.focus-mode) #tasks-section { height: clamp(440px, calc(100vh - 280px), 540px); }
+  body.integrated-home:not(.focus-mode) #timer-section,
+  body.integrated-home:not(.focus-mode) #tasks-section { display: flex; flex-direction: column; }
+  body.integrated-home:not(.focus-mode) #timer-section.app-view-focus > .container,
+  body.integrated-home:not(.focus-mode) #tasks-section.app-view-today > .container { height: 100%; }
+  body.integrated-home:not(.focus-mode) #timer-section.app-view-focus > .container {
+    display: flex;
+    flex-direction: column;
+  }
+  body.integrated-home:not(.focus-mode) #timer-section.app-view-focus .timer-card {
+    height: 100%;
+    flex: 1 1 auto;
+  }
+  body.integrated-home:not(.focus-mode) #timer-section .focus-utility-bar {
+    position: absolute;
+    top: calc(100% + 9px);
+    left: 0;
+    right: 0;
+    margin: 0;
+  }
+  body.integrated-home:not(.focus-mode) #tasks-section > .container {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  body.integrated-home:not(.focus-mode) #tasks-section .task-list {
+    min-height: 0;
+    max-height: none;
+    flex: 1 1 auto;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+@media (max-width: 600px) {
+  .activity-dialog { width: calc(100vw - 1rem); max-height: 88vh; border-radius: 20px; }
+  .activity-dialog-panel { max-height: 88vh; }
+  .activity-dialog-header { padding: 1rem 1rem 0.75rem; }
+  .activity-dialog .progress-detail-body { padding: 0.8rem 1rem 1rem; }
+  .progress-disclosure-action { font-size: 0.72rem; }
+  .progress-disclosure-action::after { content: ' ↗'; font-size: inherit; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activity-dialog,
+  .activity-dialog::backdrop,
+  .progress-disclosure-action {
+    transition-duration: 0.01ms !important;
+  }
+  .activity-dialog { transform: none; }
+}
