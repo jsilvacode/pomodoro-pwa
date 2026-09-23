@@ -198,8 +198,11 @@ test('a session started without a task stays unassigned after selecting a task a
   const app = createApp({ fm_tasks: JSON.stringify([{ id: 'b', text: 'B', estPomos: 1 }]) });
   app.run('startTimer()');
   app.advance(60_000);
-  app.run("pauseTimer(); setActiveTask('b')");
+  app.run("leaveImmersiveFocus(); setActiveTask('b')");
+  assert.equal(app.el('taskSessionNotice').hidden, false);
+  assert.match(app.el('taskSessionNotice').textContent, /B se usará en el siguiente bloque/);
   const loaded = createApp(app.saved(), app.now());
+  assert.equal(loaded.el('taskSessionNotice').hidden, false);
   loaded.run('startTimer()');
   loaded.advance(1440_000);
   assert.equal(loaded.state().history[0].taskId, null);
