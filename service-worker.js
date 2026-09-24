@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flowmodoro-v56';
+const CACHE_NAME = 'flowmodoro-v58';
 const AUDIO_CACHE_NAME = 'flowmodoro-audio-v1';
 const ASSETS = [
   './',
@@ -6,7 +6,14 @@ const ASSETS = [
   './styles.css',
   './activity-overlay.css',
   './app.js',
-  './assets/cielo-violeta.webp',
+  './experience.css',
+  './scene-controller.js',
+  './assets/ambientes/horizonte.webp',
+  './assets/ambientes/horizonte-mini.webp',
+  './assets/ambientes/refugio.webp',
+  './assets/ambientes/refugio-mini.webp',
+  './assets/ambientes/aura.webp',
+  './assets/ambientes/aura-mini.webp',
   './manifest.json',
   './icons/icon.svg',
   './icons/icon-192.png',

@@ -814,9 +814,9 @@ body[data-mode="long"] #tab-long.active {
 }
 
 .flip-card {
-  --flip-face: #29243C;
-  --flip-top: #332B49;
-  --flip-bottom: #211D34;
+  --flip-face: #20242B;
+  --flip-top: #23272E;
+  --flip-bottom: #191D24;
   --flip-ink: #F7F3FB;
   --flip-seam: rgba(11, 9, 25, 0.68);
   --flip-shadow: 0 18px 38px rgba(10, 12, 31, 0.32), inset 0 0 0 1px rgba(224, 211, 243, 0.12);
@@ -1946,70 +1946,6 @@ body[data-mode="long"] .ctrl-btn-primary {
   .pomo-counter { margin-bottom: 1.1rem; }
 }
 
-/* ═══ FOCUS MODE (modo noche al reproducir) ═══════════════ */
-body.focus-mode {
-  overflow: hidden;
-}
-
-/* La sección del timer permanece en el flujo (sin saltos de layout) */
-body.focus-mode #timer-section {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-}
-
-/* El protagonista emerge como superficie: panel de vidrio oscuro */
-body.focus-mode .timer-card {
-  max-width: 920px;
-  background: var(--bg-card);
-  border-color: var(--border-strong);
-  border-radius: 22px;
-  box-shadow: 0 42px 120px rgba(0,0,0,0.45), 0 14px 42px rgba(0,0,0,0.22);
-  padding: 2.25rem 1.75rem;
-}
-
-/* Desktop: escenario uniforme — el vidrio conserva la proporción de la
-   pantalla, centrado y con un margen estándar e igual en los 4 bordes */
-@media (min-width: 769px) {
-  body.focus-mode #timer-section {
-    padding: 3rem;
-  }
-  body.focus-mode #timer-section .container {
-    max-width: none;
-  }
-  body.focus-mode .timer-card {
-    width: 100%;
-    max-width: none;
-    min-height: 0;
-    height: calc(100vh - 6rem);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 28px;
-    padding: 2.5rem 3rem;
-  }
-  body.focus-mode .mode-tabs { width: 100%; }
-}
-
-body.focus-mode {
-  --flip-w: clamp(96px, min(18vw, calc((100vh - 27rem) / 1.83)), 180px);
-  --flip-h: calc(var(--flip-w) * 1.83);
-  --flip-font-size: calc(var(--flip-w) * 1.3);
-}
-
-@media (max-width: 768px) {
-  body.focus-mode {
-    --flip-w: clamp(100px, 32vw, 220px);
-    --flip-h: calc(var(--flip-w) * 1.5);
-    --flip-font-size: calc(var(--flip-w) * 1.0);
-  }
-}
-
 /* ─── El entorno retrocede (señales débiles combinadas) ─── */
 /* Base = salida: todo vuelve simultáneo y sin retraso */
 .hero, #tasks-section, #guide-section, #donation-section, .footer, .mobile-menu {
@@ -2024,130 +1960,14 @@ body.focus-mode {
               border-color var(--transition);
 }
 
-/* Entrada: cascada coreografiada (delays superpuestos 30-80ms) */
-body.focus-mode .navbar {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-6px);
-  transition: opacity 600ms var(--ease-premium) 0s, visibility 0s linear 0.6s,
-              transform 800ms var(--ease-premium) 0s,
-              background var(--transition), box-shadow var(--transition),
-              border-color var(--transition);
-}
-
-body.focus-mode .hero {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-4px) scale(0.995);
-  filter: blur(2px);
-  transition: opacity 600ms var(--ease-premium) 0.06s, visibility 0s linear 0.66s,
-              transform 800ms var(--ease-premium) 0.06s,
-              filter 800ms var(--ease-premium) 0.06s;
-}
-
-body.focus-mode .mobile-menu {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 600ms var(--ease-premium) 0.06s, visibility 0s linear 0.66s;
-}
-
-body.focus-mode #tasks-section {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-6px) scale(0.995);
-  transition: opacity 600ms var(--ease-premium) 0.14s, visibility 0s linear 0.74s,
-              transform 800ms var(--ease-premium) 0.14s;
-}
-
-body.focus-mode #guide-section {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-6px) scale(0.995);
-  transition: opacity 600ms var(--ease-premium) 0.22s, visibility 0s linear 0.82s,
-              transform 800ms var(--ease-premium) 0.22s;
-}
-
-body.focus-mode #donation-section {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-6px) scale(0.995);
-  transition: opacity 600ms var(--ease-premium) 0.3s, visibility 0s linear 0.9s,
-              transform 800ms var(--ease-premium) 0.3s;
-}
-
-body.focus-mode .footer {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-6px) scale(0.995);
-  transition: opacity 600ms var(--ease-premium) 0.38s, visibility 0s linear 0.98s,
-              transform 800ms var(--ease-premium) 0.38s;
-}
-
-/* ─── Revelación escalonada del contenido del timer ─── */
-body.focus-mode .mode-tabs,
-body.focus-mode .timer-session-label {
-  animation: focusReveal 700ms var(--ease-premium) backwards;
-}
-
-body.focus-mode .mode-tabs           { animation-delay: 100ms; }
-body.focus-mode .timer-session-label { animation-delay: 160ms; }
-
 @keyframes focusReveal {
   from { opacity: 0; transform: translateY(8px); filter: blur(3px); }
   to   { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
 
-/* Elementos secundarios: entran atenuados y ceden el protagonismo al reloj */
-body.focus-mode .timer-task-focus,
-body.focus-mode .pomo-counter,
-body.focus-mode .timer-controls {
-  opacity: 0.5;
-  animation: focusRevealDim 700ms var(--ease-premium) backwards;
-  transition: opacity var(--motion-normal) var(--ease-premium);
-}
-
-body.focus-mode .timer-task-focus { animation-delay: 220ms; }
-body.focus-mode .pomo-counter     { animation-delay: 280ms; }
-body.focus-mode .timer-controls   { animation-delay: 340ms; }
-
 @keyframes focusRevealDim {
   from { opacity: 0; transform: translateY(8px); filter: blur(3px); }
   to   { opacity: 0.5; transform: translateY(0); filter: blur(0); }
-}
-
-/* Al interactuar recuperan presencia plena */
-body.focus-mode .timer-task-focus:hover,
-body.focus-mode .pomo-counter:hover,
-body.focus-mode .timer-controls:hover {
-  opacity: 1;
-}
-
-/* El flash de tarea completada siempre a plena presencia */
-body.focus-mode .timer-task-focus:has(.focus-pill.complete) {
-  opacity: 1;
-}
-
-/* Los tabs de modo no son accionables durante el foco (solo indicadores) */
-body.focus-mode .mode-tab:disabled {
-  opacity: 0.35;
-  pointer-events: none;
-  cursor: default;
-}
-
-body.focus-mode .mode-tab.active:disabled {
-  opacity: 0.65;
-}
-
-/* ─── Reposo: la ambientación se detiene durante el foco ─── */
-body.focus-mode .hero__orb {
-  animation-play-state: paused;
 }
 
 /* ─── Accesibilidad ─── */
@@ -2159,51 +1979,6 @@ body.focus-mode .hero__orb {
     transition-delay: 0ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-/* Botón para salir del modo foco — contenido en la esquina del vidrio */
-.focus-exit-btn {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  z-index: 5;
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-md);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-strong);
-  color: var(--text-secondary);
-  font-size: 1.05rem;
-  cursor: pointer;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-6px) scale(0.96);
-  filter: blur(3px);
-  transition: opacity 600ms var(--ease-premium), visibility 0s linear 600ms,
-              transform 700ms var(--ease-premium), filter 700ms var(--ease-premium),
-              color var(--transition), border-color var(--transition),
-              background-color 650ms var(--ease-premium);
-}
-
-body.focus-mode .focus-exit-btn {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
-  filter: blur(0);
-  transition: opacity 600ms var(--ease-premium) 0.35s, visibility 0s linear 0s,
-              transform 700ms var(--ease-premium) 0.35s, filter 700ms var(--ease-premium) 0.35s,
-              color var(--transition), border-color var(--transition),
-              background-color 650ms var(--ease-premium);
-}
-
-.focus-exit-btn:hover {
-  color: var(--accent);
-  border-color: var(--accent);
 }
 
 /* ═══ TIMER MODE TRANSITIONS ════════════════════════════════ */
@@ -2306,25 +2081,6 @@ a, button, input, textarea,
   .donation-btn {
     max-width: 100%;
   }
-
-  /* Focus: reservar una franja limpia para la X y proteger safe areas. */
-  body.focus-mode #timer-section {
-    min-height: 100dvh;
-    padding-left: max(0.75rem, env(safe-area-inset-left));
-    padding-right: max(0.75rem, env(safe-area-inset-right));
-  }
-
-  body.focus-mode .timer-card {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    padding-top: 4rem;
-  }
-
-  body.focus-mode .focus-exit-btn {
-    top: max(0.75rem, env(safe-area-inset-top));
-    right: max(0.75rem, env(safe-area-inset-right));
-  }
 }
 
 @media (max-width: 480px) {
@@ -2357,15 +2113,6 @@ a, button, input, textarea,
   body[data-mode="short"] #tab-short.active,
   body[data-mode="long"] #tab-long.active {
     border-bottom-color: var(--accent);
-  }
-
-  /* La X vive arriba; los tabs comienzan debajo y nunca compiten por espacio. */
-  body.focus-mode .timer-card {
-    padding: 4rem 0.875rem 1.15rem;
-  }
-
-  body.focus-mode .mode-tabs {
-    margin-bottom: 0.8rem;
   }
 
   .hero,
@@ -2463,75 +2210,6 @@ a, button, input, textarea,
   }
 }
 
-/* Viewports bajos (teléfonos pequeños / landscape): compactar sin cortar. */
-@media (max-width: 768px) and (max-height: 700px) {
-  body.focus-mode {
-    --flip-w: clamp(76px, 25vw, 96px);
-    --flip-h: calc(var(--flip-w) * 1.5);
-    --flip-font-size: calc(var(--flip-w) * 1.0);
-  }
-
-  body.focus-mode .timer-card {
-    padding-top: 3.55rem;
-    padding-bottom: 0.75rem;
-  }
-
-  body.focus-mode .mode-tabs {
-    margin-bottom: 0.55rem;
-  }
-
-  body.focus-mode .mode-tab {
-    min-height: 40px;
-    padding-top: 0.35rem;
-    padding-bottom: 0.35rem;
-  }
-
-  body.focus-mode .timer-session-label {
-    margin-top: 0.65rem;
-  }
-
-  body.focus-mode .timer-task-focus {
-    margin-top: 0.45rem;
-  }
-
-  body.focus-mode .focus-pill {
-    padding-top: 0.4rem;
-    padding-bottom: 0.4rem;
-  }
-
-  body.focus-mode .pomo-counter {
-    margin-bottom: 0.65rem;
-  }
-
-  body.focus-mode .timer-controls {
-    gap: 0.65rem;
-  }
-
-  body.focus-mode .ctrl-btn-primary {
-    padding: 0.75rem 1.5rem;
-  }
-}
-
-
-/* En landscape extremo es preferible permitir desplazamiento vertical
-   controlado a ocultar controles o cortar el reloj. */
-@media (max-height: 520px) {
-  body.focus-mode {
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
-  body.focus-mode #timer-section {
-    justify-content: flex-start;
-    min-height: 100dvh;
-  }
-
-  body.focus-mode .focus-exit-btn {
-    position: fixed;
-    z-index: 220;
-  }
-}
-
 
 /* ═══ FLOWMODORO v3 — PRODUCT UX ═══════════════════════════ */
 
@@ -2561,36 +2239,6 @@ a, button, input, textarea,
 
 .focus-session-cycle {
   color: var(--accent);
-}
-
-body.focus-mode .focus-session-status {
-  display: flex;
-}
-
-body.focus-mode .mode-tabs {
-  display: none;
-}
-
-body.focus-mode .timer-card {
-  position: relative;
-}
-
-body.focus-mode #progress-section {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-body.focus-mode .timer-controls,
-body.focus-mode .timer-task-focus,
-body.focus-mode .pomo-counter {
-  opacity: 0.72;
-}
-
-body.focus-mode .timer-controls:hover,
-body.focus-mode .timer-task-focus:hover,
-body.focus-mode .pomo-counter:hover {
-  opacity: 1;
 }
 
 /* Breaks use a quieter, lighter visual language. */
@@ -2888,46 +2536,6 @@ body[data-mode="long"] .timer-card {
 
 .task-more-btn {
   display: flex;
-}
-
-.task-menu {
-  position: absolute;
-  z-index: 60;
-  top: calc(100% + 0.35rem);
-  right: 0;
-  width: min(230px, calc(100vw - 2rem));
-  padding: 0.35rem;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-lg);
-  background: var(--bg-surface);
-  box-shadow: var(--shadow-lg);
-}
-
-.task-menu[hidden] {
-  display: none;
-}
-
-.task-menu button {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.65rem 0.7rem;
-  border-radius: var(--radius-md);
-  color: var(--text-secondary);
-  font-size: 0.86rem;
-  text-align: left;
-}
-
-.task-menu button:hover {
-  background: var(--accent-subtle);
-  color: var(--accent);
-}
-
-.task-menu button.danger:hover {
-  color: #ef4444;
-  background: rgba(239,68,68,0.1);
 }
 
 /* Progress */
@@ -3232,30 +2840,9 @@ body.standalone-app .hero {
   .settings-drawer {
     width: min(100%, 420px);
   }
-
-  body.focus-mode .focus-session-status {
-    padding-right: 3rem;
-    justify-content: flex-start;
-  }
-
-  body.focus-mode .timer-card {
-    padding-top: 1.4rem;
-  }
-
-  body.focus-mode .focus-exit-btn {
-    top: max(0.65rem, env(safe-area-inset-top));
-  }
 }
 
 @media (max-width: 480px) {
-  /* Focus no longer needs the two-row tabs while a session is active. */
-  body.focus-mode .mode-tabs {
-    display: none;
-  }
-
-  body.focus-mode .timer-card {
-    padding: 1.1rem 0.875rem 1.15rem;
-  }
 
   .today-dashboard,
   .progress-summary {
@@ -3559,16 +3146,6 @@ body.standalone-app .hero {
   height: 0;
   overflow: hidden;
   pointer-events: none;
-}
-
-body.focus-mode .sound-dock {
-  opacity: 0.78;
-  transition: opacity var(--motion-normal) var(--ease-premium);
-}
-
-body.focus-mode .sound-dock:hover,
-body.focus-mode .sound-dock:focus-within {
-  opacity: 1;
 }
 
 @media (max-width: 480px) {
@@ -3974,80 +3551,6 @@ body.focus-mode .sound-dock:focus-within {
   transform: scale(0.96);
 }
 
-/* Focus is a viewport-level scene, independent of the document scroll. */
-body.focus-mode #timer-section {
-  position: fixed;
-  inset: 0;
-  z-index: 190;
-  width: 100%;
-  height: 100dvh;
-  min-height: 100dvh;
-  padding: clamp(1rem, 3vw, 3rem);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-primary);
-  overflow: hidden;
-}
-
-body.focus-mode #timer-section .container {
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-@media (min-width: 769px) {
-  body.focus-mode .timer-card {
-    width: min(100%, 1540px);
-    height: min(820px, calc(100dvh - 6rem));
-    max-height: calc(100dvh - 2rem);
-    min-height: 0;
-    margin: 0;
-    padding: clamp(1.5rem, 3vh, 2.5rem) 3rem;
-    overflow-y: auto;
-    scrollbar-width: none;
-  }
-
-  body.focus-mode .timer-card::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-body.focus-mode .duration-quick-btn {
-  display: none;
-}
-
-body.focus-mode .sound-dock {
-  opacity: 0.9;
-}
-
-body.focus-mode .sound-dock:hover,
-body.focus-mode .sound-dock:focus-within {
-  opacity: 1;
-}
-
-@media (max-width: 768px) {
-  body.focus-mode #timer-section {
-    padding:
-      max(0.75rem, env(safe-area-inset-top))
-      max(0.75rem, env(safe-area-inset-right))
-      max(0.75rem, env(safe-area-inset-bottom))
-      max(0.75rem, env(safe-area-inset-left));
-  }
-
-  body.focus-mode #timer-section .container {
-    height: 100%;
-  }
-
-  body.focus-mode .timer-card {
-    max-height: 100%;
-    overflow-y: auto;
-  }
-}
-
 
 /* ═══════════════════════════════════════════════════════════
    FLOWMODORO DESIGN SYSTEM v3 — UNIFIED COMPONENT GRAMMAR
@@ -4067,7 +3570,6 @@ body.focus-mode .sound-dock:focus-within {
   outline: none;
   box-shadow: var(--focus-ring);
 }
-
 :where(
   .btn-primary,
   .btn-ghost,
@@ -4079,12 +3581,11 @@ body.focus-mode .sound-dock:focus-within {
   .ambient-play-btn,
   .sound-option,
   .task-action-btn,
-  .task-menu button,
   .focus-pill,
   .focus-option,
   .duration-quick-btn,
   .mobile-bottom-link
-) {
+){
   transition:
     color var(--motion-fast) var(--ease-standard),
     background-color var(--motion-fast) var(--ease-standard),
@@ -4274,11 +3775,8 @@ body[data-mode="long"] .ctrl-btn-primary:hover {
   border-bottom-color: var(--accent);
   box-shadow: 0 2px 0 -1px var(--accent);
 }
-
-/* ── Option tiles and contextual rows ───────────────────── */
 .sound-option,
-.focus-option,
-.task-menu button {
+.focus-option{
   border-radius: var(--radius-control);
 }
 
@@ -4293,10 +3791,8 @@ body[data-mode="long"] .ctrl-btn-primary:hover {
   background: var(--surface-hover);
   color: var(--accent);
 }
-
 .focus-option:hover,
-.focus-option.selected,
-.task-menu button:hover {
+.focus-option.selected{
   background: var(--surface-hover);
   color: var(--accent);
 }
@@ -4309,12 +3805,9 @@ body[data-mode="long"] .ctrl-btn-primary:hover {
   background: var(--surface-hover);
   color: var(--accent);
 }
-
-/* ── Panels / menus / popovers: one elevation language ──── */
 .focus-popover,
 .sound-popover,
-.task-menu,
-.shortcuts-dialog {
+.shortcuts-dialog{
   border: 1px solid var(--border-interactive);
   border-radius: var(--radius-panel);
   background: color-mix(in srgb, var(--bg-surface) 97%, transparent);
@@ -4379,17 +3872,14 @@ body[data-mode="long"] .ctrl-btn-primary:hover {
   color: var(--accent);
 }
 
-/* ── Close / dismiss controls are the same family ───────── */
-.focus-exit-btn,
-.session-complete-dismiss {
+.session-complete-dismiss{
   border: 1px solid var(--border-interactive);
   border-radius: var(--radius-control);
   background: var(--surface-interactive);
   color: var(--text-secondary);
 }
 
-.focus-exit-btn:hover,
-.session-complete-dismiss:hover {
+.session-complete-dismiss:hover{
   border-color: color-mix(in srgb, var(--accent) 55%, var(--border-interactive));
   background: var(--surface-hover);
   color: var(--accent);
@@ -4426,18 +3916,6 @@ body[data-mode="long"] .ctrl-btn-primary:hover {
   border-radius: var(--radius-panel);
 }
 
-/* Focus workspace is intentionally larger, but uses the same family. */
-body.focus-mode .timer-card {
-  border-radius: clamp(var(--radius-xl), 2vw, 28px);
-}
-
-/* Destructive state is the only semantic color exception. */
-.task-menu button.danger:hover {
-  color: #ef4444;
-  background: rgba(239,68,68,0.10);
-  border-color: transparent;
-}
-
 /* Disabled controls are visually quiet in the same way everywhere. */
 :where(button, input, select):disabled {
   cursor: default;
@@ -4462,15 +3940,6 @@ body.focus-mode .timer-card {
   color: var(--accent);
 }
 
-body.focus-mode .timer-settings-btn {
-  opacity: 0.72;
-}
-
-body.focus-mode .timer-settings-btn:hover,
-body.focus-mode .timer-settings-btn:focus-visible {
-  opacity: 1;
-}
-
 .duration-quick-btn { display: none !important; }
 
 
@@ -4484,152 +3953,6 @@ body.focus-mode .timer-settings-btn:focus-visible {
   line-height: 1;
 }
 
-body.focus-mode .timer-task-focus,
-body.focus-mode .pomo-counter {
-  display: none !important;
-}
-
-body.focus-mode .timer-session-label {
-  margin-top: 1.2rem;
-  opacity: 0.58;
-}
-
-body.focus-mode .focus-session-status {
-  opacity: 0.48;
-}
-
-body.focus-mode .timer-action-zone {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.55rem;
-  margin-top: 1.5rem;
-}
-
-body.focus-mode .sound-dock {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.62;
-  animation: focusRevealDim 650ms var(--ease-premium) backwards;
-  animation-delay: 220ms;
-}
-
-body.focus-mode .ambient-pill,
-body.focus-mode .sound-popover {
-  display: none !important;
-}
-
-body.focus-mode .ambient-play-btn {
-  width: 42px;
-  height: 42px;
-  min-width: 42px;
-  border-radius: 50%;
-  background: transparent;
-  border-color: color-mix(in srgb, var(--accent) 24%, var(--border));
-  color: var(--text-secondary);
-}
-
-body.focus-mode .ambient-play-btn:hover,
-body.focus-mode .ambient-play-btn:focus-visible,
-body.focus-mode .ambient-play-btn.playing {
-  background: var(--accent-subtle);
-  border-color: color-mix(in srgb, var(--accent) 52%, var(--border));
-  color: var(--accent);
-}
-
-body.focus-mode .timer-controls {
-  margin: 0;
-  gap: 0;
-  opacity: 0.62;
-  animation: focusRevealDim 650ms var(--ease-premium) backwards;
-  animation-delay: 280ms;
-}
-
-body.focus-mode .timer-controls #resetBtn,
-body.focus-mode .timer-controls .timer-settings-btn {
-  display: none !important;
-}
-
-body.focus-mode .ctrl-btn-primary {
-  width: 42px;
-  height: 42px;
-  min-width: 42px;
-  padding: 0;
-  border-radius: 50%;
-  background: transparent;
-  border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--border));
-  color: var(--text-secondary);
-  box-shadow: none;
-  letter-spacing: 0;
-}
-
-[data-theme="dark"] body.focus-mode .ctrl-btn-primary {
-  background: transparent;
-  color: var(--text-secondary);
-  border-color: color-mix(in srgb, var(--accent) 24%, var(--border));
-}
-
-body.focus-mode .ctrl-btn-primary:hover,
-body.focus-mode .ctrl-btn-primary:focus-visible,
-[data-theme="dark"] body.focus-mode .ctrl-btn-primary:hover {
-  background: var(--accent-subtle);
-  border-color: color-mix(in srgb, var(--accent) 52%, var(--border));
-  color: var(--accent);
-  transform: none;
-  box-shadow: none;
-}
-
-body.focus-mode .timer-play-label {
-  display: none;
-}
-
-body.focus-mode .timer-play-icon {
-  display: inline;
-  font-size: 0.76rem;
-}
-
-body.focus-mode .timer-action-zone:hover .sound-dock,
-body.focus-mode .timer-action-zone:hover .timer-controls,
-body.focus-mode .timer-action-zone:focus-within .sound-dock,
-body.focus-mode .timer-action-zone:focus-within .timer-controls {
-  opacity: 1;
-}
-
-/* With no selected ambience, the rail naturally contains only timer pause/play. */
-body.focus-mode .ambient-play-btn[hidden] {
-  display: none !important;
-}
-
-/* The exit remains visible but quiet until intentionally approached. */
-body.focus-mode .focus-exit-btn {
-  opacity: 0.58;
-}
-
-body.focus-mode .focus-exit-btn:hover,
-body.focus-mode .focus-exit-btn:focus-visible {
-  opacity: 1;
-}
-
-/* Mobile Focus keeps the same reduced vocabulary. */
-@media (max-width: 768px) {
-  body.focus-mode .timer-action-zone {
-    margin-top: 1rem;
-  }
-
-  body.focus-mode .timer-session-label {
-    margin-top: 0.9rem;
-  }
-}
-
-
-/* Deep Focus removes all informational chrome: only clock, playback and exit remain. */
-body.focus-mode .focus-session-status,
-body.focus-mode .timer-session-label {
-  display: none !important;
-}
-
 
 /* Deep Focus control identity: minimal but unambiguous. */
 .focus-control-unit {
@@ -4638,130 +3961,6 @@ body.focus-mode .timer-session-label {
 
 .focus-control-label {
   display: none;
-}
-
-body.focus-mode .focus-control-unit {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.34rem;
-}
-
-body.focus-mode .focus-control-label {
-  display: block;
-  color: var(--text-muted);
-  font-size: 0.56rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  line-height: 1;
-  text-transform: uppercase;
-  opacity: 0.46;
-  transition:
-    opacity var(--motion-fast) var(--ease-standard),
-    color var(--motion-fast) var(--ease-standard);
-}
-
-body.focus-mode .focus-control-unit:hover .focus-control-label,
-body.focus-mode .focus-control-unit:focus-within .focus-control-label {
-  opacity: 0.92;
-  color: var(--text-secondary);
-}
-
-body.focus-mode .timer-action-zone,
-body.focus-mode .timer-controls {
-  align-items: flex-start;
-}
-
-/* No selected ambience: hide the Sound label together with its button. */
-body.focus-mode .ambient-play-btn[hidden] + .focus-control-label {
-  display: none;
-}
-
-
-/* ═══ DEEP FOCUS FINAL CONTRACT — clock + timer + exit ═══ */
-body.focus-mode .sound-dock {
-  display: none !important;
-}
-
-body.focus-mode .timer-action-zone {
-  display: block;
-  margin-top: 1.5rem;
-}
-
-body.focus-mode .timer-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  margin: 0;
-  opacity: 0.58;
-  transition: opacity var(--motion-normal) var(--ease-premium);
-}
-
-body.focus-mode .timer-controls:hover,
-body.focus-mode .timer-controls:focus-within {
-  opacity: 1;
-}
-
-body.focus-mode .timer-controls #resetBtn,
-body.focus-mode .timer-controls .timer-settings-btn {
-  display: none !important;
-}
-
-/* In Deep Focus the same timer action becomes quiet instead of disappearing. */
-body.focus-mode .ctrl-btn-primary,
-[data-theme="dark"] body.focus-mode .ctrl-btn-primary {
-  width: auto;
-  height: auto;
-  min-width: 104px;
-  min-height: 38px;
-  padding: 0.58rem 1rem;
-  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border));
-  border-radius: var(--radius-control);
-  background: transparent;
-  color: color-mix(in srgb, var(--text-secondary) 72%, transparent);
-  box-shadow: none;
-  font-size: 0.7rem;
-  font-weight: 400;
-  letter-spacing: 0.07em;
-}
-
-body.focus-mode .ctrl-btn-primary:hover,
-body.focus-mode .ctrl-btn-primary:focus-visible,
-[data-theme="dark"] body.focus-mode .ctrl-btn-primary:hover {
-  border-color: color-mix(in srgb, var(--accent) 46%, var(--border));
-  background: color-mix(in srgb, var(--accent-subtle) 62%, transparent);
-  color: var(--accent);
-  transform: none;
-  box-shadow: none;
-}
-
-body.focus-mode .ctrl-btn-primary:active {
-  transform: scale(0.985);
-}
-
-body.focus-mode .timer-play-icon {
-  display: none !important;
-}
-
-body.focus-mode .timer-play-label {
-  display: inline !important;
-}
-
-/* Remove the transient two-control labeling layer from the final composition. */
-body.focus-mode .focus-control-label,
-body.focus-mode .focus-control-unit {
-  display: none !important;
-}
-
-@media (max-width: 480px) {
-  body.focus-mode .ctrl-btn-primary {
-    min-width: 96px;
-    min-height: 36px;
-    padding-inline: 0.9rem;
-    font-size: 0.68rem;
-  }
 }
 
 
@@ -5267,30 +4466,6 @@ body.focus-mode .focus-control-unit {
   letter-spacing: -0.01em;
 }
 
-/* Deep Focus remains full-screen and isolated from App Shell view switching. */
-body.focus-mode .app-view-focus {
-  top: 0;
-  bottom: 0;
-  z-index: 190;
-  padding: clamp(1rem, 3vw, 3rem);
-}
-
-body.focus-mode .app-view-focus > .container {
-  transform: none;
-}
-
-/* Choreography: environment retreats before the central timer settles. */
-body.focus-mode .mobile-bottom-nav {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(6px);
-  transition:
-    opacity 280ms var(--ease-premium) 80ms,
-    transform 420ms var(--ease-premium) 80ms,
-    visibility 0s linear 500ms;
-}
-
 .mobile-bottom-nav {
   transition:
     opacity 280ms var(--ease-premium),
@@ -5394,20 +4569,6 @@ body.focus-mode .mobile-bottom-nav {
   place-items: center;
 }
 
-body.focus-mode #timer-section.app-view-focus {
-  display: grid;
-  place-items: center;
-  min-height: 100dvh !important;
-  height: 100dvh;
-  padding: clamp(1rem, 3vw, 3rem);
-}
-
-/* Immersive break remains as quiet as immersive work. */
-body.focus-mode .break-tip,
-body.focus-mode .timer-active-task {
-  display: none !important;
-}
-
 @media (max-width: 768px) {
   #timer-section.app-view-focus {
     display: grid;
@@ -5417,77 +4578,6 @@ body.focus-mode .timer-active-task {
     min-height: 0 !important;
     padding: 0.75rem;
   }
-
-  body.focus-mode #timer-section.app-view-focus {
-    min-height: 100dvh !important;
-    padding:
-      max(0.75rem, env(safe-area-inset-top))
-      max(0.75rem, env(safe-area-inset-right))
-      max(0.75rem, env(safe-area-inset-bottom))
-      max(0.75rem, env(safe-area-inset-left));
-  }
-}
-
-
-/* ═══ v4.1 — IMMERSIVE AUDIO + CLOSED TODAY→FOCUS LOOP ═══ */
-
-/* One subtle audio switch in Deep Focus. It never opens the selector. */
-.focus-audio-toggle {
-  position: absolute;
-  top: 0.75rem;
-  right: 3.85rem;
-  z-index: 5;
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--border-strong);
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--bg-surface) 88%, transparent);
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-6px) scale(0.96);
-  filter: blur(3px);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition:
-    opacity 600ms var(--ease-premium),
-    visibility 0s linear 600ms,
-    transform 700ms var(--ease-premium),
-    filter 700ms var(--ease-premium),
-    color var(--motion-fast) var(--ease-standard),
-    border-color var(--motion-fast) var(--ease-standard),
-    background-color var(--motion-fast) var(--ease-standard);
-}
-
-.focus-audio-toggle[hidden] {
-  display: none !important;
-}
-
-body.focus-mode .focus-audio-toggle:not([hidden]) {
-  opacity: 0.48;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
-  filter: blur(0);
-  transition-delay: 260ms, 0s, 260ms, 260ms, 0s, 0s, 0s;
-}
-
-body.focus-mode .focus-audio-toggle:hover,
-body.focus-mode .focus-audio-toggle:focus-visible,
-body.focus-mode .focus-audio-toggle.is-playing {
-  opacity: 0.92;
-  color: var(--accent);
-  border-color: color-mix(in srgb, var(--accent) 48%, var(--border-strong));
-  background: color-mix(in srgb, var(--accent-subtle) 68%, transparent);
-}
-
-/* X and ambience control read as one quiet utility pair. */
-body.focus-mode .focus-exit-btn {
-  border-radius: 50%;
 }
 
 /* Today has a direct, non-dominant return path to the timer. */
@@ -5546,13 +4636,6 @@ body.focus-mode .focus-exit-btn {
     padding-left: 0;
     border-color: transparent !important;
     background: transparent !important;
-  }
-
-  .focus-audio-toggle {
-    top: max(0.65rem, env(safe-area-inset-top));
-    right: calc(max(0.65rem, env(safe-area-inset-right)) + 3.25rem);
-    width: 40px;
-    height: 40px;
   }
 }
 
@@ -5656,29 +4739,6 @@ body.focus-mode .focus-exit-btn {
   body:not(.focus-mode) .app-view-focus .sound-dock {
     margin-bottom: 0.4rem;
   }
-}
-
-/* Even the quiet immersive scene should say whether this is focus or rest. */
-body.focus-mode .timer-session-label {
-  display: block !important;
-  margin-top: clamp(0.7rem, 1.5vh, 1rem);
-  color: var(--text-muted);
-  font-size: 0.64rem;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  opacity: 0.7;
-}
-
-body.focus-mode .timer-active-task:not([hidden]) {
-  display: block !important;
-  max-width: min(76vw, 440px);
-  margin-top: 0.4rem;
-  color: var(--text-secondary);
-  opacity: 0.84;
-}
-
-body.focus-mode .timer-controls {
-  opacity: 0.78;
 }
 
 /* A single task affordance next to the clock keeps planning optional. */
@@ -6468,85 +5528,6 @@ body.integrated-home:not(.focus-mode) .app-view-today {
   background: linear-gradient(155deg, #17313a, #182d3b 58%, #20273e);
   border-color: rgba(238, 244, 250, 0.08);
   box-shadow: 0 18px 52px rgba(0, 0, 0, 0.14);
-}
-
-body.focus-mode #timer-section.app-view-focus {
-  isolation: isolate;
-  background: #101427;
-}
-body.focus-mode #timer-section.app-view-focus::before,
-body.focus-mode #timer-section.app-view-focus::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-  z-index: 0;
-}
-body.focus-mode #timer-section.app-view-focus::before {
-  inset: -4%;
-  background: url('assets/cielo-violeta.webp') center 58% / cover no-repeat;
-  filter: blur(28px) brightness(0.88) saturate(0.85);
-  transform: scale(1.035);
-}
-body.focus-mode #timer-section.app-view-focus::after {
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 50% 50%, rgba(35, 22, 59, 0.20), rgba(7, 11, 27, 0.50) 88%),
-    linear-gradient(120deg, rgba(11, 15, 38, 0.30), rgba(30, 16, 56, 0.16) 52%, rgba(9, 17, 37, 0.40));
-}
-body.focus-mode #timer-section.app-view-focus > .container {
-  position: relative;
-  z-index: 1;
-}
-body.focus-mode .timer-card {
-  --bg-primary: #101427;
-  --bg-surface: #27243d;
-  --bg-alt: #322c49;
-  --text-primary: #f7f3fb;
-  --text-secondary: #d4cae2;
-  --text-muted: #b7aacb;
-  --border: rgba(226, 210, 244, 0.13);
-  --border-strong: rgba(226, 210, 244, 0.26);
-  --accent: #c4a8dd;
-  --accent-subtle: rgba(196, 168, 221, 0.14);
-  background:
-    linear-gradient(115deg, rgba(10, 13, 33, 0.84), rgba(31, 19, 60, 0.69) 52%, rgba(9, 17, 38, 0.84)),
-    url('assets/cielo-violeta.webp') center 58% / cover no-repeat,
-    #171e3d;
-  border: 1px solid rgba(226, 210, 244, 0.24);
-  box-shadow: 0 38px 112px rgba(5, 8, 26, 0.48), inset 0 1px 0 rgba(248, 239, 255, 0.10);
-}
-
-/* El reloj mantiene la misma cara nocturna durante la inmersión en ambos temas. */
-body.focus-mode .flip-card {
-  --flip-face: #28213F;
-  --flip-top: #392E54;
-  --flip-bottom: #241D3B;
-  --flip-ink: #FAF6FF;
-  --flip-seam: rgba(8, 7, 25, 0.70);
-  --flip-shadow: 0 18px 40px rgba(4, 7, 24, 0.36), inset 0 0 0 1px rgba(225, 206, 248, 0.16);
-}
-body.focus-mode .flip-sep {
-  color: #EADDF4;
-  opacity: 0.68;
-}
-body.focus-mode .timer-controls {
-  opacity: 1;
-}
-body.focus-mode .ctrl-btn-primary,
-[data-theme="dark"] body.focus-mode .ctrl-btn-primary {
-  min-height: 42px;
-  border-color: rgba(224, 201, 242, 0.38);
-  background: rgba(35, 29, 62, 0.42);
-  color: #E8DDF2;
-}
-
-@media (max-width: 768px) {
-  body.focus-mode .timer-card {
-    background-position: center, 53% center;
-  }
-  body.focus-mode #timer-section.app-view-focus::before {
-    filter: blur(20px) brightness(0.88) saturate(0.85);
-  }
 }
 
 /* Inicio y reanudación mantienen prioridad sin convertirse en una barra. */

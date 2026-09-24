@@ -38,8 +38,10 @@
 
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="activity-overlay.css" />
+  <link rel="stylesheet" href="experience.css" />
 </head>
 <body class="integrated-home" data-app-view="focus">
+  <div id="sceneBackdrop" class="scene-backdrop" aria-hidden="true"><div class="scene-layer"></div><div class="scene-layer"></div></div>
   <!-- ═══════════════════════════════════ NAVBAR ═══════════════════════════════════ -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
@@ -76,6 +78,11 @@
     </div>
     <div class="container">
       <div class="timer-card">
+        <div class="focus-toolbar">
+          <button id="focusExitBtn" class="focus-exit-btn" type="button" data-i18n-aria="focus.exitRunning" aria-label="Pausar y salir del foco"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg><span data-i18n="focus.back">Salir</span></button>
+          <div class="focus-toolbar-tools">
+            <button id="focusAudioToggleBtn" class="focus-audio-toggle" type="button" aria-haspopup="dialog" aria-controls="soundPopover" data-i18n-aria="ambient.sound" aria-label="Sonido"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2.5"/><ellipse cx="17" cy="16" rx="3" ry="2.5"/></svg></button><button class="scene-open-btn" type="button" data-scene-open aria-haspopup="dialog" aria-controls="sceneDialog" data-i18n-aria="scene.title" aria-label="Ambientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="m3 16 5-5 5 5 3-3 5 5"/><circle cx="15" cy="8" r="1"/></svg><span data-i18n="scene.title">Ambientes</span></button></div>
+        </div>
         <div class="focus-session-status" id="focusSessionStatus" aria-live="polite">
           <span data-i18n="focus.session">Sesión de foco</span>
           <span class="focus-session-cycle" id="focusSessionCycle">1 de 4</span>
@@ -147,7 +154,7 @@
         </div>
         <div class="timer-session-label" id="sessionLabel" data-i18n="timer.focusTime">Tiempo de enfoque</div>
         <div class="break-tip" id="breakTip" hidden></div>
-        <div class="timer-active-task" id="timerActiveTask" hidden aria-live="polite"></div>
+        <button type="button" class="timer-active-task" id="timerActiveTask" hidden aria-haspopup="dialog" aria-controls="focusPopover"></button>
 
         <!-- Quick task selector for the normal Focus view -->
         <div class="timer-task-focus">
@@ -157,8 +164,8 @@
             <span class="focus-pill-progress" id="focusPillProgress"></span>
             <span class="focus-pill-chevron" aria-hidden="true">▾</span>
           </button>
-          <div class="focus-popover" id="focusPopover" hidden>
-            <div class="focus-popover-title" data-i18n="timer.focusTitle">Enfocar en…</div>
+          <dialog class="focus-popover experience-dialog" id="focusPopover" hidden aria-labelledby="focusPickerTitle">
+            <header class="panel-header"><h2 id="focusPickerTitle">Elegir tarea</h2><button class="panel-close" type="button" data-panel-close data-i18n-aria="common.close" aria-label="Cerrar">×</button></header><p class="panel-intro" id="focusPickerContext"></p>
             <div class="focus-list" id="focusList" role="listbox" aria-label="Elegir tarea" data-i18n-aria="timer.focusChoose"></div>
             <div class="focus-quickadd">
               <input
@@ -170,7 +177,7 @@
                 maxlength="120"
               />
             </div>
-          </div>
+          </dialog>
         </div>
 
         <!-- Pomodoro counters -->
@@ -202,12 +209,7 @@
           </div>
         </div>
 
-        <button id="focusAudioToggleBtn" class="focus-audio-toggle" type="button" hidden aria-label="Reproducir ambiente" title="Reproducir ambiente">
-          <span aria-hidden="true">♫</span>
-        </button>
 
-        <!-- Exit immersive focus: pauses the timer, stops ambience and returns to the Focus view. -->
-        <button id="focusExitBtn" class="focus-exit-btn" type="button" aria-label="Pausar y salir del foco" data-i18n-aria="focus.exitRunning">✕</button>
       </div>
       <div class="focus-utility-bar" role="group" data-i18n-aria="timer.utilities" aria-label="Controles adicionales">
         <div class="sound-dock" id="soundDock">
@@ -220,53 +222,9 @@
             <span id="ambientPlayIcon" aria-hidden="true">▶</span>
           </button>
 
-          <div class="sound-popover" id="soundPopover" hidden role="dialog" aria-label="Sonido de foco" data-i18n-aria="ambient.focusSound">
-            <div class="sound-popover-header">
-              <div>
-                <span class="sound-popover-kicker">FLOWMODORO SOUNDS</span>
-                <strong data-i18n="ambient.focusSound">Sonido de foco</strong>
-              </div>
-              <button class="sound-popover-close" id="soundPopoverClose" type="button" aria-label="Cerrar" data-i18n-aria="common.close">✕</button>
-            </div>
 
-            <div class="sound-options" role="group" aria-label="Ambientes" data-i18n-aria="ambient.label">
-              <button class="sound-option" type="button" data-sound="off"><span>—</span><small data-i18n="ambient.off">Sin audio</small></button>
-              <button class="sound-option" type="button" data-sound="rain"><span>☂</span><small data-i18n="ambient.rain">Lluvia suave</small></button>
-              <button class="sound-option" type="button" data-sound="nightForest"><span>✦</span><small data-i18n="ambient.nightForest">Bosque nocturno</small></button>
-              <button class="sound-option" type="button" data-sound="cafe"><span>☕</span><small data-i18n="ambient.cafe">Café</small></button>
-              <button class="sound-option" type="button" data-sound="campfire"><span>♨</span><small data-i18n="ambient.campfire">Fogata</small></button>
-            </div>
-
-            <div class="sound-volume-row">
-              <label for="ambientVolume">
-                <span data-i18n="ambient.volume">Volumen</span>
-                <span id="ambientVolumeValue">35%</span>
-              </label>
-              <input id="ambientVolume" class="ambient-volume" type="range" min="0" max="100" step="1" value="35" />
-            </div>
-
-            <label class="sound-attenuate-row">
-              <span data-i18n="ambient.attenuate">Atenuar durante descansos</span>
-              <span class="toggle-switch"><input type="checkbox" id="ambientAttenuateToggle" checked /><span class="toggle-slider"></span></span>
-            </label>
-
-            <div class="spotify-external">
-              <div class="spotify-external-head">
-                <span data-i18n="ambient.spotifySection">Playlists en Spotify</span>
-                <small data-i18n="ambient.spotifyExternal">Se abren en Spotify</small>
-              </div>
-              <a id="spotifyLink1" href="https://open.spotify.com/playlist/0oZy1DMRofAqvOO9P4Z8qr" target="_blank" rel="noopener">
-                <span id="spotifyLink1Label">Flowmodoro · Spotify 1</span><span aria-hidden="true">↗</span>
-              </a>
-              <a id="spotifyLink2" href="https://open.spotify.com/playlist/1YGk1NFAw8l9zPwHReImrY" target="_blank" rel="noopener">
-                <span id="spotifyLink2Label">Flowmodoro · Spotify 2</span><span aria-hidden="true">↗</span>
-              </a>
-              <a id="spotifyLink3" href="https://open.spotify.com/playlist/1c62qIWEuYaRGAEYpFcZTs" target="_blank" rel="noopener">
-                <span id="spotifyLink3Label">Flowmodoro · Spotify 3</span><span aria-hidden="true">↗</span>
-              </a>
-            </div>
-          </div>
         </div>
+        <button class="scene-open-btn" type="button" data-scene-open aria-haspopup="dialog" aria-controls="sceneDialog" data-i18n-aria="scene.title" aria-label="Ambientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="m3 16 5-5 5 5 3-3 5 5"/><circle cx="15" cy="8" r="1"/></svg><span data-i18n="scene.title">Ambientes</span></button>
         <button class="ctrl-btn ctrl-btn-ghost" id="resetBtn" type="button" data-i18n-aria="timer.reset" aria-label="Reiniciar sesión" title="Reiniciar sesión">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/>
@@ -338,28 +296,7 @@
         </button>
       </div>
 
-      <dialog class="activity-dialog" id="activityDialog" aria-labelledby="activityDialogTitle">
-        <div class="activity-dialog-panel">
-          <header class="activity-dialog-header">
-            <div>
-              <span class="progress-disclosure-eyebrow" data-i18n="progress.week">Esta semana</span>
-              <h2 id="activityDialogTitle" data-i18n="progress.activityTitle">Tu actividad</h2>
-            </div>
-            <button class="activity-dialog-close" id="activityCloseBtn" type="button" data-i18n-aria="progress.close" aria-label="Cerrar actividad">×</button>
-          </header>
-          <div class="progress-detail-body">
-          <div class="week-chart" id="weekChart" aria-label="Sesiones de foco de los últimos siete días"></div>
-          <div class="history-header">
-            <div>
-              <h3 data-i18n="progress.history">Historial reciente</h3>
-              <p data-i18n="progress.localOnly">Tus datos permanecen en este dispositivo.</p>
-            </div>
-            <button class="btn-ghost btn-sm" id="exportHistoryBtn" type="button" data-i18n="progress.export">Exportar</button>
-          </div>
-          <div class="session-history" id="sessionHistory"></div>
-          </div>
-        </div>
-      </dialog>
+
     </div>
   </section>
 
@@ -367,70 +304,8 @@
   </section>
 
   <!-- Settings drawer -->
-  <div class="drawer-backdrop" id="settingsBackdrop" hidden></div>
-  <aside class="settings-drawer" id="settingsPanel" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="settingsTitle">
-    <div class="drawer-header">
-      <div>
-        <span class="drawer-eyebrow">Flowmodoro</span>
-        <h2 class="settings-title" id="settingsTitle" data-i18n="nav.settings">Ajustes</h2>
-      </div>
-      <button class="drawer-close" id="settingsCloseBtn" type="button" aria-label="Cerrar" data-i18n-aria="common.close">✕</button>
-    </div>
 
-    <div class="drawer-section drawer-section-primary" id="timerSettingsSection">
-      <h3 data-i18n="settings.timer">Temporizador</h3>
-      <div class="duration-settings">
-        <label><span data-i18n="settings.work">Foco</span><input type="number" id="setWork" min="1" max="60" value="25" class="setting-input" /><small>min</small></label>
-        <label><span data-i18n="settings.short">Descanso corto</span><input type="number" id="setShort" min="1" max="30" value="5" class="setting-input" /><small>min</small></label>
-        <label><span data-i18n="settings.long">Descanso largo</span><input type="number" id="setLong" min="1" max="60" value="15" class="setting-input" /><small>min</small></label>
-      </div>
-    </div>
 
-    <div class="drawer-section">
-      <div class="drawer-language-row">
-        <span data-i18n="settings.language">Idioma</span>
-        <button id="languageToggleBtn" class="setting-input language-toggle" type="button" aria-label="Cambiar idioma a inglés" title="Cambiar idioma a inglés">ENG</button>
-      </div>
-    </div>
-
-    <details class="drawer-advanced" id="advancedSettings">
-      <summary>
-        <span data-i18n="settings.advanced">Avanzado</span>
-        <span class="drawer-advanced-chevron">⌄</span>
-      </summary>
-      <div class="drawer-advanced-body">
-        <label class="setting-row">
-          <span data-i18n="settings.autoBreak">Iniciar descansos automáticamente</span>
-          <span class="toggle-switch"><input type="checkbox" id="autoBreakToggle" /><span class="toggle-slider"></span></span>
-        </label>
-        <label class="setting-row">
-          <span data-i18n="settings.autoFocus">Iniciar siguiente foco automáticamente</span>
-          <span class="toggle-switch"><input type="checkbox" id="autoFocusToggle" /><span class="toggle-slider"></span></span>
-        </label>
-        <label class="setting-row">
-          <span data-i18n="settings.sound">Aviso al terminar</span>
-          <span class="toggle-switch"><input type="checkbox" id="soundToggle" checked /><span class="toggle-slider"></span></span>
-        </label>
-        <label class="setting-row">
-          <span data-i18n="settings.wakeLock">Mantener pantalla activa</span>
-          <span class="toggle-switch"><input type="checkbox" id="wakeLockToggle" /><span class="toggle-slider"></span></span>
-        </label>
-        <div class="setting-row">
-          <span data-i18n="settings.notifications">Notificaciones</span>
-          <button class="btn-ghost btn-sm" id="notificationBtn" type="button" data-i18n="settings.enableNotifications">Activar</button>
-        </div>
-      </div>
-    </details>
-
-    <div class="drawer-section drawer-links">
-      <button class="drawer-link" id="installDrawerBtn" type="button" data-i18n="nav.install" hidden>Instalar App</button>
-      <button class="drawer-link" id="guideDrawerBtn" type="button" data-guide-quick="true" data-i18n="nav.guide" aria-haspopup="dialog">Guía</button>
-      <button class="drawer-link" id="shortcutsBtn" type="button" data-i18n="shortcuts.title">Atajos de teclado</button>
-      <button class="drawer-link" id="supportDrawerBtn" type="button" data-i18n="nav.support">Apoyar proyecto</button>
-    </div>
-
-    <button class="btn-primary drawer-save" id="saveSettings" data-i18n="settings.save">Guardar cambios</button>
-  </aside>
 
   <!-- ═══════════════════════════════════ GUIDE ════════════════════════════════════ -->
   <section class="section guide-section" id="guide-section">
@@ -635,11 +510,160 @@
     </div>
   </dialog>
 
+
+  <div id="overlayRoot">
+  <div class="drawer-backdrop" id="settingsBackdrop" hidden></div>
+  <dialog class="settings-drawer" id="settingsPanel" aria-hidden="true" aria-labelledby="settingsTitle">
+    <div class="drawer-header">
+      <div>
+        <span class="drawer-eyebrow">Flowmodoro</span>
+        <h2 class="settings-title" id="settingsTitle" data-i18n="nav.settings">Ajustes</h2>
+      </div>
+      <button class="drawer-close" id="settingsCloseBtn" type="button" aria-label="Cerrar" data-i18n-aria="common.close">✕</button>
+    </div>
+
+    <div class="drawer-section drawer-section-primary" id="timerSettingsSection">
+      <h3 data-i18n="settings.timer">Temporizador</h3>
+      <div class="duration-settings">
+        <label><span data-i18n="settings.work">Foco</span><input type="number" id="setWork" min="1" max="60" value="25" class="setting-input" /><small>min</small></label>
+        <label><span data-i18n="settings.short">Descanso corto</span><input type="number" id="setShort" min="1" max="30" value="5" class="setting-input" /><small>min</small></label>
+        <label><span data-i18n="settings.long">Descanso largo</span><input type="number" id="setLong" min="1" max="60" value="15" class="setting-input" /><small>min</small></label>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-language-row">
+        <span data-i18n="settings.language">Idioma</span>
+        <button id="languageToggleBtn" class="setting-input language-toggle" type="button" aria-label="Cambiar idioma a inglés" title="Cambiar idioma a inglés">ENG</button>
+      </div>
+    </div>
+
+    <details class="drawer-advanced" id="advancedSettings">
+      <summary>
+        <span data-i18n="settings.advanced">Avanzado</span>
+        <span class="drawer-advanced-chevron">⌄</span>
+      </summary>
+      <div class="drawer-advanced-body">
+        <label class="setting-row">
+          <span data-i18n="settings.autoBreak">Iniciar descansos automáticamente</span>
+          <span class="toggle-switch"><input type="checkbox" id="autoBreakToggle" /><span class="toggle-slider"></span></span>
+        </label>
+        <label class="setting-row">
+          <span data-i18n="settings.autoFocus">Iniciar siguiente foco automáticamente</span>
+          <span class="toggle-switch"><input type="checkbox" id="autoFocusToggle" /><span class="toggle-slider"></span></span>
+        </label>
+        <label class="setting-row">
+          <span data-i18n="settings.sound">Aviso al terminar</span>
+          <span class="toggle-switch"><input type="checkbox" id="soundToggle" checked /><span class="toggle-slider"></span></span>
+        </label>
+        <label class="setting-row">
+          <span data-i18n="settings.wakeLock">Mantener pantalla activa</span>
+          <span class="toggle-switch"><input type="checkbox" id="wakeLockToggle" /><span class="toggle-slider"></span></span>
+        </label>
+        <div class="setting-row">
+          <span data-i18n="settings.notifications">Notificaciones</span>
+          <button class="btn-ghost btn-sm" id="notificationBtn" type="button" data-i18n="settings.enableNotifications">Activar</button>
+        </div>
+      </div>
+    </details>
+
+    <div class="drawer-section drawer-links">
+      <button class="drawer-link" id="installDrawerBtn" type="button" data-i18n="nav.install" hidden>Instalar App</button>
+      <button class="drawer-link" id="guideDrawerBtn" type="button" data-guide-quick="true" data-i18n="nav.guide" aria-haspopup="dialog">Guía</button>
+      <button class="drawer-link" id="shortcutsBtn" type="button" data-i18n="shortcuts.title">Atajos de teclado</button>
+      <button class="drawer-link" id="supportDrawerBtn" type="button" data-i18n="nav.support">Apoyar proyecto</button>
+    </div>
+
+    <button class="btn-primary drawer-save" id="saveSettings" data-i18n="settings.save">Guardar cambios</button>
+  </dialog>
+      <dialog class="activity-dialog" id="activityDialog" aria-labelledby="activityDialogTitle">
+        <div class="activity-dialog-panel">
+          <header class="activity-dialog-header">
+            <div>
+              <span class="progress-disclosure-eyebrow" data-i18n="progress.week">Esta semana</span>
+              <h2 id="activityDialogTitle" data-i18n="progress.activityTitle">Tu actividad</h2>
+            </div>
+            <button class="activity-dialog-close" id="activityCloseBtn" type="button" data-i18n-aria="progress.close" aria-label="Cerrar actividad">×</button>
+          </header>
+          <div class="progress-detail-body">
+          <div class="week-chart" id="weekChart" aria-label="Sesiones de foco de los últimos siete días"></div>
+          <div class="history-header">
+            <div>
+              <h3 data-i18n="progress.history">Historial reciente</h3>
+              <p data-i18n="progress.localOnly">Tus datos permanecen en este dispositivo.</p>
+            </div>
+            <button class="btn-ghost btn-sm" id="exportHistoryBtn" type="button" data-i18n="progress.export">Exportar</button>
+          </div>
+          <div class="session-history" id="sessionHistory"></div>
+          </div>
+        </div>
+      </dialog>
+<dialog class="sound-popover experience-dialog" id="soundPopover" hidden aria-label="Sonido de foco" data-i18n-aria="ambient.focusSound">
+            <div class="sound-popover-header">
+              <div>
+                <span class="sound-popover-kicker">FLOWMODORO SOUNDS</span>
+                <strong data-i18n="ambient.focusSound">Sonido de foco</strong>
+              </div>
+              <button class="sound-popover-close" id="soundPopoverClose" type="button" aria-label="Cerrar" data-i18n-aria="common.close">✕</button>
+            </div>
+
+            <div class="sound-options" role="group" aria-label="Ambientes" data-i18n-aria="ambient.label">
+              <button class="sound-option" type="button" data-sound="off"><span>—</span><small data-i18n="ambient.off">Sin audio</small></button>
+              <button class="sound-option" type="button" data-sound="rain"><span>☂</span><small data-i18n="ambient.rain">Lluvia suave</small></button>
+              <button class="sound-option" type="button" data-sound="nightForest"><span>✦</span><small data-i18n="ambient.nightForest">Bosque nocturno</small></button>
+              <button class="sound-option" type="button" data-sound="cafe"><span>☕</span><small data-i18n="ambient.cafe">Café</small></button>
+              <button class="sound-option" type="button" data-sound="campfire"><span>♨</span><small data-i18n="ambient.campfire">Fogata</small></button>
+            </div>
+
+            <button id="soundPanelPlayBtn" class="panel-play-btn" type="button" data-i18n="ambient.play">Reproducir ambiente</button>
+            <div class="sound-volume-row">
+              <label for="ambientVolume">
+                <span data-i18n="ambient.volume">Volumen</span>
+                <span id="ambientVolumeValue">35%</span>
+              </label>
+              <input id="ambientVolume" class="ambient-volume" type="range" min="0" max="100" step="1" value="35" />
+            </div>
+
+            <label class="sound-attenuate-row">
+              <span data-i18n="ambient.attenuate">Atenuar durante descansos</span>
+              <span class="toggle-switch"><input type="checkbox" id="ambientAttenuateToggle" checked /><span class="toggle-slider"></span></span>
+            </label>
+
+            <div class="spotify-external">
+              <div class="spotify-external-head">
+                <span data-i18n="ambient.spotifySection">Playlists en Spotify</span>
+                <small data-i18n="ambient.spotifyExternal">Se abren en Spotify</small>
+              </div>
+              <a id="spotifyLink1" href="https://open.spotify.com/playlist/0oZy1DMRofAqvOO9P4Z8qr" target="_blank" rel="noopener">
+                <span id="spotifyLink1Label">Flowmodoro · Spotify 1</span><span aria-hidden="true">↗</span>
+              </a>
+              <a id="spotifyLink2" href="https://open.spotify.com/playlist/1YGk1NFAw8l9zPwHReImrY" target="_blank" rel="noopener">
+                <span id="spotifyLink2Label">Flowmodoro · Spotify 2</span><span aria-hidden="true">↗</span>
+              </a>
+              <a id="spotifyLink3" href="https://open.spotify.com/playlist/1c62qIWEuYaRGAEYpFcZTs" target="_blank" rel="noopener">
+                <span id="spotifyLink3Label">Flowmodoro · Spotify 3</span><span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </dialog>
+  <dialog id="taskActionsDialog" class="experience-dialog task-actions-dialog" aria-labelledby="taskActionsTitle">
+    <header class="panel-header"><h2 id="taskActionsTitle"></h2><button type="button" class="panel-close" data-panel-close data-i18n-aria="common.close" aria-label="Cerrar">×</button></header>
+    <div id="taskActionsList" class="task-actions-list"></div>
+  </dialog>
+  <dialog id="sceneDialog" class="experience-dialog scene-dialog" aria-labelledby="sceneTitle">
+    <header class="panel-header"><div><span class="panel-eyebrow">Flowmodoro</span><h2 id="sceneTitle" data-i18n="scene.title">Ambientes</h2></div><button type="button" class="panel-close" data-panel-close data-i18n-aria="common.close" aria-label="Cerrar">×</button></header>
+    <p class="panel-intro" data-i18n="scene.intro">Elige dónde quieres estar.</p>
+    <div class="scene-options" id="sceneOptions"></div>
+    <label class="scene-rotation"><input type="checkbox" id="sceneRotation"/><span data-i18n="scene.rotate">Cambiar al iniciar un nuevo bloque de trabajo</span></label>
+    <p class="scene-feedback" id="sceneFeedback" role="status" aria-live="polite"></p>
+  </dialog>
+  </div>
+
   <div class="ambient-audio-host" aria-hidden="true">
     <audio id="ambientAudioPrimary" loop preload="none"></audio>
     <audio id="ambientAudioSecondary" loop preload="none"></audio>
   </div>
 
+  <script src="scene-controller.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

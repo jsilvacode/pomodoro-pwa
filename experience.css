@@ -1,0 +1,204 @@
+/* Escena continua, controles estables y paneles fuera del espacio de trabajo. */
+:root, [data-theme="dark"] {
+  --bg-primary: #0B1A25;
+  --bg-surface: #17313D;
+  --bg-alt: #29404F;
+  --text-primary: #F3F2F0;
+  --text-secondary: #C2CED4;
+  --text-muted: #B4C3CC;
+  --accent: var(--scene-accent, #E0A5B5);
+  --accent-subtle: color-mix(in srgb, var(--accent) 12%, transparent);
+  --accent-ring: var(--accent);
+  --border: rgba(220,232,238,.13);
+  --border-strong: rgba(220,232,238,.28);
+  --scene-surface: #17313D;
+  --scene-fallback: linear-gradient(145deg,#0B1A25,#29465D 42%,#482A50 72%,#986276);
+  --mode-work: var(--accent);
+  --hero-noise-opacity: 0;
+}
+body.integrated-home, [data-theme="dark"] body.integrated-home:not(.focus-mode) { background: #0B1A25; isolation: isolate; }
+.scene-backdrop { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; background: var(--scene-fallback); }
+.scene-layer { position: absolute; inset: -8px; background-size: cover; background-position: center; opacity: 0; transition: opacity 450ms ease; filter: none; }
+.scene-layer.is-visible { opacity: 1; }
+.scene-layer::before { content: ""; position: absolute; inset: 0; backdrop-filter: blur(5px); }
+.scene-layer::after { content: ""; position: absolute; inset: 0; background: inherit; clip-path: inset(calc(clamp(16px,3vw,40px) + 8px) round 28px); opacity: 0; transition: opacity 400ms ease; }
+body.focus-mode .scene-layer::after { opacity: 1; }
+body[data-scene="aura"] .scene-layer::before { backdrop-filter: none; }
+.guide-section, .support-section { overflow: clip; }
+.scene-backdrop::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg,rgba(8,25,34,.86),rgba(20,30,48,.72) 48%,rgba(62,31,51,.62)); transition: background 400ms ease; }
+body.focus-mode .scene-backdrop::after { background: linear-gradient(115deg,rgba(5,17,24,.76),rgba(8,18,30,.60) 50%,rgba(12,19,28,.78)); }
+body[data-scene="aura"] .scene-layer { filter: none; }
+[data-theme="dark"] body.integrated-home:not(.focus-mode) .timer-card,
+[data-theme="dark"] body.integrated-home:not(.focus-mode) .app-view-today {
+  background: color-mix(in srgb, var(--scene-surface) 90%, transparent);
+  border-color: var(--border);
+  box-shadow: 0 18px 50px rgba(3,12,21,.2);
+  backdrop-filter: blur(14px);
+}
+.flip-card { --flip-face: #20242B; --flip-top: #23272E; --flip-bottom: #191D24; --flip-ink: #F3F2F0; --flip-seam: rgba(0,0,0,.6); --flip-shadow: 0 8px 18px rgba(0,0,0,.24), inset 0 0 0 1px rgba(240,245,248,.06); }
+.focus-toolbar { display: none; }
+.scene-open-btn, .focus-toolbar button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-width: 44px; min-height: 44px; padding: 9px 12px;
+  border: 1px solid var(--border-strong); border-radius: 12px;
+  background: rgba(12,28,39,.58); color: var(--text-secondary);
+  font: 600 .75rem var(--font-ui); cursor: pointer;
+}
+.scene-open-btn svg, .focus-toolbar svg { width: 20px; height: 20px; flex-shrink: 0; }
+.scene-open-btn:hover, .focus-toolbar button:hover { color: var(--text-primary); background: var(--accent-subtle); border-color: var(--accent); }
+.focus-audio-toggle.is-playing { color: var(--accent); }
+body.integrated-home:not(.focus-mode) .focus-utility-bar { gap: 8px; }
+body.integrated-home:not(.focus-mode) .sound-dock { margin-right: auto; }
+body.integrated-home:not(.focus-mode) .focus-utility-bar .scene-open-btn { order: 1; }
+body.integrated-home:not(.focus-mode) .focus-utility-bar #resetBtn { order: 2; margin-left: 0; }
+body.integrated-home:not(.focus-mode) .focus-utility-bar .timer-settings-btn { order: 3; }
+/* Foco: el vidrio aumenta, pero los dígitos tienen su propio límite. */
+body.focus-mode { overflow: hidden; --flip-w: clamp(50px, min(13vw, 19vh), 142px); --flip-h: calc(var(--flip-w) * 1.42); --flip-font-size: calc(var(--flip-w) * 1.12); }
+body.focus-mode .update-toast { visibility: hidden; pointer-events: none; }
+body.focus-mode .navbar, body.focus-mode .mobile-bottom-nav, body.focus-mode .home-intro,
+body.focus-mode #tasks-section, body.focus-mode #guide-section, body.focus-mode #donation-section, body.focus-mode .footer { visibility: hidden; pointer-events: none; }
+body.focus-mode #timer-section.app-view-focus {
+  position: fixed; inset: 0; z-index: 190; width: 100%; height: 100vh; height: 100dvh;
+  min-height: 0 !important; display: grid; place-items: stretch; opacity: 1; visibility: visible;
+  padding: clamp(16px,3vw,40px); background: transparent; overflow: auto; transform: none;
+}
+body.focus-mode #timer-section.app-view-focus > .container { width: 100%; max-width: 1440px; height: 100%; min-height: 0; margin: auto; display: block; transform: none; }
+body.focus-mode #timer-section > .section-parallax__bg { display: none; }
+body.focus-mode .timer-card {
+  position: relative; width: 100%; max-width: none; height: 100%; min-height: 340px; margin: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 24px clamp(16px,4vw,64px) 56px; overflow: auto;
+  background: color-mix(in srgb, var(--scene-surface) 30%, transparent);
+  border: 1px solid rgba(227,236,245,.18); border-radius: 28px;
+  box-shadow: 0 22px 70px rgba(0,0,0,.18); backdrop-filter: blur(0px);
+}
+body.focus-mode .focus-toolbar { display: flex; align-self: stretch; align-items: center; justify-content: space-between; gap: 8px; flex-shrink: 0; margin-bottom: auto; }
+.focus-toolbar-tools { display: flex; align-items: center; gap: 8px; }
+body.focus-mode .timer-display-container { flex: 0 0 auto; width: auto; height: auto; min-height: 0; margin: 32px 0 0; }
+body.focus-mode .view-flip { position: relative; inset: auto; }
+body.focus-mode .flip-clock { display: flex; flex-direction: row; flex-wrap: nowrap; gap: clamp(4px,1vw,14px); }
+body.focus-mode .flip-group { gap: clamp(4px,1vw,12px); }
+body.focus-mode .flip-sep { display: flex; align-items: center; padding-bottom: 0; font-size: calc(var(--flip-w) * .65); color: #D6DFE4; opacity: .8; }
+body.integrated-home:not(.focus-mode) .app-view-focus .flip-sep { display: flex; align-items: center; padding-bottom: 0; }
+body.focus-mode .mode-tabs, body.focus-mode .focus-session-status, body.focus-mode .timer-task-focus,
+body.focus-mode .pomo-counter, body.focus-mode .focus-utility-bar, body.focus-mode .focus-prep,
+body.focus-mode .break-tip { display: none; }
+body.focus-mode .timer-session-label { display: block; margin: 24px 0 0; font-size: .72rem; letter-spacing: .14em; color: #D8E2E6; opacity: 1; }
+body.focus-mode .timer-active-task:not([hidden]) { display: block; max-width: min(90%,560px); margin: 10px 0 0; color: #DCE3E6; font-size: .85rem; line-height: 1.55; text-align: center; overflow-wrap: anywhere; }
+body.focus-mode .timer-action-zone { flex-shrink: 0; margin: 28px 0 auto; }
+body.focus-mode .timer-controls { margin: 0; opacity: 1; }
+body.focus-mode .ctrl-btn-primary, [data-theme="dark"] body.focus-mode .ctrl-btn-primary {
+  width: 148px; min-width: 0; height: auto; min-height: 46px; padding: 10px 20px;
+  border: 1px solid rgba(226,230,236,.42); border-radius: 999px;
+  color: #F3F2F0; background: rgba(16,28,39,.66); box-shadow: none;
+  font: 600 .82rem var(--font-ui); text-transform: none; letter-spacing: 0;
+}
+body.focus-mode .ctrl-btn-primary:hover { background: var(--accent-subtle); border-color: var(--accent); }
+body.focus-mode .timer-play-icon { display: none; }
+body.focus-mode .timer-play-label { display: inline; }
+body.focus-mode .session-complete-card { flex-shrink: 0; max-width: 520px; }
+body.focus-mode .timer-card:has(.session-complete-card:not([hidden])) .timer-action-zone { display: none; }
+body.focus-mode .timer-card:has(.session-complete-card:not([hidden])) .timer-display-container { margin-top: 16px; }
+/* Un sistema de ventanas: el fondo sigue presente y el teclado queda dentro. */
+dialog.experience-dialog, dialog.settings-drawer, dialog.flow-dialog, dialog.shortcuts-dialog, dialog.activity-dialog {
+  position: fixed; z-index: 400; color: var(--text-primary); border: 1px solid var(--border-strong);
+}
+dialog.experience-dialog { inset: 0; width: min(680px,calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 32px); margin: auto; padding: 24px; border-radius: 24px; overflow: auto; background: #142A35; box-shadow: 0 24px 100px rgba(0,0,0,.45); }
+dialog.experience-dialog[hidden], dialog.settings-drawer:not([open]) { display: none; }
+dialog.experience-dialog::backdrop, dialog.settings-drawer::backdrop, dialog.flow-dialog::backdrop, dialog.shortcuts-dialog::backdrop { background: rgba(3,12,21,.58); backdrop-filter: blur(8px); }
+dialog[open] { animation: panel-enter 200ms ease both; }
+@keyframes panel-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.panel-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.panel-header h2 { font: 700 1.25rem/1.3 var(--font-ui); letter-spacing: -.035em; overflow-wrap: anywhere; }
+.panel-eyebrow { display: block; font-size: .66rem; letter-spacing: .12em; color: var(--accent); margin-bottom: 6px; }
+.panel-close, .sound-popover-close, .activity-dialog-close, .flow-dialog-close, .drawer-close { width: 44px; height: 44px; min-width: 44px; flex-shrink: 0; display: grid; place-items: center; border: 1px solid var(--border); border-radius: 12px; background: transparent; color: var(--text-primary); font-size: 1.25rem; cursor: pointer; }
+.panel-intro { color: var(--text-secondary); font-size: .85rem; margin-bottom: 20px; }
+.scene-options { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+.scene-choice { position: relative; padding: 0; min-width: 0; text-align: left; background: #203845; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; cursor: pointer; color: var(--text-primary); }
+.scene-choice img { display: block; width: 100%; height: auto; aspect-ratio: 1.4; object-fit: cover; }
+.scene-choice-copy { display: grid; gap: 5px; padding: 12px; }
+.scene-choice strong { font-size: .85rem; }
+.scene-choice small { color: var(--text-secondary); font-size: .7rem; line-height: 1.4; }
+.scene-choice[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.scene-choice-check { display: none; position: absolute; right: 10px; top: 10px; width: 28px; height: 28px; border-radius: 50%; background: #102B35; color: #FFF; place-items: center; }
+.scene-choice[aria-pressed="true"] .scene-choice-check { display: grid; }
+.scene-rotation { display: flex; align-items: center; gap: 12px; min-height: 52px; margin-top: 18px; font-size: .78rem; line-height: 1.5; color: var(--text-secondary); cursor: pointer; }
+.scene-rotation input { width: 20px; height: 20px; accent-color: var(--accent); flex-shrink: 0; }
+.scene-feedback { min-height: 1.5em; color: var(--text-secondary); font-size: .75rem; margin-top: 4px; }
+dialog.task-actions-dialog { inset: auto; margin: 0; width: 300px; padding: 16px; border-radius: 20px; }
+.task-actions-dialog .panel-header h2 { font-size: .86rem; max-height: 3.9em; overflow: auto; }
+.task-actions-list { display: grid; gap: 2px; }
+.task-actions-list button { display: flex; justify-content: space-between; gap: 16px; align-items: center; text-align: left; min-height: 44px; padding: 10px 12px; border: 0; border-radius: 10px; background: transparent; color: var(--text-primary); font: 500 .8rem var(--font-ui); cursor: pointer; }
+.task-actions-list button:hover { background: var(--accent-subtle); }
+.task-actions-list button:disabled { opacity: .45; cursor: default; }
+.task-actions-list [data-task-action="delete"] { color: #FFACA9; border-top: 1px solid var(--border); margin-top: 6px; }
+dialog.sound-popover { width: min(400px,calc(100% - 24px)); }
+.panel-play-btn { width: 100%; min-height: 44px; padding: 10px; margin: 16px 0 8px; border-radius: 12px; border: 1px solid var(--border-strong); color: var(--accent); background: var(--accent-subtle); cursor: pointer; }
+.panel-play-btn:disabled { opacity: .5; }
+dialog.settings-drawer { inset: 0; width: min(470px,calc(100% - 24px)); max-width: none; height: auto; max-height: calc(100dvh - 24px); margin: auto; padding: 24px; border-radius: 24px; transform: none; visibility: visible; background: #142A35; overflow: auto; }
+dialog.settings-drawer.open { transform: none; }
+.task-more-btn, .task-focus-control { min-height: 44px; }
+.task-more-btn { min-width: 44px; }
+.task-item { animation: none; }
+.task-item:hover { transform: none; }
+.task-text { overflow-wrap: anywhere; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+@media (max-width: 768px) {
+  body.focus-mode { --flip-w: clamp(42px,calc((100vw - 104px) / 4),94px); --flip-h: calc(var(--flip-w) * 1.42); --flip-font-size: calc(var(--flip-w) * 1.1); }
+  body.focus-mode .scene-layer::after { clip-path: inset(20px round 22px); }
+  body.focus-mode #timer-section.app-view-focus { padding: max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left)); }
+  body.focus-mode .timer-card { padding: 12px 12px 48px; border-radius: 22px; }
+  body.focus-mode .focus-toolbar .scene-open-btn span { display: none; }
+  body.focus-mode .timer-active-task:not([hidden]) { max-width: 100%; font-size: .8rem; }
+  body.integrated-home:not(.focus-mode) .focus-utility-bar .scene-open-btn span { display: none; }
+}
+@media (max-width: 600px) {
+  dialog.experience-dialog { padding: 18px; }
+  .scene-options { grid-template-columns: 1fr; gap: 10px; }
+  .scene-choice { display: grid; grid-template-columns: 100px 1fr; align-items: center; }
+  .scene-choice img { height: 84px; aspect-ratio: auto; }
+  .scene-choice-check { right: 8px; top: 8px; width: 22px; height: 22px; font-size: .7rem; }
+  .scene-choice-copy { padding: 12px 30px 12px 12px; }
+  dialog.task-actions-dialog { inset: auto 12px max(12px,env(safe-area-inset-bottom)) !important; width: auto; max-height: calc(100dvh - 24px); border-radius: 24px; }
+  body.integrated-home:not(.focus-mode) .task-item { grid-template-columns: 24px minmax(0,1fr) auto 44px; }
+}
+@media (max-height: 520px) {
+  body.focus-mode { --flip-w: clamp(42px, min(12vw,18vh),80px); }
+  body.focus-mode .timer-card { min-height: 290px; padding: 8px 16px 14px; }
+  body.focus-mode .timer-display-container { margin-top: 10px; }
+  body.focus-mode .timer-session-label { margin-top: 8px; }
+  body.focus-mode .timer-active-task:not([hidden]) { margin-top: 4px; }
+  body.focus-mode .timer-action-zone { margin-top: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene-layer, .scene-backdrop::after { transition: none; }
+  dialog[open] { animation: none; }
+}
+
+/* La tarea abre el plan del siguiente bloque sin cambiar la sesión actual. */
+.timer-active-task { border: 0; background: transparent; padding: 6px 10px; min-height: 44px; cursor: pointer; font-family: var(--font-ui); }
+.timer-active-task::after { content: ' ›'; color: var(--accent); }
+.timer-active-task:hover { background: var(--accent-subtle); border-radius: 10px; }
+dialog.focus-popover { width: min(440px,calc(100% - 24px)); }
+.focus-list { max-height: min(42vh,320px); overflow-y: auto; }
+.focus-option { width: 100%; border: 0; text-align: left; min-height: 44px; color: var(--text-primary); background: transparent; font-family: var(--font-ui); }
+body.focus-mode .timer-active-task { -webkit-line-clamp: unset; overflow: visible; }
+/* La escena sustituye los adornos flotantes de las secciones antiguas. */
+.section-parallax__bg { display: none; }
+/* Las listas largas conservan a mano el resumen del día. */
+dialog.task-actions-dialog::backdrop { background: rgba(3,12,21,.2); backdrop-filter: blur(2px); }
+@media (max-width: 860px) {
+  body.integrated-home:not(.focus-mode) .app-view-today .task-list { max-height: min(55dvh,480px); overflow-y: auto; overscroll-behavior: contain; }
+}
+@media (max-width: 600px) and (max-height: 700px) {
+  body.integrated-home:not(.focus-mode) .home-intro { margin-bottom: 12px; padding-block: 0; }
+  body.integrated-home:not(.focus-mode) .home-intro h1 { font-size: 1.75rem; }
+  body.integrated-home:not(.focus-mode) .home-intro p { font-size: .8rem; }
+  body.integrated-home:not(.focus-mode) .home-intro-kicker { margin-bottom: 6px; }
+}
+.task-check { position: relative; width: 44px; height: 44px; flex: 0 0 44px; min-width: 44px; border: 0; background: transparent; border-radius: 10px; }
+.task-check::before { content: ''; position: absolute; width: 20px; height: 20px; top: 12px; left: 12px; border: 1px solid var(--border-strong); border-radius: 5px; }
+.task-check[aria-pressed="true"]::before { border-color: var(--accent); }
+@media (max-width: 480px) {
+  body.integrated-home:not(.focus-mode) .task-item { grid-template-columns: 44px minmax(0,1fr) auto 44px; }
+}

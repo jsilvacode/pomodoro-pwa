@@ -62,6 +62,8 @@ function createApp(saved = {}, start = Date.parse('2026-09-22T12:00:00Z'), brows
     select() {}
     scrollIntoView() {}
     getBoundingClientRect() { return { top: 0, left: 0, right: 400, bottom: 100, width: 400, height: 100 }; }
+    showModal() { this.open = true; }
+    close() { this.open = false; }
     pause() {}
     load() {}
     play() { return Promise.resolve(); }
@@ -80,6 +82,7 @@ function createApp(saved = {}, start = Date.parse('2026-09-22T12:00:00Z'), brows
   }
   const navigator = { language: browserLanguages[0], languages: browserLanguages, userAgent: 'test' };
   const window = Object.assign(new Element(), {
+    FlowScenes: { ...require('../scene-controller.js'), create:options => require('../scene-controller.js').create({...options, loadImage:async () => {}}) },
     navigator, location: { hash: '' }, scrollY: 0, innerWidth: 1440, innerHeight: 900,
     matchMedia: q => ({ matches: q.includes('reduced-motion'), addEventListener() {} }),
     scrollTo() {}, confirm: () => acceptDiscard
@@ -400,4 +403,43 @@ test('global shortcuts do not intercept native button or link keyboard actions',
   app.document.dispatch('keydown', { key: ' ', target: button, preventDefault() { prevented = true; } });
   assert.equal(prevented, false);
   assert.equal(app.state().isRunning, true);
+});
+
+test('browser shortcuts never reset or change the current block', () => {
+  const app = createApp();
+  app.run('startTimer()');
+  const before = app.state();
+  for (const modifier of ['metaKey','ctrlKey','altKey']) {
+    for (const key of ['r','f','1','2','3']) {
+      app.document.dispatch('keydown', { key, [modifier]: true });
+    }
+  }
+  const after = app.state();
+  for (const key of ['sessionId','endTime','sessionPhase','currentMode','timeLeft']) assert.equal(after[key],before[key]);
+});
+
+test('scene rotation only runs when a new work block starts, never on resume or breaks', () => {
+  const app = createApp();
+  app.run('var sceneRotations = 0; sceneController.onNewSession = function() { sceneRotations++; }; startTimer(); pauseTimer(); startTimer();');
+  assert.equal(app.run('sceneRotations'),1);
+  app.run("pauseTimer(); setMode('short', {force:true}); startTimer();");
+  assert.equal(app.run('sceneRotations'),1);
+  app.run("pauseTimer(); setMode('work', {force:true}); startTimer();");
+  assert.equal(app.run('sceneRotations'),2);
+});
+
+test('scene and overlay changes preserve the running block, its task and audio state', async () => {
+  const app = createApp();
+  app.run("createTask('Preparar propuesta'); startTimer(); state.ambientPlaying = true;");
+  const before = app.state();
+  await app.run("sceneController.select('refugio')");
+  app.run("openPanel($('sceneDialog'), dom.startBtn); openSoundPopover(dom.focusAudioToggleBtn);");
+  assert.equal(app.el('sceneDialog').open,false);
+  assert.equal(app.el('soundPopover').open,true);
+  app.run('closePanel()');
+  const after = app.state();
+  for (const key of ['sessionId','endTime','sessionPhase','timeLeft','ambientPlaying']) assert.equal(after[key],before[key]);
+  assert.deepEqual(after.sessionTaskSnapshot,before.sessionTaskSnapshot);
+  assert.equal(app.el('soundPopover').open,false);
+  assert.equal(app.saved().fm_scene,'refugio');
 });
