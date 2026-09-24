@@ -7,6 +7,7 @@
 
 const TRANSLATIONS = {
   es: {
+    "focus.back":"Salir","scene.title":"Ambientes","scene.intro":"Elige dónde quieres estar.","scene.rotate":"Cambiar al iniciar un nuevo bloque de trabajo","scene.horizonte":"Horizonte","scene.refugio":"Refugio","scene.aura":"Aura","scene.horizonte.description":"Lago abierto y luz de atardecer","scene.refugio.description":"Bosque, niebla y calma","scene.aura.description":"Color y luz, sin distracciones","scene.loading":"Preparando el ambiente…","scene.error":"No se pudo cargar. Tu ambiente actual se conserva.","scene.ready":"Ambiente listo.",
     'nav.focus':'Foco','nav.today':'Hoy','nav.progress':'Progreso','nav.more':'Más','nav.settings':'Ajustes',
     'nav.timer':'Timer','nav.tasks':'Tareas','nav.guide':'Guía','nav.install':'Instalar App','nav.support':'Apoyar proyecto',
     'home.kicker':'TU ESPACIO DE FOCO','home.title':'Haz más, con calma.','home.subtitle':'Un espacio sereno para concentrarte y descansar a tu ritmo.',
@@ -67,6 +68,7 @@ const TRANSLATIONS = {
     'break.tip1':'Levántate un momento.','break.tip2':'Mira a distancia y descansa la vista.','break.tip3':'Toma agua.','break.tip4':'Respira y cambia de postura.'
   },
   en: {
+    "focus.back":"Exit","scene.title":"Scenes","scene.intro":"Choose where you want to be.","scene.rotate":"Change when starting a new work block","scene.horizonte":"Horizon","scene.refugio":"Retreat","scene.aura":"Aura","scene.horizonte.description":"An open lake in sunset light","scene.refugio.description":"Woodland, mist and quiet","scene.aura.description":"Light and color, without distractions","scene.loading":"Preparing your scene…","scene.error":"Unable to load. Your current scene is still here.","scene.ready":"Scene ready.",
     'nav.focus':'Focus','nav.today':'Today','nav.progress':'Progress','nav.more':'More','nav.settings':'Settings',
     'nav.timer':'Timer','nav.tasks':'Tasks','nav.guide':'Guide','nav.install':'Install App','nav.support':'Support project',
     'home.kicker':'YOUR FOCUS SPACE','home.title':'Do more, at your own pace.','home.subtitle':'A calm space to focus and rest on your terms.',
@@ -127,6 +129,7 @@ const TRANSLATIONS = {
     'break.tip1':'Stand up for a moment.','break.tip2':'Look into the distance and rest your eyes.','break.tip3':'Drink some water.','break.tip4':'Breathe and change posture.'
   },
   pt: {
+    "focus.back":"Sair","scene.title":"Ambientes","scene.intro":"Escolha onde você quer estar.","scene.rotate":"Mudar ao iniciar um novo bloco de trabalho","scene.horizonte":"Horizonte","scene.refugio":"Refúgio","scene.aura":"Aura","scene.horizonte.description":"Lago aberto e luz do entardecer","scene.refugio.description":"Bosque, névoa e tranquilidade","scene.aura.description":"Luz e cor, sem distrações","scene.loading":"Preparando o ambiente…","scene.error":"Não foi possível carregar. Seu ambiente atual foi mantido.","scene.ready":"Ambiente pronto.",
     'nav.focus':'Foco','nav.today':'Hoje','nav.progress':'Progresso','nav.more':'Mais','nav.settings':'Configurações','nav.timer':'Temporizador','nav.tasks':'Tarefas','nav.guide':'Guia','nav.install':'Instalar app','nav.support':'Apoiar o projeto',
     'home.kicker':'SEU ESPAÇO DE FOCO','home.title':'Faça mais, com calma.','home.subtitle':'Um espaço tranquilo para se concentrar e descansar no seu ritmo.','home.logo':'Flowmodoro · Início','home.workspace':'Espaço de trabalho',
     'hero.badge':'✨ Seu fluxo de trabalho ideal','hero.title1':'Trabalhe melhor,','hero.title2':'descanse melhor.','hero.subtitle':'Use a técnica Pomodoro para aumentar sua produtividade com intervalos de trabalho e descanso que respeitam sua atenção.','hero.cta':'Começar agora','hero.learn':'O que é Pomodoro?','hero.stat1':'min de foco','hero.stat2':'min de descanso','hero.stat3':'e depois 15 min de pausa',
@@ -438,6 +441,7 @@ function setLang(lang, manual) {
     dom.languageToggleBtn.title = label;
   }
   applyTranslations();
+  renderSceneOptions();
   updateTimerUI(true);
   renderTasks();
   renderFocusUI();
@@ -548,15 +552,54 @@ function syncActiveSection() {
   });
 }
 
+// Todos los paneles viven fuera de las listas y comparten la capa superior.
+let activePanel = null;
+function panelBackground(inert) {
+  document.querySelectorAll('body > main, body > .navbar, body > .mobile-bottom-nav').forEach(function(el) { el.inert = inert; });
+}
+function closePanel(restoreFocus = true) {
+  if (!activePanel) return;
+  const current = activePanel;
+  activePanel = null;
+  if (typeof current.dialog.close === 'function' && current.dialog.open) current.dialog.close();
+  else current.dialog.removeAttribute('open');
+  if (current.dialog === dom.focusPopover) {
+    current.dialog.hidden = true;
+    dom.focusPill.setAttribute('aria-expanded','false');
+  }
+  if (current.dialog === dom.soundPopover) {
+    current.dialog.hidden = true;
+    dom.ambientPill.setAttribute('aria-expanded', 'false');
+    updateAmbientUI();
+  }
+  if (current.dialog === dom.settingsPanel) {
+    current.dialog.classList.remove('open');
+    current.dialog.setAttribute('aria-hidden','true');
+    dom.settingsBackdrop.hidden = true;
+    settingsReturnFocus = null;
+  }
+  panelBackground(false);
+  dom.body.style.overflow = focusMode ? 'hidden' : '';
+  if (restoreFocus && current.trigger && current.trigger.isConnected !== false) current.trigger.focus({preventScroll:true});
+}
+function openPanel(dialog, trigger) {
+  closePanel(false);
+  closeFocusPopover();
+  activePanel = {dialog:dialog, trigger:trigger || document.activeElement};
+  dialog.hidden = false;
+  if (typeof dialog.showModal === 'function') dialog.showModal();
+  else dialog.setAttribute('open','');
+  panelBackground(true);
+  dom.body.style.overflow = 'hidden';
+  const firstControl = dialog.querySelector('button:not([disabled]), input:not([disabled])');
+  if (firstControl) firstControl.focus({preventScroll:true});
+}
 function setDialogOpen(dialog, open) {
   if (!dialog) return;
-  if (open) {
-    if (typeof dialog.showModal === 'function' && !dialog.open) dialog.showModal();
-    else dialog.setAttribute('open','');
-  } else {
-    if (typeof dialog.close === 'function' && dialog.open) dialog.close();
-    else dialog.removeAttribute('open');
-  }
+  if (open) openPanel(dialog);
+  else if (activePanel && activePanel.dialog === dialog) closePanel();
+  else if (typeof dialog.close === 'function' && dialog.open) dialog.close();
+  else dialog.removeAttribute('open');
 }
 
 function shouldOfferFocusPrep() {
@@ -627,15 +670,17 @@ function openSettings() {
   dom.autoBreakToggle.checked = state.autoStartBreaks;
   dom.autoFocusToggle.checked = state.autoStartFocus;
   dom.wakeLockToggle.checked = state.keepAwake;
+  openPanel(dom.settingsPanel, settingsReturnFocus);
   dom.settingsPanel.classList.add('open');
   dom.settingsPanel.setAttribute('aria-hidden','false');
-  dom.settingsBackdrop.hidden = false;
+  dom.settingsBackdrop.hidden = true;
   dom.body.style.overflow = 'hidden';
   updateNotificationButton();
   dom.settingsCloseBtn.focus({ preventScroll:true });
 }
 
 function closeSettings(restoreFocus = true) {
+  if (activePanel && activePanel.dialog === dom.settingsPanel) { closePanel(restoreFocus); return; }
   dom.settingsPanel.classList.remove('open');
   dom.settingsPanel.setAttribute('aria-hidden','true');
   dom.settingsBackdrop.hidden = true;
@@ -788,9 +833,9 @@ function updateAmbientUI() {
   dom.ambientPlayBtn.setAttribute('aria-label', state.ambientPlaying ? t('ambient.pause') : t('ambient.play'));
   dom.ambientPlayBtn.title = state.ambientPlaying ? t('ambient.pause') : t('ambient.play');
   if (dom.focusAudioToggleBtn) {
-    dom.focusAudioToggleBtn.hidden = !active;
+    dom.focusAudioToggleBtn.hidden = false;
     dom.focusAudioToggleBtn.classList.toggle('is-playing', active && state.ambientPlaying);
-    const immersiveAudioLabel = state.ambientPlaying ? t('ambient.pause') : t('ambient.play');
+    const immersiveAudioLabel = t('ambient.sound');
     dom.focusAudioToggleBtn.setAttribute('aria-label', immersiveAudioLabel);
     dom.focusAudioToggleBtn.title = immersiveAudioLabel;
   }
@@ -799,6 +844,10 @@ function updateAmbientUI() {
       ? (state.ambientPlaying ? t('ambient.playing') : t('ambient.paused')) + ' · ' + t(config.labelKey)
       : t('ambient.sound')
   );
+  if ($('soundPanelPlayBtn')) {
+    $('soundPanelPlayBtn').disabled = !active;
+    $('soundPanelPlayBtn').textContent = state.ambientPlaying ? t('ambient.pause') : t('ambient.play');
+  }
   dom.ambientVolumeValue.textContent = state.ambientVolume + '%';
   updateSoundOptions();
 }
@@ -898,57 +947,26 @@ async function setAmbientPreset(preset, autoplay) {
   if (next !== 'off' && autoplay) await startAmbient();
 }
 
-function positionSoundPopover() {
-  if (!dom.soundPopover || dom.soundPopover.hidden) return;
-  const rect = dom.ambientPill.getBoundingClientRect();
-  const width = Math.min(360, window.innerWidth - 24);
-  dom.soundPopover.style.width = width + 'px';
-
-  const measuredHeight = dom.soundPopover.offsetHeight || 390;
-  let left = rect.left + rect.width / 2 - width / 2;
-  left = Math.max(12, Math.min(left, window.innerWidth - width - 12));
-
-  let top = rect.bottom + 10;
-  if (top + measuredHeight > window.innerHeight - 12) {
-    top = Math.max(12, rect.top - measuredHeight - 10);
-  }
-
-  dom.soundPopover.style.left = left + 'px';
-  dom.soundPopover.style.top = top + 'px';
-}
-
-function openSoundPopover() {
-  dom.soundPopover.hidden = false;
+function positionSoundPopover() { /* Centrado por el sistema común de paneles. */ }
+function openSoundPopover(trigger) {
+  openPanel(dom.soundPopover, trigger || (focusMode ? dom.focusAudioToggleBtn : dom.ambientPill));
   dom.ambientPill.setAttribute('aria-expanded','true');
   updateAmbientUI();
-  requestAnimationFrame(positionSoundPopover);
 }
-
 function closeSoundPopover() {
-  dom.soundPopover.hidden = true;
+  if (activePanel && activePanel.dialog === dom.soundPopover) closePanel();
+  else dom.soundPopover.hidden = true;
   dom.ambientPill.setAttribute('aria-expanded','false');
-  updateAmbientUI();
 }
-
-dom.ambientPill.addEventListener('click', function() {
-  if (dom.soundPopover.hidden) openSoundPopover();
-  else closeSoundPopover();
-});
-
-dom.ambientPlayBtn.addEventListener('click', async function() {
-  if (state.ambientPreset === 'off') {
-    openSoundPopover();
-    return;
-  }
+dom.ambientPill.addEventListener('click', function() { openSoundPopover(dom.ambientPill); });
+async function toggleAmbientPlayback() {
+  if (state.ambientPreset === 'off') { openSoundPopover(); return; }
   if (state.ambientPlaying) pauseAmbient();
   else await startAmbient();
-});
-
-dom.focusAudioToggleBtn.addEventListener('click', async function() {
-  if (state.ambientPreset === 'off') return;
-  if (state.ambientPlaying) pauseAmbient();
-  else await startAmbient();
-});
+}
+dom.ambientPlayBtn.addEventListener('click', toggleAmbientPlayback);
+dom.focusAudioToggleBtn.addEventListener('click', function() { openSoundPopover(dom.focusAudioToggleBtn); });
+$('soundPanelPlayBtn').addEventListener('click', toggleAmbientPlayback);
 
 dom.soundPopoverClose.addEventListener('click', closeSoundPopover);
 
@@ -1166,6 +1184,7 @@ function setMode(mode, options) {
   persistSession();
   if (preserveImmersive) {
     dom.body.classList.add('focus-mode');
+    dom.body.dataset.uiMode = 'focus';
     setThemeUI('dark');
   } else {
     syncFocusPrep();
@@ -1187,6 +1206,7 @@ function startTimer() {
     state.totalTime = state.timeLeft;
   }
   if (state.sessionPhase === 'ready') {
+    if (state.currentMode === 'work' && sceneController) sceneController.onNewSession();
     state.sessionId = state.sessionId || generateId();
     state.sessionTaskSnapshot = snapshotActiveTask();
     state.sessionTaskSnapshotCaptured = true;
@@ -1430,6 +1450,7 @@ function enterFocusMode() {
   if (focusMode || state.currentMode !== 'work') return;
   focusMode = true;
   dom.body.classList.add('focus-mode');
+  dom.body.dataset.uiMode = 'focus';
   dom.tabWork.disabled = true;
   dom.tabShort.disabled = true;
   dom.tabLong.disabled = true;
@@ -1443,6 +1464,7 @@ function exitFocusMode() {
   if (!focusMode) return;
   focusMode = false;
   dom.body.classList.remove('focus-mode');
+  dom.body.dataset.uiMode = 'home';
   dom.tabWork.disabled = false;
   dom.tabShort.disabled = false;
   dom.tabLong.disabled = false;
@@ -1589,13 +1611,13 @@ function renderFocusUI() {
 function renderFocusList() {
   const pending = state.tasks.filter(function(task){ return !task.done; });
   const rows = pending.map(function(task) {
-    return '<div class="focus-option ' + (task.id === state.activeTaskId ? 'selected' : '') + '" data-id="' + escapeHtml(task.id) + '" role="option" aria-selected="' + (task.id === state.activeTaskId) + '">' +
+    return '<button type="button" class="focus-option ' + (task.id === state.activeTaskId ? 'selected' : '') + '" data-id="' + escapeHtml(task.id) + '" role="option" aria-selected="' + (task.id === state.activeTaskId) + '">' +
       '<span class="focus-option-text">' + escapeHtml(task.text) + '</span>' +
-      '<span class="focus-option-progress">🍅 ' + task.actPomos + '/' + task.estPomos + '</span></div>';
+      '<span class="focus-option-progress">🍅 ' + task.actPomos + '/' + task.estPomos + '</span></button>';
   }).join('');
   dom.focusList.innerHTML =
-    '<div class="focus-option ' + (!state.activeTaskId ? 'selected' : '') + '" data-id="" role="option" aria-selected="' + (!state.activeTaskId) + '">' +
-    '<span class="focus-option-text">— ' + escapeHtml(t('tasks.noTask')) + ' —</span></div>' + rows;
+    '<button type="button" class="focus-option ' + (!state.activeTaskId ? 'selected' : '') + '" data-id="" role="option" aria-selected="' + (!state.activeTaskId) + '">' +
+    '<span class="focus-option-text">— ' + escapeHtml(t('tasks.noTask')) + ' —</span></button>' + rows;
 }
 
 function createTask(text) {
@@ -1616,36 +1638,36 @@ function createTask(text) {
   return task;
 }
 
-function positionFocusPopover() {
-  const rect = dom.focusPill.getBoundingClientRect();
-  const width = Math.min(320, window.innerWidth - 24);
-  const height = dom.focusPopover.offsetHeight || 0;
-  let left = rect.left + rect.width / 2 - width / 2;
-  left = Math.max(12, Math.min(left, window.innerWidth - width - 12));
-  let top = rect.bottom + 10;
-  if (height && top + height > window.innerHeight - 8) top = Math.max(8, rect.top - height - 10);
-  dom.focusPopover.style.width = width + 'px';
-  dom.focusPopover.style.left = left + 'px';
-  dom.focusPopover.style.top = top + 'px';
-}
-
-function openFocusPopover() {
+function positionFocusPopover() { /* El selector comparte el panel centrado. */ }
+function openFocusPopover(trigger) {
   renderFocusList();
-  dom.focusPopover.hidden = false;
+  const inProgress = ['running','paused'].includes(state.sessionPhase);
+  $('focusPickerTitle').textContent = t(inProgress ? 'timer.nextChoose' : 'timer.focusChoose');
+  $('focusPickerContext').textContent = inProgress ? dom.timerActiveTask.textContent : t('tasks.subtitle');
+  openPanel(dom.focusPopover, trigger || dom.focusPill);
   dom.focusPill.setAttribute('aria-expanded','true');
-  requestAnimationFrame(positionFocusPopover);
 }
-
 function closeFocusPopover() {
+  if (activePanel && activePanel.dialog === dom.focusPopover) closePanel();
   dom.focusPopover.hidden = true;
   dom.focusPill.setAttribute('aria-expanded','false');
 }
-
+dom.timerActiveTask.addEventListener('click', function() { openFocusPopover(dom.timerActiveTask); });
 dom.focusPill.addEventListener('click', function() {
   if (dom.focusPopover.hidden) openFocusPopover();
   else closeFocusPopover();
 });
 
+dom.focusList.addEventListener('keydown', function(event) {
+  if (!['ArrowDown','ArrowUp','Home','End'].includes(event.key)) return;
+  const options = Array.from(dom.focusList.querySelectorAll('.focus-option'));
+  if (!options.length) return;
+  event.preventDefault();
+  const current = options.indexOf(document.activeElement);
+  const next = event.key === 'Home' ? 0 : event.key === 'End' ? options.length - 1
+    : (current + (event.key === 'ArrowDown' ? 1 : -1) + options.length) % options.length;
+  options[next].focus();
+});
 dom.focusList.addEventListener('click', function(event) {
   const option = event.target.closest('.focus-option');
   if (!option) return;
@@ -1782,7 +1804,6 @@ function renderTasks() {
   dom.clearDoneBtn.disabled = !hasDone;
 
   visible.forEach(function(task) {
-    const index = state.tasks.indexOf(task);
     const item = document.createElement('div');
     item.className = 'task-item' + (task.id === state.activeTaskId ? ' active-task' : '') + (task.done ? ' done' : '');
     item.dataset.id = task.id;
@@ -1794,26 +1815,63 @@ function renderTasks() {
       '<div class="pomo-badge" title="' + escapeHtml(t('tasks.estimation')) + '"><span class="pomo-count">🍅 ' + task.actPomos + '/' + task.estPomos + '</span></div>' +
       '<button class="task-focus-control' + (isActive ? ' is-active' : '') + '" data-action="focus" type="button" aria-pressed="' + isActive + '" aria-label="' + escapeHtml(focusLabel + ': ' + task.text) + '" title="' + escapeHtml(focusLabel) + '"' + (task.done ? ' disabled' : '') + '>' + escapeHtml(focusLabel) + '</button>' +
       '<div class="task-actions">' +
-        '<button class="task-action-btn task-more-btn" data-action="more" aria-label="' + escapeHtml(t('nav.more')) + '">•••</button>' +
-        '<div class="task-menu" hidden>' +
-          '<button data-action="focus">' + escapeHtml(focusLabel) + '<span>◎</span></button>' +
-          '<button data-action="edit">' + escapeHtml(t('tasks.edit')) + '<span>✎</span></button>' +
-          '<button data-action="inc-pomo">' + escapeHtml(t('tasks.inc.pomos')) + '<span>+ 🍅</span></button>' +
-          '<button data-action="dec-pomo" ' + (task.estPomos <= 1 ? 'disabled' : '') + '>' + escapeHtml(t('tasks.dec.pomos')) + '<span>− 🍅</span></button>' +
-          '<button data-action="up" ' + (index === 0 ? 'disabled' : '') + '>' + escapeHtml(t('tasks.reorder.up')) + '<span>↑</span></button>' +
-          '<button data-action="down" ' + (index === state.tasks.length - 1 ? 'disabled' : '') + '>' + escapeHtml(t('tasks.reorder.down')) + '<span>↓</span></button>' +
-          '<button class="danger" data-action="delete">' + escapeHtml(t('tasks.delete')) + '<span>×</span></button>' +
-        '</div>' +
+        '<button class="task-action-btn task-more-btn" data-action="more" aria-haspopup="dialog" aria-controls="taskActionsDialog" aria-label="' + escapeHtml(t('nav.more') + ': ' + task.text) + '">•••</button>' +
       '</div>';
     dom.taskList.appendChild(item);
   });
 }
 
-function closeTaskMenus(except) {
-  document.querySelectorAll('.task-menu').forEach(function(menu) {
-    if (menu !== except) menu.hidden = true;
-  });
+let taskMenuId = null;
+function closeTaskMenus() {
+  if (activePanel && activePanel.dialog === $('taskActionsDialog')) closePanel();
 }
+function taskRow(id) {
+  return Array.from(dom.taskList.querySelectorAll('.task-item')).find(function(row) { return row.dataset.id === id; });
+}
+function restoreTaskControl(id) {
+  const row = taskRow(id);
+  const target = row ? row.querySelector('.task-more-btn') : dom.taskInput;
+  if (target) target.focus({preventScroll:true});
+}
+function openTaskActions(task, trigger) {
+  taskMenuId = task.id;
+  const index = state.tasks.indexOf(task);
+  $('taskActionsTitle').textContent = task.text;
+  const actions = [
+    ['focus', state.activeTaskId === task.id ? 'tasks.unfocus' : 'tasks.focus', task.done, '◎'],
+    ['edit','tasks.edit',false,'✎'], ['inc-pomo','tasks.inc.pomos',false,'+'],
+    ['dec-pomo','tasks.dec.pomos',task.estPomos <= 1,'−'],
+    ['up','tasks.reorder.up',index === 0,'↑'], ['down','tasks.reorder.down',index === state.tasks.length - 1,'↓'],
+    ['delete','tasks.delete',false,'×']
+  ];
+  $('taskActionsList').innerHTML = actions.map(function(action) {
+    return '<button type="button" data-task-action="' + action[0] + '"' + (action[2] ? ' disabled' : '') + '><span>' + escapeHtml(t(action[1])) + '</span><span aria-hidden="true">' + action[3] + '</span></button>';
+  }).join('');
+  const dialog = $('taskActionsDialog');
+  openPanel(dialog, trigger);
+  positionTaskActions();
+}
+function positionTaskActions() {
+  if (!activePanel || activePanel.dialog !== $('taskActionsDialog')) return;
+  const dialog = activePanel.dialog;
+  if (window.innerWidth > 600) {
+    const rect = activePanel.trigger.getBoundingClientRect();
+    const box = dialog.getBoundingClientRect();
+    dialog.style.left = Math.max(12, Math.min(rect.right - box.width, window.innerWidth - box.width - 12)) + 'px';
+    dialog.style.top = Math.max(12, Math.min(rect.bottom + 8, window.innerHeight - box.height - 12)) + 'px';
+  } else { dialog.style.left = ''; dialog.style.top = ''; }
+}
+window.addEventListener('resize', positionTaskActions);
+$('taskActionsList').addEventListener('click', function(event) {
+  const control = event.target.closest('[data-task-action]');
+  if (!control || control.disabled) return;
+  const task = state.tasks.find(function(row) { return row.id === taskMenuId; });
+  const item = task && taskRow(task.id);
+  closePanel(false);
+  if (!task || !item) return;
+  performTaskAction(control.dataset.taskAction, task, item);
+  if (control.dataset.taskAction !== 'edit') restoreTaskControl(task.id);
+});
 
 function beginTaskEdit(item, task) {
   const textEl = item.querySelector('.task-text');
@@ -1834,6 +1892,7 @@ function beginTaskEdit(item, task) {
       renderFocusUI();
     }
     renderTasks();
+    restoreTaskControl(task.id);
   }
   input.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') finish(true);
@@ -1859,14 +1918,11 @@ dom.taskList.addEventListener('click', function(event) {
   if (!control) return;
   const action = control.dataset.action;
 
-  if (action === 'more') {
-    const menu = item.querySelector('.task-menu');
-    const wasHidden = menu.hidden;
-    closeTaskMenus();
-    menu.hidden = !wasHidden;
-    return;
-  }
+  if (action === 'more') { openTaskActions(task, control); return; }
+  performTaskAction(action, task, item);
+});
 
+function performTaskAction(action, task, item) {
   closeTaskMenus();
   if (action === 'toggle') {
     task.done = !task.done;
@@ -1908,13 +1964,7 @@ dom.taskList.addEventListener('click', function(event) {
   renderTasks();
   renderFocusUI();
   updateTaskSessionNotice();
-});
-
-document.addEventListener('click', function(event) {
-  if (!event.target.closest('.task-actions')) closeTaskMenus();
-  if (!dom.focusPopover.hidden && !dom.focusPopover.contains(event.target) && !dom.focusPill.contains(event.target)) closeFocusPopover();
-  if (!dom.soundPopover.hidden && !dom.soundPopover.contains(event.target) && !dom.ambientPill.contains(event.target)) closeSoundPopover();
-});
+}
 
 function addTask() {
   const text = dom.taskInput.value.trim();
@@ -2014,19 +2064,13 @@ function renderProgress() {
 }
 
 function closeActivityDialog() {
-  if (dom.activityDialog.open) dom.activityDialog.close();
+  setDialogOpen(dom.activityDialog, false);
 }
 dom.activityOpenBtn.addEventListener('click', function() {
-  dom.activityDialog.showModal();
+  openPanel(dom.activityDialog, dom.activityOpenBtn);
   dom.activityCloseBtn.focus();
 });
 dom.activityCloseBtn.addEventListener('click', closeActivityDialog);
-dom.activityDialog.addEventListener('click', function(event) {
-  if (event.target === dom.activityDialog) closeActivityDialog();
-});
-dom.activityDialog.addEventListener('close', function() {
-  dom.activityOpenBtn.focus();
-});
 
 dom.exportHistoryBtn.addEventListener('click', function() {
   const payload = {
@@ -2048,22 +2092,18 @@ dom.exportHistoryBtn.addEventListener('click', function() {
 });
 
 
-let guideReturnFocus = null;
 function openGuideDialog(trigger) {
-  guideReturnFocus = trigger === dom.guideDrawerBtn
+  const returnFocus = trigger === dom.guideDrawerBtn
     ? settingsReturnFocus || dom.moreBtn
     : trigger && typeof trigger.focus === 'function' ? trigger : document.activeElement;
   closeSettings(false);
-  setDialogOpen(dom.guideDialog, true);
+  openPanel(dom.guideDialog, returnFocus);
   window.requestAnimationFrame(function() {
     if (dom.guideDialogCloseBtn) dom.guideDialogCloseBtn.focus();
   });
 }
 function closeGuideDialog() {
   setDialogOpen(dom.guideDialog, false);
-  const returnTarget = guideReturnFocus;
-  guideReturnFocus = null;
-  if (returnTarget && typeof returnTarget.focus === 'function') returnTarget.focus();
 }
 function openSupportDialog() {
   closeSettings();
@@ -2075,12 +2115,6 @@ if (dom.guideQuickBtn) dom.guideQuickBtn.addEventListener('click', function() { 
 dom.guideDrawerBtn.addEventListener('click', function() { openGuideDialog(dom.guideDrawerBtn); });
 dom.guideDialogCloseBtn.addEventListener('click', closeGuideDialog);
 if (dom.guideDialog) {
-  dom.guideDialog.addEventListener('close', function() {
-    if (!guideReturnFocus) return;
-    const returnTarget = guideReturnFocus;
-    guideReturnFocus = null;
-    if (typeof returnTarget.focus === 'function') returnTarget.focus();
-  });
   const guideEditorialLink = dom.guideDialog.querySelector('[data-guide-editorial-link]');
   if (guideEditorialLink) guideEditorialLink.addEventListener('click', function(event) {
     event.preventDefault();
@@ -2092,18 +2126,18 @@ dom.supportDrawerBtn.addEventListener('click', openSupportDialog);
 dom.supportDialogCloseBtn.addEventListener('click', closeSupportDialog);
 
 function openShortcuts() {
-  closeSettings();
-  if (typeof dom.shortcutsDialog.showModal === 'function') dom.shortcutsDialog.showModal();
-  else dom.shortcutsDialog.setAttribute('open','');
+  const trigger = settingsReturnFocus || dom.shortcutsBtn;
+  closeSettings(false);
+  openPanel(dom.shortcutsDialog, trigger);
 }
 function closeShortcuts() {
-  if (typeof dom.shortcutsDialog.close === 'function' && dom.shortcutsDialog.open) dom.shortcutsDialog.close();
-  else dom.shortcutsDialog.removeAttribute('open');
+  setDialogOpen(dom.shortcutsDialog, false);
 }
 dom.shortcutsBtn.addEventListener('click', openShortcuts);
 dom.shortcutsCloseBtn.addEventListener('click', closeShortcuts);
 
 document.addEventListener('keydown', function(event) {
+  if (event.metaKey || event.ctrlKey || event.altKey) return;
   const target = event.target;
   const typing = target && (target.matches('input,textarea,select') || target.isContentEditable);
   if (typing) {
@@ -2207,6 +2241,89 @@ async function registerServiceWorker() {
   }
 }
 
+// La escena permanece montada: cambiar de vista solo modifica su iluminación.
+let visibleSceneLayer = 0;
+let sceneRequest = 0;
+const sceneController = window.FlowScenes ? window.FlowScenes.create({
+  storage: localStorage,
+  onChange: function(scene) {
+    const layers = document.querySelectorAll('.scene-layer');
+    if (layers.length) {
+      visibleSceneLayer = 1 - visibleSceneLayer;
+      const next = layers[visibleSceneLayer];
+      next.style.backgroundImage = 'url("' + scene.image + '")';
+      next.style.backgroundPosition = scene.position;
+      next.classList.add('is-visible');
+      layers[1 - visibleSceneLayer].classList.remove('is-visible');
+    }
+    dom.body.dataset.scene = scene.id;
+    dom.html.style.setProperty('--scene-accent', scene.accent);
+    dom.html.style.setProperty('--scene-surface', scene.surface);
+    dom.html.style.setProperty('--scene-fallback', scene.fallback);
+    updateSceneSelection();
+  }
+}) : null;
+function updateSceneSelection() {
+  if (!sceneController) return;
+  const preferences = sceneController.getState();
+  document.querySelectorAll('[data-scene-choice]').forEach(function(button) {
+    button.setAttribute('aria-pressed', String(button.dataset.sceneChoice === preferences.selected));
+  });
+  $('sceneRotation').checked = preferences.rotate;
+}
+function renderSceneOptions() {
+  if (!sceneController) return;
+  $('sceneOptions').innerHTML = window.FlowScenes.catalog.map(function(scene) {
+    return '<button class="scene-choice" type="button" data-scene-choice="' + scene.id + '" aria-pressed="false">' +
+      '<img src="' + scene.thumbnail + '" alt="" width="360" height="203" loading="lazy"/>' +
+      '<span class="scene-choice-copy"><strong>' + escapeHtml(t('scene.' + scene.id)) + '</strong><small>' + escapeHtml(t('scene.' + scene.id + '.description')) + '</small></span><span class="scene-choice-check" aria-hidden="true">✓</span></button>';
+  }).join('');
+  updateSceneSelection();
+}
+document.querySelectorAll('[data-scene-open]').forEach(function(button) {
+  button.addEventListener('click', function() {
+    $('sceneFeedback').textContent = '';
+    updateSceneSelection();
+    openPanel($('sceneDialog'), button);
+  });
+});
+$('sceneOptions').addEventListener('click', async function(event) {
+  const button = event.target.closest('[data-scene-choice]');
+  if (!button || !sceneController) return;
+  const request = ++sceneRequest;
+  $('sceneFeedback').textContent = t('scene.loading');
+  const success = await sceneController.select(button.dataset.sceneChoice);
+  if (request === sceneRequest) $('sceneFeedback').textContent = t(success ? 'scene.ready' : 'scene.error');
+});
+$('sceneRotation').addEventListener('change', function(event) {
+  if (sceneController) sceneController.setRotation(event.target.checked);
+});
+// Escape cierra primero el panel; nunca pausa inadvertidamente la sesión de detrás.
+document.addEventListener('keydown', function(event) {
+  if (!activePanel) return;
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    closePanel();
+  } else if (event.key === 'Tab') {
+    const controls = Array.from(activePanel.dialog.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),a[href]'))
+      .filter(function(el) { return el.getClientRects().length > 0; });
+    const first = controls[0];
+    const last = controls[controls.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  }
+}, true);
+document.querySelectorAll('dialog').forEach(function(dialog) {
+  dialog.addEventListener('cancel', function(event) { event.preventDefault(); closePanel(); });
+  dialog.addEventListener('click', function(event) {
+    if (event.target.closest('[data-panel-close]')) { closePanel(); return; }
+    if (event.target !== dialog) return;
+    const rect = dialog.getBoundingClientRect();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closePanel();
+  });
+});
+
 class ParallaxController {
   constructor() {
     this.sections = [];
@@ -2279,7 +2396,9 @@ function init() {
   updateAmbientUI();
   hydrateSpotifyLinkLabels();
   document.body.appendChild(dom.focusPopover);
-  document.body.appendChild(dom.soundPopover);
+  $('overlayRoot').appendChild(dom.soundPopover);
+  document.querySelectorAll('dialog').forEach(function(dialog) { $('overlayRoot').appendChild(dialog); });
+  if (sceneController) sceneController.select(sceneController.getState().selected);
 
   if (state.isRunning) {
     clearInterval(state.intervalId);
